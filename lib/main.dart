@@ -1,19 +1,45 @@
+// ignore_for_file: avoid_print, non_constant_identifier_names
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:sheive/features/conversas/presentation/pages/main.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sheive/model.dart';
-import 'package:contacts_service/contacts_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // By default, this will loop through all contacts using a page size of 20.
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   return runApp(const MyApp());
 }
+
+class TabData {
+  final Tab myTab;
+  final Widget myWidget;
+  TabData({
+    required this.myTab,
+    required this.myWidget,
+  });
+}
+
+List<TabData> myTabs = [
+  TabData(
+    myTab: const Tab(
+      text: 'Conversas',
+    ),
+    myWidget: const Conversas(),
+  ),
+  TabData(
+    myTab: const Tab(
+      text: '📷︎',
+    ),
+    myWidget: const Placeholder(),
+  ),
+];
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -29,9 +55,9 @@ class MyApp extends StatelessWidget {
           backgroundColor: Colors.amber,
         ),
       ),
-      home: const DefaultTabController(
-        child: Home(),
-        length: 3,
+      home: DefaultTabController(
+        child: const Home(),
+        length: myTabs.length,
       ),
     );
   }
@@ -45,183 +71,36 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 0;
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final Controller getState = Get.put(Controller());
+    getState;
+
     return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
-        ],
-        title: const Text("Whatsapp 2"),
-        bottom: const TabBar(
-          indicatorColor: Colors.amber,
-          labelColor: Colors.amber,
-          unselectedLabelColor: Colors.white,
-          physics: ClampingScrollPhysics(),
-          tabs: [
-            Tab(
-              text: "CONVERSAS",
-            ),
-            Tab(
-              text: "STATUS",
-            ),
-            Tab(
-              text: "CHAMADAS",
-            ),
-          ],
-        ),
-      ),
+      appBar: MyAppBar(),
       body: TabBarView(
         physics: const ClampingScrollPhysics(),
         children: [
-          Scaffold(
-            body: ListView.builder(
-              itemBuilder: (_, a) {
-                DateTime _now = DateTime.now();
-                var title = a.toString() + "ASDASDASDA";
-                var icon = Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        color: Colors.white30,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: const Icon(Icons.person),
-                    ),
-                  ],
-                );
-                return ListTile(
-                  onTap: () {
-                    Get.to(
-                      Scaffold(
-                        appBar: AppBar(
-                          leading: TextButton(
-                            child: Row(
-                              children: const [
-                                Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                ),
-                              ],
-                            ),
-                            onPressed: () {
-                              Get.back();
-                            },
-                          ),
-                          title: Row(
-                            children: [
-                              Column(
-                                children: [
-                                  Text(title),
-                                  const Text("+12312123123"),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      transition: Transition.topLevel,
-                      duration: Duration(milliseconds: 500),
-                    );
-                  },
-                  leading: icon,
-                  title: Text(
-                    title,
-                  ),
-                  subtitle: const Text("Sheive"),
-                  trailing: Container(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          '${_now.hour}:${_now.minute}',
-                          style: TextStyle(
-                            color: context.theme.primaryColor,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          constraints: const BoxConstraints(
-                            minHeight: 18,
-                            minWidth: 18,
-                            maxWidth: 18,
-                          ),
-                          decoration: BoxDecoration(
-                            color: context.theme.primaryColor,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                          padding: const EdgeInsets.all(2),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Text(
-                                a.toString(),
-                                style: const TextStyle(color: Colors.black, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-            floatingActionButton: FloatingActionButton(
-              child: const Icon(
-                Icons.message,
-                color: Colors.white,
-              ),
-              onPressed: () => Get.to(
-                Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Contatos"),
-                    actions: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.search,
-                        ),
-                      )
-                    ],
-                  ),
-                  // body: FutureBuilder(
-                  //   future: ContactsService.getContacts(),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.hasData) {
-                  //       print(snapshot);
-                  //     }
-                  //     return Container();
-                  //   },
-                  // ),
-                ),
-                transition: Transition.topLevel,
-                duration: Duration(milliseconds: 500),
-              ),
-            ),
-          ),
-          const Placeholder(),
-          const Placeholder(),
+          for (var tab in myTabs) tab.myWidget
+        ],
+      ),
+    );
+  }
+
+  AppBar MyAppBar() {
+    return AppBar(
+      actions: [
+        IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+        IconButton(onPressed: () {}, icon: const Icon(Icons.more_vert)),
+      ],
+      title: const Text("Whatsapp 2"),
+      bottom: TabBar(
+        indicatorColor: Colors.amber,
+        labelColor: Colors.amber,
+        unselectedLabelColor: Colors.white,
+        physics: const ClampingScrollPhysics(),
+        tabs: [
+          for (var tab in myTabs) tab.myTab
         ],
       ),
     );
