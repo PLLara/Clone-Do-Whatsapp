@@ -1,10 +1,13 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:sheive/features/conversas/presentation/pages/main.dart';
+import 'package:whatsapp2/features/conversas/presentation/pages/conversas.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sheive/model.dart';
+import 'package:whatsapp2/model.dart';
+
+late List<CameraDescription> cameras;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,6 +16,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  cameras = await availableCameras();
 
   return runApp(const MyApp());
 }
@@ -31,15 +35,51 @@ List<TabData> myTabs = [
     myTab: const Tab(
       text: 'Conversas',
     ),
-    myWidget: const Conversas(),
+    myWidget: Conversas(),
   ),
   TabData(
     myTab: const Tab(
       text: '📷︎',
     ),
-    myWidget: const Placeholder(),
+    myWidget: CameraApp(),
   ),
 ];
+class CameraApp extends StatefulWidget {
+  @override
+  _CameraAppState createState() => _CameraAppState();
+}
+
+class _CameraAppState extends State<CameraApp> {
+  late CameraController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CameraController(cameras[0], ResolutionPreset.max);
+    controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!controller.value.isInitialized) {
+      return Container();
+    }
+    return MaterialApp(
+      home: CameraPreview(controller),
+    );
+  }
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);

@@ -1,12 +1,14 @@
-// ignore_for_file: avoid_print, non_constant_identifier_names
+// ignore_for_file: avoid_print, non_constant_identifier_names, must_be_immutable
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sheive/features/conversas/data/contacts_provider.dart';
-import 'package:flutter_contacts/flutter_contacts.dart';
+import 'package:whatsapp2/features/conversas/presentation/state/contacts_state.dart';
+import 'package:whatsapp2/features/conversas/presentation/widgets/contatos.dart';
 
 class Conversas extends StatelessWidget {
-  const Conversas({
+  ContactsController contactsController = Get.put(ContactsController()); // Rather Controller controller = Controller();
+
+  Conversas({
     Key? key,
   }) : super(key: key);
 
@@ -20,7 +22,7 @@ class Conversas extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () => Get.to(
-          const Contatos(),
+          Contatos(),
           transition: Transition.topLevel,
           duration: const Duration(milliseconds: 500),
         ),
@@ -29,51 +31,6 @@ class Conversas extends StatelessWidget {
   }
 }
 
-class Contatos extends StatelessWidget {
-  const Contatos({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return FutureBuilder<List<Contact>>(
-      future: getContacts(),
-      builder: (context, snapshot) {
-        if (snapshot.data == null) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-
-        List<Contact> contacts = snapshot.data!;
-        return Scaffold(
-          appBar: AppBar(
-            title: const Text("Contatos"),
-            actions: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(
-                  Icons.search,
-                ),
-              )
-            ],
-          ),
-          body: ListView.builder(
-            itemCount: contacts.length,
-            itemBuilder: (BuildContext context, int index) {
-              Contact contact = contacts[index];
-              return ListTile(
-                title: Text(contact.displayName),
-              );
-            },
-          ),
-        );
-      },
-    );
-  }
-}
 
 class ConversationsList extends StatelessWidget {
   const ConversationsList({
@@ -103,7 +60,7 @@ class ConversationsList extends StatelessWidget {
         return ListTile(
           onTap: () async {
             Get.to(
-              Scaffold(
+              () => Scaffold(
                 appBar: AppBar(
                   leading: TextButton(
                     child: Row(
@@ -138,7 +95,7 @@ class ConversationsList extends StatelessWidget {
           title: Text(
             title,
           ),
-          subtitle: const Text("Sheive"),
+          subtitle: const Text("whatsapp2"),
           trailing: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
