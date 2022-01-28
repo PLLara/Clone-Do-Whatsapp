@@ -16,7 +16,7 @@ class ConversaGeral extends StatefulWidget {
 }
 
 class _ConversaGeralState extends State<ConversaGeral> {
-  final ConversaController conversaController = Get.put(ConversaController());
+  final ConversaController conversaController = Get.find<ConversaController>();
 
   @override
   void initState() {
@@ -88,6 +88,7 @@ class _ConversaGeralState extends State<ConversaGeral> {
                   itemBuilder: (e, index) {
                     return MensagemWidget(
                       conversaController.papo.value[index],
+                      key: Key(conversaController.papo.value[index]['usuario'] + conversaController.papo.value[index]['mensagem']),
                     );
                   },
                 ),
@@ -103,6 +104,7 @@ class _ConversaGeralState extends State<ConversaGeral> {
 
 class MensagemWidget extends StatelessWidget {
   final dynamic mensagem;
+
   MensagemWidget(
     this.mensagem, {
     Key? key,
@@ -113,19 +115,56 @@ class MensagemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     if (mensagem['usuario'] == FirebaseAuth.instance.currentUser?.phoneNumber) {
       return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(mensagem['mensagem'])
-          ],
+        padding: const EdgeInsets.only(left: 60),
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 8.0,
+            vertical: 1,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Flexible(
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: const Color(0xff005C4B),
+                  ),
+                  child: Text(
+                    mensagem['mensagem'],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       );
     }
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Text(mensagem['usuario'] + ": " + mensagem['mensagem']),
+      padding: const EdgeInsets.only(right: 60),
+      child: Row(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              margin: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 1,
+              ),
+              decoration: BoxDecoration(
+                color: const Color(0xff202C33),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(mensagem['usuario'] + ": " + mensagem['mensagem']),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -186,14 +225,16 @@ class BottomInputBar extends StatelessWidget {
                 icon: const Icon(Icons.send),
                 color: Colors.white,
                 onPressed: () {
-                  var realtime = FirebaseDatabase.instance;
-                  var conversaGeral = realtime.ref('conversas/geral');
-                  conversaGeral.child(const Uuid().v4()).set({
-                    "mensagem": conversaController.controller.text,
-                    "date": DateTime.now().toString(),
-                    'usuario': FirebaseAuth.instance.currentUser?.phoneNumber.toString() ?? 'UNDEFINED'
-                  });
-                  conversaController.controller.clear();
+                  if (conversaController.controller.text.trim() != '') {
+                    var realtime = FirebaseDatabase.instance;
+                    var conversaGeral = realtime.ref('conversas/geral');
+                    conversaGeral.child(const Uuid().v4()).set({
+                      "mensagem": conversaController.controller.text,
+                      "date": DateTime.now().toString(),
+                      'usuario': FirebaseAuth.instance.currentUser?.phoneNumber.toString() ?? 'UNDEFINED'
+                    });
+                    conversaController.controller.clear();
+                  }
                 },
               ),
             ),

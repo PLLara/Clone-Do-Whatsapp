@@ -5,9 +5,11 @@ import 'package:get/get.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contatos.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_geral.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_state.dart';
 
 class Conversas extends StatelessWidget {
   ContactsController contactsController = Get.put(ContactsController()); // Rather Controller controller = Controller();
+  final ConversaController conversaController = Get.put(ConversaController());
 
   Conversas({
     Key? key,
