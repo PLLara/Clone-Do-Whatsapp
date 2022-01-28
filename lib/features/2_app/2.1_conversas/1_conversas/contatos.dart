@@ -6,8 +6,6 @@ import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
 
-// TODO: Tornar o contatos uma feature separada de conversas
-
 class Contatos extends StatelessWidget {
   ContactsController contactsController = Get.find();
 

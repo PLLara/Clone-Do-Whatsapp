@@ -2,16 +2,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contatos.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_geral.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_state.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_page.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
 
 class Conversas extends StatelessWidget {
-  ContactsController contactsController = Get.put(ContactsController()); // Rather Controller controller = Controller();
-  final ConversaController conversaController = Get.put(ConversaController());
+  final ConversaController conversaController = Get.find<ConversaController>();
 
   Conversas({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Obx(() {
+      if (conversaController.state.value == States.loading) {
+        return const ScaffoldLoading();
+      }
+      return const ConversasPageContent();
+    });
+  }
+}
+
+class ConversasPageContent extends StatelessWidget {
+  const ConversasPageContent({
     Key? key,
   }) : super(key: key);
 
@@ -25,7 +41,12 @@ class Conversas extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (e) => Contatos()));
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (e) => Contatos(),
+            ),
+          );
         },
       ),
     );
@@ -63,7 +84,7 @@ class ConversationsList extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (e) =>ConversaGeral(
+                builder: (e) => const ConversaGeral(
                   key: Key("ConversaGeral"),
                 ),
               ),

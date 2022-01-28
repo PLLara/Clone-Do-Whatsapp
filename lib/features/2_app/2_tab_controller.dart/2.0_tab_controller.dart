@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: non_constant_identifier_names, prefer_const_constructors
 
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -25,6 +25,14 @@ class _HomeState extends State<Home> {
           text: 'Conversas',
         ),
         myWidget: Conversas(),
+      ),
+            TabData(
+        myTab: const Tab(
+          text: 'Status',
+        ),
+        myWidget: Scaffold(
+          body: Center(child: Text(":)")),
+        ),
       ),
       TabData(
         myTab: const Tab(

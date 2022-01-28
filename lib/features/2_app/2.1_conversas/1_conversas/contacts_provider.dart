@@ -7,7 +7,7 @@ Future<List<Contact>> getContacts() async {
     List<Contact> contacts = await FlutterContacts.getContacts(withProperties: true, withPhoto: true);
     return contacts;
   } else {
-    return [
+  return [
       Contact(name: Name(first: "Error"))
     ];
   }

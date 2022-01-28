@@ -1,4 +1,6 @@
 // ignore: must_be_immutable
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class Concordar extends StatelessWidget {
