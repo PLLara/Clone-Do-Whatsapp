@@ -167,7 +167,7 @@ class MessageScaffold extends StatelessWidget {
       }
       var someNumber = element.phones[0].normalizedNumber.substring(element.phones[0].normalizedNumber.length - 8);
       if (someNumber == userNumber.substring(userNumber.length - 8)) {
-        userName  = element.displayName;
+        userName = element.displayName;
       }
     });
 
@@ -202,6 +202,7 @@ class MessageScaffold extends StatelessWidget {
                               style: TextStyle(color: colors[int.parse(userNumber) % colors.length]),
                             )
                           : const SizedBox(),
+                      mensagem['mediaLink'] != '' ? Image.network(mensagem['mediaLink']) : SizedBox(),
                       Text(textoMensagem),
                       Text(
                         data,
