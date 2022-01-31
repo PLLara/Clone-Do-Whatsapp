@@ -262,6 +262,7 @@ class NextButton extends StatelessWidget {
                             print(e);
                             Get.defaultDialog(
                               title: "Fatal Error!",
+                              content: Text(e.toString()),
                               barrierDismissible: false,
                               textConfirm: "Exit",
                               onConfirm: () {

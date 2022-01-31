@@ -202,8 +202,31 @@ class MessageScaffold extends StatelessWidget {
                               style: TextStyle(color: colors[int.parse(userNumber) % colors.length]),
                             )
                           : const SizedBox(),
-                      mensagem['mediaLink'] != '' ? Image.network(mensagem['mediaLink']) : SizedBox(),
-                      Text(textoMensagem),
+                      mensagem['mediaLink'] != ''
+                          ? TextButton(
+                              onPressed: () {
+                                Get.to(
+                                  Scaffold(
+                                    body: Center(
+                                      child: Hero(
+                                        tag: mensagem['mediaLink'],
+                                        child: Image.network(
+                                          mensagem['mediaLink'],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Hero(
+                                tag: mensagem['mediaLink'],
+                                child: Image.network(
+                                  mensagem['mediaLink'],
+                                ),
+                              ),
+                            )
+                          : SizedBox(),
+                      SelectableText(textoMensagem),
                       Text(
                         data,
                         style: TextStyle(color: Color(0xaaffffff), fontSize: 12),
