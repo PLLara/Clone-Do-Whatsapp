@@ -13,12 +13,13 @@ AppBar MyAppBar(myTabs) {
         onSelected: (e) {
           if (e == 'Config') {
             Get.to(
-                const Configuracoes(
-                  key: Key('config'),
-                ),
-                transition: Transition.topLevel,
-                duration: const Duration(milliseconds: 400),
-                curve: Curves.easeInOut);
+              () => const Configuracoes(
+                key: Key('config'),
+              ),
+              transition: Transition.topLevel,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
+            );
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry>[

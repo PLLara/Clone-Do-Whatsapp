@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 //   ),
 // );
 
-var defaultColor = Colors.yellow;
+var defaultColor = Colors.amber;
 
 defaultAppTheme() {
   return ThemeData.dark().copyWith(

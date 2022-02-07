@@ -25,13 +25,13 @@ class _HomeState extends State<Home> {
     List<TabData> myTabs = [
       TabData(
         myTab: const Tab(
-          text: 'Conversas',
+          text: 'CONVERSAS',
         ),
         myWidget: Conversas(),
       ),
       TabData(
         myTab: const Tab(
-          text: 'Status',
+          text: 'STATUS',
         ),
         myWidget: Scaffold(
           body: Center(child: Text(":)")),

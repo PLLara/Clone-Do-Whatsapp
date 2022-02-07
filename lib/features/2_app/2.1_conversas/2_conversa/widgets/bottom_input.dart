@@ -69,23 +69,21 @@ class BottomInputBar extends StatelessWidget {
                                     TextButton(
                                       onPressed: () {
                                         Get.back();
-                                        if (image != null) {
-                                          var ref = FirebaseStorage.instance.ref('conversas/geral/${Uuid().v4()}');
-                                          try {
-                                            ref.putFile(File(image.path)).then(
-                                              (p0) async {
-                                                var path = await p0.ref.getDownloadURL();
-                                                sendMessage(path: 'conversas/geral', mensagem: '', mediaLink: path);
-                                              },
-                                            );
-                                          } catch (e) {
-                                            Get.defaultDialog(
-                                              title: 'ERROR - ${e.toString()}',
-                                              content: Image.file(
-                                                File(image.path),
-                                              ),
-                                            );
-                                          }
+                                        var ref = FirebaseStorage.instance.ref('conversas/geral/${const Uuid().v4()}');
+                                        try {
+                                          ref.putFile(File(image.path)).then(
+                                            (p0) async {
+                                              var path = await p0.ref.getDownloadURL();
+                                              sendMessage(path: 'conversas/geral', mensagem: '', mediaLink: path);
+                                            },
+                                          );
+                                        } catch (e) {
+                                          Get.defaultDialog(
+                                            title: 'ERROR - ${e.toString()}',
+                                            content: Image.file(
+                                              File(image.path),
+                                            ),
+                                          );
                                         }
                                       },
                                       child: Text("Send"),
