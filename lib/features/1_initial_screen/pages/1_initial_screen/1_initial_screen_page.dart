@@ -25,11 +25,9 @@ class InicialScreen extends StatelessWidget {
               const AwesomeImage(),
               const Termos(),
               Concordar(
-                nextScreen: MaterialPageRoute(
-                  builder: (context) => RegisterPage(
-                    key: const Key('register'),
-                  ),
-                ),
+                nextScreen: RegisterPage(
+                    key: Key('register'),
+                  )
               )
             ],
           ),

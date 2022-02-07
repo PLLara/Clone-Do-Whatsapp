@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/contacts_state.dart';
 
 class Contatos extends StatelessWidget {
   ContactsController contactsController = Get.find();
@@ -12,7 +12,6 @@ class Contatos extends StatelessWidget {
   Contatos({
     Key? key,
   }) : super(key: key) {
-    print("Pegando contatos");
     contactsController.getContactsFromDevice();
   }
 

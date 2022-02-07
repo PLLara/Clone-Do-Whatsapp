@@ -23,6 +23,7 @@ defaultAppTheme() {
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: defaultColor,
     ),
+    appBarTheme: const AppBarTheme(elevation: 1),
     textTheme: const TextTheme().copyWith(
       headline1: const TextStyle(
         fontSize: 27,

@@ -2,9 +2,10 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Concordar extends StatelessWidget {
-  final Route nextScreen;
+  final Widget nextScreen;
 
   const Concordar({
     Key? key,
@@ -19,9 +20,11 @@ class Concordar extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Navigator.push(
-              context,
+            Get.to(
               nextScreen,
+              transition: Transition.topLevel,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
             );
           },
           child: const Text("CONCORDAR E AVANÇAR"),

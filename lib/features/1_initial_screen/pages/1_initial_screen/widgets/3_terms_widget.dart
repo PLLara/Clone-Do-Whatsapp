@@ -11,7 +11,7 @@ class Termos extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Text(
-        "Tem termo de uso nenhum kkkkkkkkkkkkk, se der cadeia reclama com a google.",
+        "Os termos de uso ainda serão de ser feitos.",
         textAlign: TextAlign.center,
       ),
     );

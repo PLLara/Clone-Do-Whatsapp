@@ -1,8 +1,10 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names, invalid_use_of_protected_member
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
+import 'package:whatsapp2/common/widgets/loading.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/contacts_state.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/color_list.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/widgets/AppBar.dart';
@@ -19,20 +21,6 @@ class ConversaGeral extends StatefulWidget {
 
 class _ConversaGeralState extends State<ConversaGeral> {
   final ConversaController conversaController = Get.find<ConversaController>();
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   print("...CONFIGURANDO O LISTENER PARA OS DADOS...");
-  //   conversaController.dataStream.resume();
-  // }
-
-  // @override
-  // void dispose() async {
-  //   super.dispose();
-  //   conversaController.dataStream.pause();
-  //   print("...INSCRIÇÃO FECHADA...");
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -210,8 +198,9 @@ class MessageScaffold extends StatelessWidget {
                                     body: Center(
                                       child: Hero(
                                         tag: mensagem['mediaLink'],
-                                        child: Image.network(
-                                          mensagem['mediaLink'],
+                                        child: CachedNetworkImage(
+                                          imageUrl: mensagem['mediaLink'],
+                                          placeholder: (context, url) => const Loading(),
                                         ),
                                       ),
                                     ),
@@ -220,8 +209,9 @@ class MessageScaffold extends StatelessWidget {
                               },
                               child: Hero(
                                 tag: mensagem['mediaLink'],
-                                child: Image.network(
-                                  mensagem['mediaLink'],
+                                child: CachedNetworkImage(
+                                  imageUrl: mensagem['mediaLink'],
+                                  placeholder: (context, url) => const Loading(),
                                 ),
                               ),
                             )

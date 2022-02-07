@@ -11,7 +11,7 @@ class FormFooter extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Padding(
       padding: EdgeInsets.only(top: 15.0),
-      child: Text("Tu vai receber um sms ai se pa"),
+      child: Text("Você receberá um sms em instantes"),
     );
   }
 }

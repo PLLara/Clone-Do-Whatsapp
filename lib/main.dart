@@ -2,7 +2,7 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:whatsapp2/features/1_initial_screen/pages/1_initial_screen/1_initial_screen_page.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/contacts_state.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
 import 'features/2_app/2_tab_controller.dart/2.0_tab_controller.dart';
 import 'common/themes/default.dart';
@@ -15,7 +15,6 @@ late List<CameraDescription> cameras;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // By default, this will loop through all contacts using a page size of 20.
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

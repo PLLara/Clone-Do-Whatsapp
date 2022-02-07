@@ -17,7 +17,7 @@ class FormHeader extends StatelessWidget {
           style: Theme.of(context).textTheme.headline2,
         ),
         const Text(
-          "O Whatsapp 2 vai precisar verificar o teu numero de telefone :)",
+          "O Whatsapp 2 vai precisar verificar o a sua identidade",
           textAlign: TextAlign.center,
         ),
       ],

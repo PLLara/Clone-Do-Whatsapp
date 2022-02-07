@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contacts_state.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/contacts_state.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contatos.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_page.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
@@ -19,7 +19,7 @@ class Conversas extends StatelessWidget {
   Widget build(BuildContext context) {
     return Obx(() {
       if (conversaController.state.value == States.loading) {
-        return const ScaffoldLoading();
+        return const Loading();
       }
       return const ConversasPageContent();
     });
@@ -41,11 +41,11 @@ class ConversasPageContent extends StatelessWidget {
           color: Colors.white,
         ),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (e) => Contatos(),
-            ),
+          Get.to(
+            Contatos(),
+            transition: Transition.rightToLeft,
+            duration: const Duration(milliseconds: 400),
+            curve: Curves.easeInOut,
           );
         },
       ),
@@ -81,13 +81,11 @@ class ConversationsList extends StatelessWidget {
         );
         return ListTile(
           onTap: () async {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (e) => const ConversaGeral(
-                  key: Key("ConversaGeral"),
-                ),
-              ),
+            Get.to(
+              const ConversaGeral(),
+              transition: Transition.topLevel,
+              duration: const Duration(milliseconds: 400),
+              curve: Curves.easeInOut,
             );
           },
           leading: icon,
