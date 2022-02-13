@@ -11,11 +11,11 @@ class AwesomeImage extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(9999),
-      child: const SizedBox(
+      child: SizedBox(
         width: 300,
         child: Image(
-          color: Colors.yellow,
-          image: AssetImage('assets/background.png'),
+          color: Theme.of(context).primaryColor,
+          image: const AssetImage('assets/background.png'),
         ),
       ),
     );

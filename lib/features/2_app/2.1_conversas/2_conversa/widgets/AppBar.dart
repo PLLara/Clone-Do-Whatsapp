@@ -1,7 +1,9 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/path_cubit.dart';
 
 AppBar ConversaAppBarBind() {
   return AppBar(
@@ -33,7 +35,11 @@ AppBar ConversaAppBarBind() {
         ],
       ),
     ),
-    title: const Text("Conversa Geral"),
+    title: BlocBuilder<PathCubit, String>(
+      builder: (context, state) {
+        return Text(state);
+      },
+    ),
     actions: [
       PopupMenuButton(
         itemBuilder: (BuildContext context) => <PopupMenuEntry>[

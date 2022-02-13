@@ -51,7 +51,7 @@ android {
     defaultConfig {
         applicationId "com.whatsapp2.app"
         minSdkVersion 21
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 28
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }

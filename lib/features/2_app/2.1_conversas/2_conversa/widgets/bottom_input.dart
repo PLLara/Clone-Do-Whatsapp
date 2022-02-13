@@ -6,17 +6,20 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/src/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/path_cubit.dart';
 
 class BottomInputBar extends StatelessWidget {
-  BottomInputBar({
+  const BottomInputBar({
     Key? key,
   }) : super(key: key);
-  final ConversaController conversaController = Get.find<ConversaController>();
 
   @override
   Widget build(BuildContext context) {
+    final ConversaController conversaController = Get.find<ConversaController>(tag: context.read<PathCubit>().state);
+
     return SizedBox(
       height: 55,
       child: Container(
@@ -29,7 +32,7 @@ class BottomInputBar extends StatelessWidget {
                 margin: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(100),
-                  color: Colors.red,
+                  color: const Color(0xff202C33),
                 ),
                 child: Row(
                   children: [
@@ -49,52 +52,50 @@ class BottomInputBar extends StatelessWidget {
                     ),
                     Flexible(
                       flex: 1,
-                      child: Container(
-                        child: IconButton(
-                          icon: Icon(Icons.photo),
-                          onPressed: () async {
-                            XFile? image = await getImageFromGallery();
-                            if (image == null) {
-                              return;
-                            }
-
-                            Get.to(
-                              Scaffold(
-                                appBar: AppBar(),
-                                body: Column(
-                                  children: [
-                                    Image.file(
-                                      File(image.path),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Get.back();
-                                        var ref = FirebaseStorage.instance.ref('conversas/geral/${const Uuid().v4()}');
-                                        try {
-                                          ref.putFile(File(image.path)).then(
-                                            (p0) async {
-                                              var path = await p0.ref.getDownloadURL();
-                                              sendMessage(path: 'conversas/geral', mensagem: '', mediaLink: path);
-                                            },
-                                          );
-                                        } catch (e) {
-                                          Get.defaultDialog(
-                                            title: 'ERROR - ${e.toString()}',
-                                            content: Image.file(
-                                              File(image.path),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                      child: Text("Send"),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            );
+                      child: IconButton(
+                        icon: const Icon(Icons.photo),
+                        onPressed: () async {
+                          XFile? image = await getImageFromGallery();
+                          if (image == null) {
                             return;
-                          },
-                        ),
+                          }
+                          Get.to(
+                            () => Scaffold(
+                              appBar: AppBar(),
+                              body: Column(
+                                children: [
+                                  Image.file(
+                                    File(image.path),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Get.back();
+                                      conversaController.route;
+                                      var ref = FirebaseStorage.instance.ref('${conversaController.route}/${const Uuid().v4()}');
+                                      try {
+                                        ref.putFile(File(image.path)).then(
+                                          (p0) async {
+                                            var path = await p0.ref.getDownloadURL();
+                                            sendMessage(path: conversaController.route, mensagem: '', mediaLink: path);
+                                          },
+                                        );
+                                      } catch (e) {
+                                        Get.defaultDialog(
+                                          title: 'ERROR - ${e.toString()}',
+                                          content: Image.file(
+                                            File(image.path),
+                                          ),
+                                        );
+                                      }
+                                    },
+                                    child: const Text("Send"),
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                          return;
+                        },
                       ),
                     )
                   ],
@@ -102,7 +103,7 @@ class BottomInputBar extends StatelessWidget {
               ),
             ),
             CircleAvatar(
-              backgroundColor: Colors.blue,
+              backgroundColor: const Color(0xff00A884),
               radius: 20,
               child: IconButton(
                 padding: const EdgeInsets.all(5),
@@ -111,7 +112,7 @@ class BottomInputBar extends StatelessWidget {
                 onPressed: () {
                   if (conversaController.controller.text.trim() != '') {
                     sendMessage(
-                      path: 'conversas/geral',
+                      path: conversaController.route,
                       mensagem: conversaController.controller.text,
                     );
                     conversaController.controller.clear();
@@ -132,7 +133,11 @@ class BottomInputBar extends StatelessWidget {
   }
 }
 
-void sendMessage({required String path, required String mensagem, String mediaLink = ''}) {
+void sendMessage({
+  required String path,
+  required String mensagem,
+  String mediaLink = '',
+}) {
   var realtime = FirebaseDatabase.instance;
   var conversaGeral = realtime.ref(path);
   var hoje = DateTime.now();

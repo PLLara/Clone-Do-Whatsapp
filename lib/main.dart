@@ -1,11 +1,11 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names
 import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:whatsapp2/common/state/user_state.dart';
 import 'package:whatsapp2/features/1_initial_screen/pages/1_initial_screen/1_initial_screen_page.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/contacts_state.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
-import 'features/2_app/2_tab_controller.dart/2.0_tab_controller.dart';
+import 'package:whatsapp2/common/state/contacts_state.dart';
 import 'common/themes/default.dart';
+import 'features/2_app/2.2_tab_controller.dart/2.0_tab_controller.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       smartManagement: SmartManagement.keepFactory,
       title: 'Whatsapp 2',
-      theme: defaultAppTheme(),
+      theme: defaultDarkTheme(),
       home: LoggedOrNorController(
         key: const Key('loggedOrNot'),
       ),
@@ -42,15 +42,17 @@ class MyApp extends StatelessWidget {
 
 class LoggedOrNorController extends StatefulWidget {
   final ContactsController contactsController = Get.put(ContactsController(), permanent: true);
-  final ConversaController conversaController = Get.put(ConversaController(), permanent: true);
+  final UserController userController = Get.put(UserController(), permanent: true);
+
   LoggedOrNorController({
     Key? key,
   }) : super(key: key) {
-    print("-----------------------------------------------------------------------------------TENTANDO INICIAR O STATE");
-    if (conversaController.iniciado.value != true) {
-      conversaController.start();
-      contactsController.getContactsFromDevice();
-    }
+    print("-------------------------------------------TENTANDO INICIAR O STATE");
+    contactsController.getContactsFromDevice();
+    FirebaseAuth.instance.userChanges().listen((User? newUser) {
+      userController.changeUser(newUser);
+    });
+
   }
 
   @override

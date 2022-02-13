@@ -2,10 +2,10 @@
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:whatsapp2/features/2_app/2.1_appbar/appbar_widget.dart';
 
-import '../2.1_conversas/1_conversas/conversas.dart';
+import '../2.1_conversas/1_conversas/conversas_state.dart';
 import '../2.2_camera/presentation/camera_widget.dart';
-import 'appbar/appbar_widget.dart';
 
 class Home extends StatefulWidget {
   final List<CameraDescription> cameras;

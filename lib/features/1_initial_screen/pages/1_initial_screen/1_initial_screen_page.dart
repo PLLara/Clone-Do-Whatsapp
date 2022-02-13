@@ -26,8 +26,8 @@ class InicialScreen extends StatelessWidget {
               const Termos(),
               Concordar(
                 nextScreen: RegisterPage(
-                    key: Key('register'),
-                  )
+                  key: const Key('register'),
+                ),
               )
             ],
           ),

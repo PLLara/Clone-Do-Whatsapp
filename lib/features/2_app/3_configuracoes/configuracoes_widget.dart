@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/navigator/go_to_page.dart';
+import 'package:whatsapp2/common/state/user_state.dart';
+import 'package:whatsapp2/common/themes/default.dart';
 
 class Configuracoes extends StatelessWidget {
   const Configuracoes({
@@ -25,8 +27,8 @@ class Configuracoes extends StatelessWidget {
               UserIdentity(
                 onTap: () {
                   goToPage(
-                    const UserDetails(
-                      key: Key('userdetails'),
+                    UserDetails(
+                      key: const Key('userdetails'),
                     ),
                   );
                 },
@@ -37,18 +39,41 @@ class Configuracoes extends StatelessWidget {
               ),
               Column(
                 mainAxisSize: MainAxisSize.max,
-                children: const [
+                children: [
                   ConfigurationOption(
                     title: "Conta",
                     subtitle: "Detalhes, e sei lá oq mais",
                     icon: Icons.vpn_key,
+                    callback: () {
+                      Get.to(
+                        () => Scaffold(
+                          appBar: AppBar(),
+                          body: Column(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Get.changeTheme(defaultLightTheme());
+                                },
+                                child: const Text("DiaNoite"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.changeTheme(defaultDarkTheme());
+                                },
+                                child: const Text("DiaNoite"),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  ConfigurationOption(
+                  const ConfigurationOption(
                     title: "Conversas",
                     subtitle: "Tema, papel de parede, histórico",
                     icon: Icons.sms,
                   ),
-                  ConfigurationOption(
+                  const ConfigurationOption(
                     title: "Ajuda",
                     subtitle: "Central de ajuda política de privacidade",
                     icon: Icons.help_outline,
@@ -78,9 +103,11 @@ class Configuracoes extends StatelessWidget {
 }
 
 class UserDetails extends StatelessWidget {
-  const UserDetails({
+  UserDetails({
     Key? key,
   }) : super(key: key);
+
+  final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -106,23 +133,27 @@ class UserDetails extends StatelessWidget {
               ),
             ),
           ),
-          ConfigurationOption(
-            title: 'Nome',
-            subtitle: FirebaseAuth.instance.currentUser?.displayName ?? '',
-            icon: Icons.person,
-            endIcon: Icons.edit,
-            callback: () {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(
-                      5.0,
+          Obx(
+            () {
+              return ConfigurationOption(
+                title: 'Nome',
+                subtitle: userController.user.value?.displayName ?? '',
+                icon: Icons.person,
+                endIcon: Icons.edit,
+                callback: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(
+                          5.0,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                isScrollControlled: true,
-                builder: (context) => const ChangeNameBottomSheet(),
+                    isScrollControlled: true,
+                    builder: (context) => const ChangeNameBottomSheet(),
+                  );
+                },
               );
             },
           ),
@@ -173,11 +204,13 @@ class _ChangeNameBottomSheetState extends State<ChangeNameBottomSheet> {
               ),
               TextButton(
                 onPressed: () async {
+                  var newUserName = nameController.text;
                   Get.back();
-                  await FirebaseAuth.instance.currentUser?.updateDisplayName(nameController.text).then(
+                  await FirebaseAuth.instance.currentUser?.updateDisplayName(newUserName).then(
                         (value) => {
                           Get.showSnackbar(
                             const GetSnackBar(
+                              duration: Duration(milliseconds: 2000),
                               title: "Success",
                               message: ":)",
                             ),
@@ -250,47 +283,51 @@ class UserIdentity extends StatelessWidget {
 
   UserIdentity({Key? key, required this.onTap}) : super(key: key);
 
+  final UserController userController = Get.find<UserController>();
+
   @override
   Widget build(BuildContext context) {
-    var currentUser = FirebaseAuth.instance.currentUser;
-    var phoneNumber = (currentUser?.phoneNumber ?? '').toString();
-    var name = currentUser?.displayName;
-    var asd = currentUser?.metadata;
-    return ListTile(
-      onTap: onTap,
-      title: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(
-          children: [
-            const Hero(
-              tag: 'avatar',
-              child: CircleAvatar(
-                radius: 40,
-                child: Icon(
-                  Icons.person,
-                  size: 40,
+    return Obx(() {
+      User? currentUser = userController.user.value;
+      var phoneNumber = (currentUser?.phoneNumber ?? '').toString();
+      var name = currentUser?.displayName;
+      var asd = currentUser?.metadata;
+      return ListTile(
+        onTap: onTap,
+        title: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              const Hero(
+                tag: 'avatar',
+                child: CircleAvatar(
+                  radius: 40,
+                  child: Icon(
+                    Icons.person,
+                    size: 40,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(name ?? 'SEM NOME AINDA'),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(asd?.creationTime.toString() ?? 'SEM DESCRIÇÃO'),
-                ],
+              const SizedBox(
+                width: 20,
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(name ?? 'SEM NOME AINDA'),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(asd?.creationTime.toString() ?? 'SEM DESCRIÇÃO'),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }

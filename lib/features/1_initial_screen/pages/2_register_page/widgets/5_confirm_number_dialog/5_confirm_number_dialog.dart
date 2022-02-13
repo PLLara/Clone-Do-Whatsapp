@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/1_initial_screen/global/location_state.dart';
-import 'package:whatsapp2/features/1_initial_screen/global/show_fatal_error.dart';
+import 'package:whatsapp2/common/widgets/show_fatal_error.dart';
 import 'package:whatsapp2/features/1_initial_screen/pages/2_register_page/widgets/5_confirm_number_dialog/state/verify_phone_number.dart';
 import 'package:whatsapp2/features/1_initial_screen/pages/2_register_page/widgets/5_confirm_number_dialog/widgets/botao_de_voltar.dart';
 import 'package:whatsapp2/features/1_initial_screen/pages/2_register_page/widgets/5_confirm_number_dialog/widgets/numero_de_celular_formatado.dart';

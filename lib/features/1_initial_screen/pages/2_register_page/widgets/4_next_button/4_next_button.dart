@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/features/1_initial_screen/global/location_state.dart';
@@ -30,6 +32,7 @@ class NextButton extends StatelessWidget {
           DialogoDeConfirmacaoDeNumero(
             key: const Key('dialogoconfirmacaonumero'),
           ),
+          barrierDismissible: false
         );
       },
       child: const Text('Próximo'),

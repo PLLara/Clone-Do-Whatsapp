@@ -20,7 +20,7 @@ class Concordar extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Get.to(
+            Get.to(()=>
               nextScreen,
               transition: Transition.topLevel,
               duration: const Duration(milliseconds: 400),
