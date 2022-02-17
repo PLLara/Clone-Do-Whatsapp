@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     // ignore: missing_enum_constant_in_switch
     switch (defaultTargetPlatform) {
@@ -43,11 +40,23 @@ class DefaultFirebaseOptions {
     );
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBGk-UQzUi87TkW-EPv75PXmXiZ_2n2ONU',
+    appId: '1:1005267707114:web:991ad2d96cbe856a6d2393',
+    messagingSenderId: '1005267707114',
+    projectId: 'whatsappi-2',
+    authDomain: 'whatsappi-2.firebaseapp.com',
+    databaseURL: 'https://whatsappi-2-default-rtdb.firebaseio.com',
+    storageBucket: 'whatsappi-2.appspot.com',
+    measurementId: 'G-9VR129Y8JL',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAxQe0rhoXpHJTUcGpecL62nf8-O3r8Rmg',
     appId: '1:1005267707114:android:56f36d89cad9b3bf6d2393',
     messagingSenderId: '1005267707114',
     projectId: 'whatsappi-2',
+    databaseURL: 'https://whatsappi-2-default-rtdb.firebaseio.com',
     storageBucket: 'whatsappi-2.appspot.com',
   );
 }

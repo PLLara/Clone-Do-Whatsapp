@@ -15,41 +15,46 @@ class CameraApp extends StatefulWidget {
 }
 
 class _CameraAppState extends State<CameraApp> {
-  late CameraController controller;
+  late CameraController? controller;
 
   @override
   void initState() {
     List<CameraDescription> cameras = widget.cameras;
     super.initState();
-    controller = CameraController(cameras[1], ResolutionPreset.low);
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
+    try {
+      controller = CameraController(cameras[1], ResolutionPreset.low);
+      controller?.initialize().then((_) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {});
+      });
+    } catch (e) {
+      controller = null;
+      print("Camera não iniciada");
+    }
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
+    if (controller == null) {
+      return const Text("Camera não disponível!");
     }
     return MaterialApp(
       home: Column(
         children: [
           CameraPreview(
-            controller,
+            controller!,
           ),
           TextButton(
             onPressed: () async {
-              var file = await controller.takePicture();
+              var file = await controller!.takePicture();
               Get.defaultDialog(
                 actions: [
                   TextButton(
@@ -58,7 +63,7 @@ class _CameraAppState extends State<CameraApp> {
                         file.path
                       ], text: 'eu amo o vitao');
                     },
-                    child: Text("ENVIAR"),
+                    child: const Text("ENVIAR"),
                   )
                 ],
                 title: file.path,
@@ -69,7 +74,7 @@ class _CameraAppState extends State<CameraApp> {
                 ),
               );
             },
-            child: Text('FOTO'),
+            child: const Text('FOTO'),
           ),
         ],
       ),

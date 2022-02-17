@@ -10,17 +10,19 @@ ThemeData defaultDarkTheme() {
       backgroundColor: defaultColor,
     ),
     appBarTheme: const AppBarTheme(elevation: 1),
-    textTheme: const TextTheme().copyWith(
-      headline1: const TextStyle(
-        fontSize: 27,
-        fontWeight: FontWeight.w800,
-      ),
-      headline2: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w800,
-        color: defaultColor,
-      ),
-    ),
+    textTheme: const TextTheme()
+        .copyWith(
+          headline1: const TextStyle(
+            fontSize: 27,
+            fontWeight: FontWeight.w800,
+          ),
+          headline2: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: defaultColor,
+          ),
+        )
+        .apply(bodyColor: Colors.white, displayColor: Colors.white),
   );
 }
 
@@ -32,17 +34,21 @@ ThemeData defaultLightTheme() {
       backgroundColor: defaultColor,
     ),
     appBarTheme: const AppBarTheme(elevation: 1),
-    textTheme: const TextTheme().copyWith(
-      headline1: const TextStyle(
-        fontSize: 27,
-        fontWeight: FontWeight.w800,
-      ),
-      headline2: TextStyle(
-        fontSize: 20,
-        fontWeight: FontWeight.w800,
-        color: defaultColor,
-      ),
-    ),
+    textTheme: const TextTheme()
+        .copyWith(
+          headline1: const TextStyle(
+            fontSize: 27,
+            fontWeight: FontWeight.w800,
+          ),
+          headline2: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            color: defaultColor,
+          ),
+        )
+        .apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.white,
+        ),
   );
 }
-

@@ -32,7 +32,6 @@ class NextButton extends StatelessWidget {
           DialogoDeConfirmacaoDeNumero(
             key: const Key('dialogoconfirmacaonumero'),
           ),
-          barrierDismissible: false,
         );
       },
       child: const Text('Próximo'),

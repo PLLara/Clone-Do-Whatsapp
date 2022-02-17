@@ -19,8 +19,12 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  cameras = await availableCameras();
-
+  try {
+    cameras = await availableCameras();
+  } catch (e) {
+    cameras = [];
+    print("COE A CAMERA NÃO FUNCIONA!");
+  }
   return runApp(const MyApp());
 }
 
@@ -52,7 +56,6 @@ class LoggedOrNorController extends StatefulWidget {
     FirebaseAuth.instance.userChanges().listen((User? newUser) {
       userController.changeUser(newUser);
     });
-
   }
 
   @override

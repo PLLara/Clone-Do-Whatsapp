@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 
 import 'package:postgres/postgres.dart';
 import 'package:uuid/uuid.dart';
