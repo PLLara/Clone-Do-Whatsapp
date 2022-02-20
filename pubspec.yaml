@@ -1,5 +1,5 @@
 name: whatsapp2
-description: A new Flutter project.
+description: O projetao do lara.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -56,6 +56,7 @@ dependencies:
   photo_gallery: ^1.1.1
   permission_handler: ^8.3.0
   open_file: ^3.2.1
+  palestine_console: ^0.0.10
 
 dev_dependencies:
   flutter_lints: ^1.0.0

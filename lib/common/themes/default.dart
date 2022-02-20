@@ -22,7 +22,7 @@ ThemeData defaultDarkTheme() {
             color: defaultColor,
           ),
         )
-        .apply(bodyColor: Colors.white, displayColor: Colors.white),
+        .apply(bodyColor: Colors.pink, displayColor: Colors.pink),
   );
 }
 
@@ -47,8 +47,8 @@ ThemeData defaultLightTheme() {
           ),
         )
         .apply(
-          bodyColor: Colors.white,
-          displayColor: Colors.white,
+          bodyColor: Colors.pink,
+          displayColor: Colors.pink,
         ),
   );
 }

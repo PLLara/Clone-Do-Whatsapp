@@ -1,38 +1,48 @@
 import 'dart:io';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CameraApp extends StatefulWidget {
-  final List<CameraDescription> cameras;
-
-  const CameraApp({Key? key, required this.cameras}) : super(key: key);
+  const CameraApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CameraAppState createState() => _CameraAppState();
 }
 
 class _CameraAppState extends State<CameraApp> {
-  late CameraController? controller;
+  CameraController? controller;
 
   @override
   void initState() {
-    List<CameraDescription> cameras = widget.cameras;
-    super.initState();
+    List<CameraDescription> cameras;
     try {
-      controller = CameraController(cameras[1], ResolutionPreset.low);
-      controller?.initialize().then((_) {
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
-      });
+      availableCameras().then(
+        (value) {
+          cameras = value;
+          controller = CameraController(
+            cameras[cameras.length - 1],
+            ResolutionPreset.low,
+          );
+          controller?.initialize().then(
+            (_) {
+              if (!mounted) {
+                return;
+              }
+              setState(() {});
+            },
+          );
+        },
+      );
     } catch (e) {
+      cameras = [];
       controller = null;
-      print("Camera não iniciada");
     }
+
+    super.initState();
   }
 
   @override
@@ -44,40 +54,73 @@ class _CameraAppState extends State<CameraApp> {
   @override
   Widget build(BuildContext context) {
     if (controller == null) {
-      return const Text("Camera não disponível!");
+      return const Center(
+        child: Text("Camera não disponível!"),
+      );
     }
     return MaterialApp(
-      home: Column(
+      home: Stack(
         children: [
           CameraPreview(
             controller!,
           ),
-          TextButton(
-            onPressed: () async {
-              var file = await controller!.takePicture();
-              Get.defaultDialog(
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Share.shareFiles([
-                        file.path
-                      ], text: 'eu amo o vitao');
-                    },
-                    child: const Text("ENVIAR"),
-                  )
-                ],
-                title: file.path,
-                content: Image.file(
-                  File(
-                    file.path,
-                  ),
-                ),
-              );
-            },
-            child: const Text('FOTO'),
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: TakePicture(
+                controller: controller,
+              ),
+            ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class TakePicture extends StatelessWidget {
+  const TakePicture({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
+
+  final CameraController? controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () async {
+        var file = await controller?.takePicture();
+
+        if (file != null) {
+          Get.defaultDialog(
+            title: file.path,
+            content: Image.file(
+              File(
+                file.path,
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Share.shareFiles([
+                    file.path
+                  ], text: 'eu amo o vitao');
+                },
+                child: const Text("ENVIAR"),
+              )
+            ],
+          );
+
+        } else {
+
+          Get.defaultDialog(
+            title: "Camera Error!",
+          );
+          
+        }
+      },
+      child: const Text('FOTO'),
     );
   }
 }

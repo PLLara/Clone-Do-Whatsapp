@@ -24,10 +24,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -58,5 +55,17 @@ class DefaultFirebaseOptions {
     projectId: 'whatsappi-2',
     databaseURL: 'https://whatsappi-2-default-rtdb.firebaseio.com',
     storageBucket: 'whatsappi-2.appspot.com',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyCk9URc31HYCVALFCQK3N08x7qsyCokVUk',
+    appId: '1:1005267707114:ios:14b5f8b05e4d3d9f6d2393',
+    messagingSenderId: '1005267707114',
+    projectId: 'whatsappi-2',
+    databaseURL: 'https://whatsappi-2-default-rtdb.firebaseio.com',
+    storageBucket: 'whatsappi-2.appspot.com',
+    androidClientId: '1005267707114-4nu46ert3r9ff0anb2db951i2ts0351l.apps.googleusercontent.com',
+    iosClientId: '1005267707114-v2uphrqus1k8vscslj7f4cl22i2eguhu.apps.googleusercontent.com',
+    iosBundleId: 'com.whatsapp2.app',
   );
 }

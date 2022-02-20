@@ -8,10 +8,7 @@ import '../2.1_conversas/1_conversas/conversas_page.dart';
 import '../2.2_camera/presentation/camera_widget.dart';
 
 class Home extends StatefulWidget {
-  final List<CameraDescription> cameras;
-
-  const Home(
-    this.cameras, {
+  const Home({
     Key? key,
   }) : super(key: key);
 
@@ -41,9 +38,7 @@ class _HomeState extends State<Home> {
         myTab: const Tab(
           text: '📷︎',
         ),
-        myWidget: CameraApp(
-          cameras: widget.cameras,
-        ),
+        myWidget: CameraApp(),
       ),
     ];
     return DefaultTabController(

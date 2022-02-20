@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:palestine_console/palestine_console.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/model/message_model.dart';
 
 enum States { loading, ready, error }
@@ -25,7 +26,6 @@ class ConversaController extends GetxController {
   ConversaController({required this.route});
 
   messageWasAdded() {
-    print(quantidadeDeMensagensNaoLidas);
     quantidadeDeMensagensNaoLidas.value += 1;
   }
 
@@ -90,7 +90,7 @@ class ConversaController extends GetxController {
     addedValueStream = reference.orderByKey().limitToLast(1).onValue.listen((event) {
       bool seEuDeveriaAdicionarAMensagem(DatabaseEvent event) => event.snapshot.value != null && iniciado.value;
       if (seEuDeveriaAdicionarAMensagem(event)) {
-        print("----- MESSAGE ADDED -----");
+        Print.green("----- MESSAGE ADDED -----");
         papo.insert(0, parseMessage(event.snapshot.children.last));
       }
       iniciado.value = true;

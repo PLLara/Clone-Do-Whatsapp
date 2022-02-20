@@ -9,10 +9,11 @@ class Termos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Text(
         "Os termos de uso ainda serão de ser feitos.",
         textAlign: TextAlign.center,
+        style: Theme.of(context).textTheme.bodyText1
       ),
     );
   }
