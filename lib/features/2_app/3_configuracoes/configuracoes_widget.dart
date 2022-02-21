@@ -265,13 +265,11 @@ class ConfigurationOption extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.subtitle2,
+        style: Theme.of(context).textTheme.bodyText1,
       ),
       subtitle: Text(
         subtitle,
-        style: Theme.of(context).textTheme.subtitle2?.copyWith(
-              color: Colors.white70,
-            ),
+        style: Theme.of(context).textTheme.bodyText1,
       ),
       trailing: Icon(endIcon),
     );

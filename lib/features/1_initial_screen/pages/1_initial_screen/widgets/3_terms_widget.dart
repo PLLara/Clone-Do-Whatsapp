@@ -11,7 +11,7 @@ class Termos extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "Os termos de uso ainda serão de ser feitos.",
+        "Os termos de uso ainda terão de ser feitos.",
         textAlign: TextAlign.center,
         style: Theme.of(context).textTheme.bodyText1
       ),

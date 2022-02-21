@@ -125,6 +125,7 @@ class CellphoneInput extends StatelessWidget {
         Expanded(
           flex: 3,
           child: TextFormField(
+            style: Theme.of(context).textTheme.bodyText1,
             controller: countryCodeInputController,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
@@ -140,6 +141,7 @@ class CellphoneInput extends StatelessWidget {
         Expanded(
           flex: 8,
           child: TextFormField(
+            style: Theme.of(context).textTheme.bodyText1,
             controller: phoneNumberInputController,
             keyboardType: TextInputType.number,
             autocorrect: false,

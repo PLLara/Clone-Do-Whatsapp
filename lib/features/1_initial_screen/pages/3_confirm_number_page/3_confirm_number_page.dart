@@ -39,6 +39,7 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
                 child: loading
                     ? const Loading()
                     : TextField(
+                        style: Theme.of(context).textTheme.bodyText1,
                         onChanged: (verificationCode) async {
                           if (verificationCode.length == 6) {
                             setState(() {
@@ -85,7 +86,10 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
                       Icons.sms,
                       color: Colors.amber,
                     ),
-                    title: const Text('Remande o SMS'),
+                    title: Text(
+                      'Remande o SMS',
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
                   ),
                   const Divider(),
                   ListTile(
@@ -94,7 +98,10 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
                       Icons.phone,
                       color: Colors.amber,
                     ),
-                    title: const Text("Receba por ligação"),
+                    title: Text(
+                      "Receba por ligação",
+                      style: Theme.of(context).textTheme.bodyText2,
+                    ),
                   ),
                 ],
               ),

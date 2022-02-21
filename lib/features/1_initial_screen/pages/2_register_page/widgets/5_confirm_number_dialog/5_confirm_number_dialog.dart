@@ -99,10 +99,14 @@ class ConfirmNumberDialogContent extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("Você escolheu o número: "),
+        Text(
+          "Você escolheu o número: ",
+          style: Theme.of(context).textTheme.bodyText1,
+        ),
         NumeroDeCelularFormatadoEEmNegrito(),
-        const Text(
+        Text(
           "Tem certeza que esse é o número certo?",
+          style: Theme.of(context).textTheme.bodyText1,
         )
       ],
     );

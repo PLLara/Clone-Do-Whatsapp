@@ -65,7 +65,7 @@ class ConversaController extends GetxController {
 
   start() async {
     final reference = FirebaseDatabase.instance.ref(route);
-    print("-----------------------------------------------INICIANDO DO STATE");
+    print("-------------------INICIANDO DO STATE--------------------------");
 
     state.value = States.loading;
     var ref = await reference.once();

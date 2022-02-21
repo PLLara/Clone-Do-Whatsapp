@@ -117,8 +117,9 @@ class ConversaOpenerTile extends StatelessWidget {
       leading: icon,
       title: Text(
         conversaController.route,
+        style: Theme.of(context).textTheme.bodyText1,
       ),
-      subtitle: const Text("whatsapp2"),
+      subtitle: const Text(""),
       trailing: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,

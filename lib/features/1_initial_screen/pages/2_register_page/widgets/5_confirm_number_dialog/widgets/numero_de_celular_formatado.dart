@@ -18,8 +18,8 @@ class NumeroDeCelularFormatadoEEmNegrito extends StatelessWidget {
           var formattedNumber = locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '');
           return Text(
             formattedNumber,
-            style: const TextStyle(
-              fontWeight: FontWeight.w900,
+            style: Theme.of(context).textTheme.bodyText1?.copyWith(
+              fontWeight: FontWeight.bold
             ),
           );
         },

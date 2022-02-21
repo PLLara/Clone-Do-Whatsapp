@@ -37,23 +37,28 @@ AppBar MyAppBar(myTabs) {
           }
         },
         itemBuilder: (BuildContext context) => <PopupMenuEntry>[
-          const PopupMenuItem(
+          PopupMenuItem(
+            textStyle: Theme.of(context).textTheme.bodyText1,
             value: 'newGroup',
-            child: Text('Novo Grupo'),
-          ),
-          const PopupMenuItem(
-            value: 'favortes',
-            child: Text('Mensagens Favoritas'),
-          ),
-          const PopupMenuItem(
-            value: 'TestLab',
-            child: Text('TestLab'),
-          ),
-          const PopupMenuItem(
-            value: 'Config',
-            child: Text('Configurações'),
+            child: const Text('Novo Grupo'),
           ),
           PopupMenuItem(
+            textStyle: Theme.of(context).textTheme.bodyText1,
+            value: 'favortes',
+            child: const Text('Mensagens Favoritas'),
+          ),
+          PopupMenuItem(
+            textStyle: Theme.of(context).textTheme.bodyText1,
+            value: 'TestLab',
+            child: const Text('TestLab'),
+          ),
+          PopupMenuItem(
+            textStyle: Theme.of(context).textTheme.bodyText1,
+            value: 'Config',
+            child: const Text('Configurações'),
+          ),
+          PopupMenuItem(
+            textStyle: Theme.of(context).textTheme.bodyText1,
             value: 'Sair',
             child: const Text('Sair'),
             onTap: () {
@@ -99,7 +104,7 @@ class _FileManagerState extends State<FileManager> {
       );
     }
 
-    return Icon(Icons.description);
+    return const Icon(Icons.description);
   }
 
   @override
@@ -111,7 +116,7 @@ class _FileManagerState extends State<FileManager> {
           itemCount: widget.entities.length,
           itemBuilder: (e, a) {
             var entitie = widget.entities[a];
-    
+
             return ListTile(
               leading: FutureBuilder(
                 future: getIcon(entitie),
@@ -119,7 +124,7 @@ class _FileManagerState extends State<FileManager> {
                   if (snapshot.hasData) {
                     return snapshot.data as Widget;
                   }
-                  return Loading();
+                  return const Loading();
                 },
               ),
               onTap: () {
@@ -158,8 +163,8 @@ getDir(String path, {first = false}) async {
   if (!first) {
     Get.back();
   }
-  Get.to(()=>
-    FileManager(
+  Get.to(
+    () => FileManager(
       key: Key(path),
       entities: entities,
     ),
