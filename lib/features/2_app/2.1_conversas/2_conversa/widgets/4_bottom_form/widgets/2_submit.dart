@@ -13,7 +13,7 @@ class Submit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ConversaController conversaController = Get.find<ConversaController>(
-      tag: context.read<PathCubit>().state,
+      tag: context.read<PathCubit>().state.conversaId,
     );
     return CircleAvatar(
       backgroundColor: const Color(0xff00A884),

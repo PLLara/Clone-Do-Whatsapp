@@ -1,8 +1,10 @@
-// ignore_for_file: avoid_print, non_constant_identifier_names, must_be_immutable, avoid_unnecessary_containers
+// ignore_for_file: avoid_print, non_constant_identifier_names, must_be_immutable, avoid_unnecessary_containers, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/contatos_state.dart';
+import 'package:whatsapp2/common/widgets/loading.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/contatos_page.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/path_conversas.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/conversa_page.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/conversa_state.dart';
 
@@ -13,19 +15,23 @@ class Conversas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const ConversasPageContent();
+    return ConversasPageContent();
   }
 }
 
 class ConversasPageContent extends StatelessWidget {
-  const ConversasPageContent({
+  ConversasPageContent({
     Key? key,
   }) : super(key: key);
+
+  final PathConversasController pathConversasController = Get.put(
+    PathConversasController(),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: const ConversationsList(),
+      body: ConversationsList(),
       floatingActionButton: FloatingActionButton(
         child: const Icon(
           Icons.message,
@@ -45,25 +51,28 @@ class ConversasPageContent extends StatelessWidget {
 }
 
 class ConversationsList extends StatelessWidget {
-  const ConversationsList({
+  ConversationsList({
     Key? key,
   }) : super(key: key);
 
+  final PathConversasController pathConversasController = Get.find();
+
   @override
   Widget build(BuildContext context) {
-    var conversas = [
-      'conversas/geral',
-      'conversas/geral2',
-      'conversas/geral3',
-    ];
+    return Obx(() {
+      var conversas = pathConversasController.conversas;
+      if (conversas.isEmpty) {
+        return const Loading();
+      }
 
-    return ListView.builder(
-      itemCount: conversas.length,
-      itemBuilder: (_, index) {
-        DateTime _now = DateTime.now();
-        return ConversaOpenerTile(now: _now, path: conversas[index]);
-      },
-    );
+      return ListView.builder(
+        itemCount: conversas.length,
+        itemBuilder: (_, index) {
+          DateTime _now = DateTime.now();
+          return ConversaOpenerTile(now: _now, path: conversas.value[index]);
+        },
+      );
+    });
   }
 }
 
@@ -73,14 +82,14 @@ class ConversaOpenerTile extends StatelessWidget {
         super(key: key);
 
   final DateTime _now;
-  final String path;
+  final ConversaPathData path;
 
   @override
   Widget build(BuildContext context) {
     final ConversaController conversaController = Get.put(
-      ConversaController(route: path),
+      ConversaController(route: path.conversaId),
       permanent: true,
-      tag: path,
+      tag: path.conversaId,
     );
 
     if (conversaController.iniciado.value != true) {
@@ -103,23 +112,12 @@ class ConversaOpenerTile extends StatelessWidget {
     );
 
     return ListTile(
-      onTap: () async {
-        conversaController.quantidadeDeMensagensNaoLidas.value = 0;
-        Get.to(
-          () => Conversa(
-            tag: path,
-          ),
-          transition: Transition.topLevel,
-          duration: const Duration(milliseconds: 400),
-          curve: Curves.easeInOut,
-        );
-      },
       leading: icon,
       title: Text(
-        conversaController.route,
+        path.titulo,
         style: Theme.of(context).textTheme.bodyText1,
       ),
-      subtitle: const Text(""),
+      subtitle: Text(path.descricao),
       trailing: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.end,
@@ -163,6 +161,17 @@ class ConversaOpenerTile extends StatelessWidget {
           ),
         ],
       ),
+      onTap: () async {
+        conversaController.quantidadeDeMensagensNaoLidas.value = 0;
+        Get.to(
+          () => Conversa(
+            path: path,
+          ),
+          transition: Transition.topLevel,
+          duration: const Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+      },
     );
   }
 }

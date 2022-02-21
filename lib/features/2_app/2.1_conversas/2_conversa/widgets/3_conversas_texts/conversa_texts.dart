@@ -20,7 +20,7 @@ class ConversaTexts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ConversaController conversaController = Get.find<ConversaController>(
-      tag: context.read<PathCubit>().state,
+      tag: context.read<PathCubit>().state.conversaId,
     );
     mensageKey(int index) => conversaController.papo.value[index].usuario + conversaController.papo.value[index].message + conversaController.papo.value[index].date.toString();
 

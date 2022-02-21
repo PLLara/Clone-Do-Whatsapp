@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/features/2_app/2.1_conversas/1_conversas/state/path_conversas.dart';
 import 'package:whatsapp2/features/2_app/2.1_conversas/2_conversa/state/path_cubit.dart';
 
 AppBar ConversaAppBarBind() {
@@ -35,9 +36,9 @@ AppBar ConversaAppBarBind() {
         ],
       ),
     ),
-    title: BlocBuilder<PathCubit, String>(
+    title: BlocBuilder<PathCubit, ConversaPathData>(
       builder: (context, state) {
-        return Text(state);
+        return Text(state.titulo);
       },
     ),
     actions: [
