@@ -11,20 +11,6 @@ class PathConversasController extends GetxController {
     getPaths();
   }
 
-  addNewPath({required String titulo, String descricao = 'sem descricao'}) async {
-    
-    var response = await http.post(
-      Uri.parse('https://whatsapp-2-backend.herokuapp.com/createconversa'),
-      body: {
-        "titulo": titulo,
-        "descricao": descricao,
-        "criadorFone": FirebaseAuth.instance.currentUser?.phoneNumber ?? ''
-      },
-    );
-
-    print(response.body);
-  }
-
   getPaths() async {
     conversas.removeRange(0, conversas.length);
     var response = await http.post(
@@ -43,7 +29,29 @@ class PathConversasController extends GetxController {
       }
     }
 
+    newPaths.add(
+      ConversaPathData(
+        conversaId: 'geral',
+        titulo: 'geral',
+        descricao: '...',
+        criadorId: '',
+        thumbnail: '',
+      ),
+    );
     conversas.addAll(newPaths);
+  }
+
+  addNewPath({required String titulo, String descricao = 'sem descricao'}) async {
+    var response = await http.post(
+      Uri.parse('https://whatsapp-2-backend.herokuapp.com/createconversa'),
+      body: {
+        "titulo": titulo,
+        "descricao": descricao,
+        "criadorFone": FirebaseAuth.instance.currentUser?.phoneNumber ?? ''
+      },
+    );
+
+    print(response.body);
   }
 
   RxList<ConversaPathData> conversas = <ConversaPathData>[].obs;
