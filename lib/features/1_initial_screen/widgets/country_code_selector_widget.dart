@@ -2,12 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/features/1_initial_screen/global/location_state.dart';
+
+import '../2_register_page/state/location_state.dart';
 
 class CountryCodeSelector extends StatefulWidget {
   final List<Location> locations;
   final Function(Location) onSelectCountry;
-  
+
   const CountryCodeSelector(
       {Key? key,
       this.locations = const [

@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_print
 
 import 'package:postgres/postgres.dart';
 import 'package:uuid/uuid.dart';
@@ -240,7 +241,6 @@ class Postgres {
       },
     );
 
-        
     List<Conversa> conversas = allConversasQuery.map((conversa) {
       return Conversa(
         id: conversa[0],
@@ -250,7 +250,6 @@ class Postgres {
         thumbnail: conversa[4],
       );
     }).toList();
-
 
     return PostgresResponse(
       PgResponseStatus.success,
@@ -265,6 +264,6 @@ void main(List<String> args) async {
   await postgres.connection.open();
   print(await postgres.adicionarUsuarioNaConversa('8aa6c5ba-64e2-48cf-b1b7-4688f2d9fe51', '+5563992496492'));
   print((await postgres.getAllConversasFromUserParticipante('+5563992496492')).payload);
-  
+
   postgres.connection.close();
 }

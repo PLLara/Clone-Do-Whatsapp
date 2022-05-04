@@ -1,20 +1,25 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:whatsapp2/common/state/user_state.dart';
-import 'package:whatsapp2/features/1_initial_screen/pages/1_initial_screen/1_initial_screen_page.dart';
 import 'package:whatsapp2/common/state/contacts_state.dart';
 import 'common/themes/default.dart';
-import 'features/2_app/2.2_tab_controller.dart/2.0_tab_controller.dart';
+import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
+import 'features/2_app/1_appbar&tabbar/2_tab_controller/2_tab_controller.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  runApp(
+    const MyApp(),
   );
 
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -30,7 +35,6 @@ void main() async {
 
   print('User granted permission: ${settings.authorizationStatus}');
 
-
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('Got a message whilst in the foreground!');
     print('Message data: ${message.data}');
@@ -38,7 +42,6 @@ void main() async {
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
     }
-    
   });
 
   try {
@@ -47,11 +50,9 @@ void main() async {
       vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
     );
     print("My FCM token is: $token");
-  } catch (e) {}
-
-  return runApp(
-    const MyApp(),
-  );
+  } catch (e) {
+    print(e);
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -84,12 +85,20 @@ class LoggedOrNorController extends StatefulWidget {
   LoggedOrNorController({
     Key? key,
   }) : super(key: key) {
-    // ignore: avoid_print
     print("--------------------TENTANDO INICIAR O STATE-----------------------");
     contactsController.getContactsFromDevice();
     FirebaseAuth.instance.userChanges().listen(
-      (User? newUser) {
-        userController.changeUser(newUser);
+      (User? user) {
+        userController.changeUser(user);
+        if (user != null) {
+          FirebaseFirestore firestore = FirebaseFirestore.instance;
+          firestore.collection('usuarios').doc(user.uid).set({
+            'nome': user.displayName,
+            'email': user.email,
+            'numero': user.phoneNumber,
+            'foto': user.photoURL
+          });
+        }
       },
     );
   }
@@ -124,7 +133,7 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
   @override
   Widget build(BuildContext context) {
     if (_logged) {
-      return const Home();
+      return const TabSwitcher();
     }
     return const InicialScreen();
   }
