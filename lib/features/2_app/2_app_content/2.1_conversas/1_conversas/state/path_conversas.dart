@@ -25,6 +25,7 @@ class PathConversasController extends GetxController {
 
   getPaths() async {
     var myPhoneNumber = Get.find<UserController>().user.value?.phoneNumber ?? '';
+    myPhoneNumber = myPhoneNumber.substring(myPhoneNumber.length - 8);
     conversasStream = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots().listen(
       (event) {
         List<ConversaPathData> newConversas = [];
@@ -42,6 +43,8 @@ class PathConversasController extends GetxController {
             newConversas.add(
               newConversaPathData,
             );
+          } else {
+            print("${pNewConversa['participantes']} does not contain $myPhoneNumber");
           }
         }
         conversas.removeRange(0, conversas.length);
@@ -71,6 +74,9 @@ class PathConversasController extends GetxController {
     if (creatorPhoneNumber == null) {
       return;
     }
+    creatorPhoneNumber = creatorPhoneNumber.substring(creatorPhoneNumber.length - 8);
+    participantes = participantes.map((participante) => participante.substring(participante.length - 8)).toList();
+
     participantes.add(creatorPhoneNumber);
     await FirebaseFirestore.instance.collection('conversas').add({
       'titulo': titulo,
