@@ -19,45 +19,60 @@ void main() async {
   );
 
   runApp(
-    const MyApp(),
+    MyApp(),
   );
-
-  FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  print('User granted permission: ${settings.authorizationStatus}');
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
-    if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
-    }
-  });
-
-  try {
-    await FirebaseMessaging.instance.subscribeToTopic('all');
-    var token = await messaging.getToken(
-      vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
-    );
-    print("My FCM token is: $token");
-  } catch (e) {
-    print(e);
-  }
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  MyApp({Key? key}) : super(key: key) {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging
+        .requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    )
+        .then(
+      (value) {
+        print('Permission granted: $value');
+      },
+    ).catchError(
+      (error) {
+        print('Permission error: $error');
+      },
+    );
 
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Got a message whilst in the foreground!');
+      print('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        print('Message also contained a notification: ${message.notification}');
+      }
+    });
+
+    FirebaseMessaging.instance.subscribeToTopic('all').then(
+      (value) {
+        messaging
+            .getToken(
+          vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
+        )
+            .then(
+          (value) {
+            print("My FCM token is: $value");
+          },
+        ).catchError(
+          (e) {
+            print("Error: $e");
+          },
+        );
+      },
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(

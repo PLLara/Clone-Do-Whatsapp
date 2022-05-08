@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 
-import '../../../1_conversas/state/path_conversas.dart';
+import '../../../1_conversas/state/conversas_state.dart';
 import '../../state/path_cubit.dart';
 
 AppBar ConversaAppBarBind() {

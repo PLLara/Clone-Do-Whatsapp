@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_page.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/path_conversas.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 
 import '../2_conversa/conversa_page.dart';
 import '../2_conversa/state/conversa_state.dart';
@@ -78,8 +78,11 @@ class ConversationsList extends StatelessWidget {
 }
 
 class ConversaOpenerTile extends StatelessWidget {
-  const ConversaOpenerTile({Key? key, required DateTime now, required this.path})
-      : _now = now,
+  const ConversaOpenerTile({
+    Key? key,
+    required DateTime now,
+    required this.path,
+  })  : _now = now,
         super(key: key);
 
   final DateTime _now;
@@ -167,6 +170,7 @@ class ConversaOpenerTile extends StatelessWidget {
         Get.to(
           () => Conversa(
             path: path,
+            key: Key(path.conversaId),
           ),
           transition: Transition.topLevel,
           duration: const Duration(milliseconds: 400),

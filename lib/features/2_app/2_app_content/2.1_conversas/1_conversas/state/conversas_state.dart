@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
@@ -9,7 +10,7 @@ enum Status { waiting, success, empty }
 
 class PathConversasController extends GetxController {
   PathConversasController() {
-    getPaths();
+    setPathListener();
   }
 
   RxList<ConversaPathData> conversas = <ConversaPathData>[].obs;
@@ -23,7 +24,7 @@ class PathConversasController extends GetxController {
     super.dispose();
   }
 
-  getPaths() async {
+  setPathListener() async {
     var myPhoneNumber = Get.find<UserController>().user.value?.phoneNumber ?? '';
     myPhoneNumber = myPhoneNumber.substring(myPhoneNumber.length - 8);
     conversasStream = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots().listen(
@@ -32,7 +33,6 @@ class PathConversasController extends GetxController {
         for (var newConversa in event.docs) {
           var pNewConversa = newConversa.data();
           if ((pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber)) {
-            print("${pNewConversa['participantes']} contains $myPhoneNumber");
             var newConversaPathData = ConversaPathData(
               conversaId: newConversa.id,
               titulo: pNewConversa['titulo'],
@@ -43,8 +43,6 @@ class PathConversasController extends GetxController {
             newConversas.add(
               newConversaPathData,
             );
-          } else {
-            print("${pNewConversa['participantes']} does not contain $myPhoneNumber");
           }
         }
         conversas.removeRange(0, conversas.length);
@@ -69,8 +67,9 @@ class PathConversasController extends GetxController {
     required List<String> participantes,
     String descricao = '',
     bool personal = false,
+    String? thumbnail,
+    required String? creatorPhoneNumber,
   }) async {
-    var creatorPhoneNumber = Get.find<UserController>().user.value?.phoneNumber;
     if (creatorPhoneNumber == null) {
       return;
     }
@@ -82,7 +81,7 @@ class PathConversasController extends GetxController {
       'titulo': titulo,
       'descricao': descricao,
       'criador': Get.find<UserController>().user.value?.uid,
-      'thumbnail': '',
+      'thumbnail': thumbnail,
       'participantes': participantes,
       'personal': personal,
     });

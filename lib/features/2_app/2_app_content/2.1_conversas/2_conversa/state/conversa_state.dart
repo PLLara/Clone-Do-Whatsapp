@@ -16,6 +16,14 @@ class ConversaController extends GetxController {
   late final StreamSubscription<DatabaseEvent> removedValueStream;
   final TextEditingController controller = TextEditingController();
 
+  @override
+  void dispose() {
+    addedValueStream.cancel();
+    removedValueStream.cancel();
+    controller.dispose();
+    super.dispose();
+  }
+
   final Rx<States> state = States.ready.obs;
 
   final RxList<MessageModel> papo = <MessageModel>[].obs;
@@ -64,6 +72,7 @@ class ConversaController extends GetxController {
   }
 
   start() async {
+    iniciado.value = true;
     final reference = FirebaseDatabase.instance.ref(route);
     print("-------------------INICIANDO DO STATE--------------------------");
 
@@ -93,7 +102,6 @@ class ConversaController extends GetxController {
         Print.green("----- MESSAGE ADDED -----");
         papo.insert(0, parseMessage(event.snapshot.children.last));
       }
-      iniciado.value = true;
       messageWasAdded();
     });
 
