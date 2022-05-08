@@ -1,11 +1,14 @@
 // ignore_for_file: avoid_print, non_constant_identifier_names, must_be_immutable, avoid_unnecessary_containers, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
+import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/common/state/contacts_state.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_page.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 
+import '../../2.3_contatos/widgets/contacts_list_view/widgets/user_description_widget.dart';
 import '../2_conversa/conversa_page.dart';
 import '../2_conversa/state/conversa_state.dart';
 
@@ -57,6 +60,7 @@ class ConversationsList extends StatelessWidget {
   }) : super(key: key);
 
   final PathConversasController pathConversasController = Get.find();
+  final ContactsController contactsController = Get.find<ContactsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -70,18 +74,27 @@ class ConversationsList extends StatelessWidget {
         itemCount: conversas.length,
         itemBuilder: (_, index) {
           DateTime _now = DateTime.now();
-          return ConversaOpenerTile(now: _now, path: conversas.value[index]);
+          return Obx(
+            () => ConversaListTile(
+              now: _now,
+              path: conversas.value[index],
+              contatos: contactsController.contatos.value,
+            ),
+          );
         },
       );
     });
   }
 }
 
-class ConversaOpenerTile extends StatelessWidget {
-  const ConversaOpenerTile({
+class ConversaListTile extends StatelessWidget {
+  final List<Contact> contatos;
+
+  const ConversaListTile({
     Key? key,
     required DateTime now,
     required this.path,
+    required this.contatos,
   })  : _now = now,
         super(key: key);
 
@@ -115,10 +128,30 @@ class ConversaOpenerTile extends StatelessWidget {
       ],
     );
 
+    var otherPessoa = Contact();
+    if (path.personal) {
+      path.participantes.remove(path.criadorNumber);
+      var otherPessoaNumber = path.participantes[0];
+      for (var contact in contatos) {
+        for (var element in contact.phones) {
+          var parsedNumber = element.number.replaceAll(' ', '').replaceAll('-', '');
+          if (parsedNumber == otherPessoaNumber) {
+            otherPessoa = contact;
+          }
+        }
+      }
+    }
+
     return ListTile(
-      leading: icon,
+      key: Key(otherPessoa.toString()),
+      leading: path.personal
+          ? UserPhotoOrPlaceholder(
+              contact: otherPessoa,
+              key: Key(otherPessoa.toString()),
+            )
+          : icon,
       title: Text(
-        path.titulo,
+        (path.personal ? otherPessoa.displayName : path.titulo),
         style: Theme.of(context).textTheme.bodyText1,
       ),
       subtitle: Text(path.descricao),

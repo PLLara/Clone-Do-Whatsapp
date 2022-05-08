@@ -11,7 +11,6 @@ class ContactsController extends GetxController {
   RxList<Contact> contatos = <Contact>[].obs;
   ContactsController() {
     print('initializing contacts controller');
-    getContactsFromDevice();
   }
 
   getContactsFromDevice() async {
@@ -42,17 +41,25 @@ class ContactsController extends GetxController {
         break;
       }
     }
+    setContacts(contacts);
 
     FirebaseFirestore.instance.collection('usuarios').get().then((value) async {
       for (var doc in value.docs) {
         for (var contact in contacts) {
+          // * Pegando a lista de numeros do usuario
           var numberList = contact.phones.map((e) {
+            e.number = e.number.replaceAll('-', '');
+            e.number = e.number.replaceAll(' ', '');
             var number = e.number;
             if (number.length < 7) {
               number = 'TEM NUMERO NAO :)';
             }
-            return number.substring(number.length - 8);
+            var normalizedNumber = number.substring(number.length - 8);
+
+            return normalizedNumber;
           }).toList();
+
+          // * Verificando se cada numero tem zap 2
           var dbNumber = doc.data()['numero'] ?? 'VISH CADE O NUMERO?';
           dbNumber = dbNumber.substring(dbNumber.length - 8);
           if (numberList.contains(dbNumber)) {
@@ -63,16 +70,14 @@ class ContactsController extends GetxController {
               ));
               contact.photo = imageData.bodyBytes;
             }
-          }
+          } else {}
         }
       }
       contatos.sort((a, b) {
         return b.websites.length.compareTo(a.websites.length);
       });
-      contatos.addAll(contacts);
       update();
     });
-    setContacts(contacts);
   }
 
   setContacts(List<Contact> newContacts) {

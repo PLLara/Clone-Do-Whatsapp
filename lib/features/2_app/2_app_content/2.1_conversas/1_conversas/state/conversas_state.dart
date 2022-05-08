@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../common/state/user_state.dart';
@@ -26,7 +28,7 @@ class PathConversasController extends GetxController {
 
   setPathListener() async {
     var myPhoneNumber = Get.find<UserController>().user.value?.phoneNumber ?? '';
-    myPhoneNumber = myPhoneNumber.substring(myPhoneNumber.length - 8);
+    print("participantes must contain " + myPhoneNumber);
     var conversasSnapshots = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots();
     conversasStream = conversasSnapshots.listen(
       (event) {
@@ -36,11 +38,14 @@ class PathConversasController extends GetxController {
           if ((pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber)) {
             print("${pNewConversa['participantes']} contains $myPhoneNumber");
             var newConversaPathData = ConversaPathData(
+              criadorNumber: myPhoneNumber,
               conversaId: newConversa.id,
               titulo: pNewConversa['titulo'],
               descricao: pNewConversa['descricao'],
               criadorId: pNewConversa['criador'],
               thumbnail: pNewConversa['thumbnail'],
+              personal: pNewConversa['personal'],
+              participantes: pNewConversa['participantes'].cast<String>() as List<String>,
             );
             newConversas.add(
               newConversaPathData,
@@ -50,17 +55,24 @@ class PathConversasController extends GetxController {
         conversas.removeRange(0, conversas.length);
         conversas.addAll(newConversas);
         if (conversas.isEmpty) {
-          conversas.add(
-            ConversaPathData(
-              conversaId: 'geral',
-              titulo: 'Conversa Geral',
-              descricao: ':)',
-              criadorId: 'asd',
-              thumbnail: '',
-            ),
-          );
+          addConversaGeral();
         }
       },
+    );
+  }
+
+  void addConversaGeral() {
+    conversas.add(
+      ConversaPathData(
+        criadorNumber: '',
+        conversaId: 'geral',
+        titulo: 'Conversa Geral',
+        descricao: ':)',
+        criadorId: 'asd',
+        thumbnail: '',
+        personal: false,
+        participantes: [],
+      ),
     );
   }
 
@@ -75,9 +87,6 @@ class PathConversasController extends GetxController {
     if (creatorPhoneNumber == null) {
       return;
     }
-    creatorPhoneNumber = creatorPhoneNumber.substring(creatorPhoneNumber.length - 8);
-    participantes = participantes.map((participante) => participante.substring(participante.length - 8)).toList();
-
     participantes.add(creatorPhoneNumber);
     await FirebaseFirestore.instance.collection('conversas').add({
       'titulo': titulo,
@@ -92,51 +101,71 @@ class PathConversasController extends GetxController {
 
 class ConversaPathData {
   String conversaId;
+  String criadorId;
+
+  String criadorNumber;
+
   String titulo;
   String descricao;
-  String criadorId;
+  List<String> participantes;
+  bool personal;
   dynamic thumbnail;
   ConversaPathData({
     required this.conversaId,
+    required this.criadorId,
+    required this.criadorNumber,
     required this.titulo,
     required this.descricao,
-    required this.criadorId,
+    required this.participantes,
+    required this.personal,
     required this.thumbnail,
   });
 
   ConversaPathData copyWith({
     String? conversaId,
+    String? criadorId,
+    String? criadorNumber,
     String? titulo,
     String? descricao,
-    String? criadorId,
-    dynamic thumbnail,
+    List<String>? participantes,
+    bool? personal,
+    dynamic? thumbnail,
   }) {
     return ConversaPathData(
       conversaId: conversaId ?? this.conversaId,
+      criadorId: criadorId ?? this.criadorId,
+      criadorNumber: criadorNumber ?? this.criadorNumber,
       titulo: titulo ?? this.titulo,
       descricao: descricao ?? this.descricao,
-      criadorId: criadorId ?? this.criadorId,
+      participantes: participantes ?? this.participantes,
+      personal: personal ?? this.personal,
       thumbnail: thumbnail ?? this.thumbnail,
     );
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    return <String, dynamic>{
       'conversaId': conversaId,
+      'criadorId': criadorId,
+      'criadorNumber': criadorNumber,
       'titulo': titulo,
       'descricao': descricao,
-      'criadorId': criadorId,
+      'participantes': participantes,
+      'personal': personal,
       'thumbnail': thumbnail,
     };
   }
 
-  factory ConversaPathData.fromMap(Map map) {
+  factory ConversaPathData.fromMap(Map<String, dynamic> map) {
     return ConversaPathData(
-      conversaId: map['conversaId'] as String,
-      titulo: map['titulo'] as String,
-      descricao: map['descricao'] as String,
-      criadorId: map['criadorId'] as String,
-      thumbnail: '',
+      conversaId: map['conversaId'],
+      criadorId: map['criadorId'],
+      criadorNumber: map['criadorNumber'],
+      titulo: map['titulo'],
+      descricao: map['descricao'],
+      participantes: List<String>.from(map['participantes']),
+      personal: map['personal'],
+      thumbnail: map['thumbnail'],
     );
   }
 
@@ -146,18 +175,18 @@ class ConversaPathData {
 
   @override
   String toString() {
-    return 'Payload(conversaId: $conversaId, titulo: $titulo, descricao: $descricao, criadorId: $criadorId, thumbnail: $thumbnail)';
+    return 'ConversaPathData(conversaId: $conversaId, criadorId: $criadorId, criadorNumber: $criadorNumber, titulo: $titulo, descricao: $descricao, participantes: $participantes, personal: $personal, thumbnail: $thumbnail)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ConversaPathData && other.conversaId == conversaId && other.titulo == titulo && other.descricao == descricao && other.criadorId == criadorId && other.thumbnail == thumbnail;
+    return other is ConversaPathData && other.conversaId == conversaId && other.criadorId == criadorId && other.criadorNumber == criadorNumber && other.titulo == titulo && other.descricao == descricao && listEquals(other.participantes, participantes) && other.personal == personal && other.thumbnail == thumbnail;
   }
 
   @override
   int get hashCode {
-    return conversaId.hashCode ^ titulo.hashCode ^ descricao.hashCode ^ criadorId.hashCode ^ thumbnail.hashCode;
+    return conversaId.hashCode ^ criadorId.hashCode ^ criadorNumber.hashCode ^ titulo.hashCode ^ descricao.hashCode ^ participantes.hashCode ^ personal.hashCode ^ thumbnail.hashCode;
   }
 }

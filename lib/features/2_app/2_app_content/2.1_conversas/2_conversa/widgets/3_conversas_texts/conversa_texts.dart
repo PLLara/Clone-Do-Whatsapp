@@ -128,7 +128,6 @@ class _MessageScaffoldState extends State<MessageScaffold> {
         continue;
       }
       var someNumber = element.phones[0].normalizedNumber.substring(element.phones[0].normalizedNumber.length - 8);
-
       if (someNumber == userNumber.substring(userNumber.length - 8)) {
         userName = element.displayName;
       }

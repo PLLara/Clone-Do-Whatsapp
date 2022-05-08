@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/configuracoes_widget.dart';
 
+import '../../../2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 import '../1_appbar_widget.dart';
 
 class AppBarDropDown extends StatelessWidget {
@@ -32,6 +33,10 @@ class AppBarDropDown extends StatelessWidget {
             ),
           );
         }
+
+        if (e == 'danger') {
+          Get.find<PathConversasController>().addConversaGeral();
+        }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
         PopupMenuItem(
@@ -41,8 +46,18 @@ class AppBarDropDown extends StatelessWidget {
         ),
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,
-          value: 'favortes',
+          value: 'favorites',
           child: const Text('Mensagens Favoritas'),
+        ),
+        PopupMenuItem(
+          textStyle: Theme.of(context).textTheme.bodyText1,
+          value: 'danger',
+          child: const Text(
+            'Liberar conversa geral',
+            style: TextStyle(
+              color: Colors.red,
+            ),
+          ),
         ),
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,

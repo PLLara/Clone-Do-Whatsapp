@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:whatsapp2/common/state/user_state.dart';
 import 'package:whatsapp2/common/state/contacts_state.dart';
+import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
 import 'common/themes/default.dart';
 import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
 import 'features/2_app/1_appbar&tabbar/2_tab_controller/2_tab_controller.dart';
@@ -152,7 +153,12 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
   @override
   Widget build(BuildContext context) {
     if (_logged) {
-      return const TabSwitcher();
+      return Obx(() {
+        if (Get.find<ContactsController>().contatos.isEmpty) {
+          return const ScaffoldLoading();
+        }
+        return const TabSwitcher();
+      });
     }
     return const InicialScreen();
   }

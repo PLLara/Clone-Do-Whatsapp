@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
-import 'package:get/get.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/widgets/contacts_list_view/widgets/user_description_widget.dart';
 import '../../../../../../common/functions/temzap2.dart';
-import '../../../2.1_conversas/1_conversas/state/conversas_state.dart';
 
 class ContactsListView extends StatelessWidget {
   final List<Contact> contacts;

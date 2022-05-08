@@ -46,7 +46,6 @@ class Contatos extends StatelessWidget {
       ),
       body: ContactsListView(
         contacts: contacts,
-        key: const Key('Contacts'),
       ),
     );
   }

@@ -10,7 +10,6 @@ class UserDescription extends StatelessWidget {
   }) : super(key: key);
 
   final PathConversasController pathConversasController = Get.find();
-
   final Contact contact;
 
   @override
