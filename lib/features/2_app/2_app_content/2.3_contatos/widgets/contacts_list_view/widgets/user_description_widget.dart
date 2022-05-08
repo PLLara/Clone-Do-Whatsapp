@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/common/state/user_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 
 class UserDescription extends StatelessWidget {
@@ -11,8 +10,8 @@ class UserDescription extends StatelessWidget {
   }) : super(key: key);
 
   final PathConversasController pathConversasController = Get.find();
+
   final Contact contact;
-  final UserController userController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -30,21 +29,19 @@ class UserDescription extends StatelessWidget {
                 for (var x in contact.phones) Text(x.number)
               ],
             ),
-            Obx(
-              () => TextButton(
-                onPressed: () async {
-                  // go back to initial screen
-                  Get.back();
-                  await pathConversasController.addNewPath(
-                      titulo: contact.displayName,
-                      participantes: [
-                        contact.phones[0].number
-                      ],
-                      personal: true,
-                      creatorPhoneNumber: userController.user.value?.phoneNumber);
-                },
-                child: const Text('Criar conversa'),
-              ),
+            TextButton(
+              onPressed: () async {
+                // go back to initial screen
+                Get.back();
+                await pathConversasController.addNewPath(
+                  titulo: contact.displayName,
+                  participantes: [
+                    contact.phones[0].number
+                  ],
+                  personal: true,
+                );
+              },
+              child: const Text('Criar conversa'),
             )
           ],
         ),

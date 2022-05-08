@@ -27,12 +27,14 @@ class PathConversasController extends GetxController {
   setPathListener() async {
     var myPhoneNumber = Get.find<UserController>().user.value?.phoneNumber ?? '';
     myPhoneNumber = myPhoneNumber.substring(myPhoneNumber.length - 8);
-    conversasStream = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots().listen(
+    var conversasSnapshots = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots();
+    conversasStream = conversasSnapshots.listen(
       (event) {
         List<ConversaPathData> newConversas = [];
         for (var newConversa in event.docs) {
           var pNewConversa = newConversa.data();
           if ((pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber)) {
+            print("${pNewConversa['participantes']} contains $myPhoneNumber");
             var newConversaPathData = ConversaPathData(
               conversaId: newConversa.id,
               titulo: pNewConversa['titulo'],
@@ -68,8 +70,8 @@ class PathConversasController extends GetxController {
     String descricao = '',
     bool personal = false,
     String? thumbnail,
-    required String? creatorPhoneNumber,
   }) async {
+    var creatorPhoneNumber = Get.find<UserController>().user.value?.phoneNumber;
     if (creatorPhoneNumber == null) {
       return;
     }

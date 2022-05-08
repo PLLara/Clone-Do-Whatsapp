@@ -55,23 +55,27 @@ class MyApp extends StatelessWidget {
       }
     });
 
-    FirebaseMessaging.instance.subscribeToTopic('all').then(
-      (value) {
-        messaging
-            .getToken(
-          vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
-        )
-            .then(
-          (value) {
-            print("My FCM token is: $value");
-          },
-        ).catchError(
-          (e) {
-            print("Error: $e");
-          },
-        );
-      },
-    );
+    try {
+      FirebaseMessaging.instance.subscribeToTopic('all').then(
+        (value) {
+          messaging
+              .getToken(
+            vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
+          )
+              .then(
+            (value) {
+              print("My FCM token is: $value");
+            },
+          ).catchError(
+            (e) {
+              print("Error: $e");
+            },
+          );
+        },
+      );
+    } catch (e) {
+      print("Error: $e");
+    }
   }
   @override
   Widget build(BuildContext context) {
