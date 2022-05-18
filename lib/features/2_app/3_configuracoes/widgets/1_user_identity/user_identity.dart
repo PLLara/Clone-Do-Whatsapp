@@ -2,62 +2,55 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/navigator/go_to_page.dart';
-import 'package:whatsapp2/common/state/user_state.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/widgets/1_user_identity/widgets/1_user_details.dart';
 
 import '../../../../../common/widgets/user_photo.dart';
 
 class UserIdentity extends StatelessWidget {
-  UserIdentity({Key? key}) : super(key: key);
-
-  final UserController userController = Get.find<UserController>();
+  const UserIdentity({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Obx(
-      () {
-        User? currentUser = userController.user.value;
-        if (currentUser == null) {
-          return const Loading();
-        }
-        var name = currentUser.displayName;
-        var metaData = currentUser.metadata;
-        return ListTile(
-          title: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Hero(
-                  tag: 'avatar',
-                  child: UserPhotoWidget(),
-                ),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name ?? 'SEM NOME AINDA'),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(metaData.creationTime.toString()),
-                    ],
-                  ),
-                ),
-              ],
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      return const Loading();
+    }
+    var name = currentUser.displayName;
+    var metaData = currentUser.metadata;
+    return ListTile(
+      title: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: [
+            const Hero(
+              tag: 'avatar',
+              child: UserPhotoWidget(),
             ),
-          ),
-          onTap: () {
-            goToPage(
-              UserDetails(
-                key: const Key('userdetails'),
+            const SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name ?? 'SEM NOME AINDA'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(metaData.creationTime.toString()),
+                ],
               ),
-            );
-          },
+            ),
+          ],
+        ),
+      ),
+      onTap: () {
+        Get.to(
+          () => const UserDetails(
+            key: Key('userdetails'),
+          ),
         );
       },
     );

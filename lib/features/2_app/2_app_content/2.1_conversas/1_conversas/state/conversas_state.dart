@@ -1,17 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-
-import '../../../../../../common/state/user_state.dart';
+import 'package:palestine_console/palestine_console.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
 
 enum Status { waiting, success, empty }
 
-class PathConversasController extends GetxController {
-  PathConversasController() {
+class ConversasPathController extends GetxController {
+  ConversasPathController() {
     setPathListener();
   }
 
@@ -19,24 +18,19 @@ class PathConversasController extends GetxController {
   Rx<Status> status = Status.waiting.obs;
   late StreamSubscription conversasStream;
 
-  @override
-  void dispose() {
-    conversasStream.cancel();
-    conversas.removeRange(0, conversas.length);
-    super.dispose();
-  }
-
   setPathListener() async {
-    var myPhoneNumber = Get.find<UserController>().user.value?.phoneNumber ?? '';
-    print("participantes must contain " + myPhoneNumber);
+    Print.magenta("---------- INITIALIZING PATH CONVERSAS CONTROLLER LISTENER ----------");
+
+    var myPhoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber ?? '';
     var conversasSnapshots = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots();
     conversasStream = conversasSnapshots.listen(
-      (event) {
+      (event) async {
         List<ConversaPathData> newConversas = [];
         for (var newConversa in event.docs) {
           var pNewConversa = newConversa.data();
-          if ((pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber)) {
-            print("${pNewConversa['participantes']} contains $myPhoneNumber");
+          var iParticipateInConversa = (pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber);
+          if (iParticipateInConversa) {
+            Print.green("${pNewConversa['']} ${pNewConversa['participantes']} contains $myPhoneNumber");
             var newConversaPathData = ConversaPathData(
               criadorNumber: myPhoneNumber,
               conversaId: newConversa.id,
@@ -44,24 +38,42 @@ class PathConversasController extends GetxController {
               descricao: pNewConversa['descricao'],
               criadorId: pNewConversa['criador'],
               thumbnail: pNewConversa['thumbnail'],
-              personal: pNewConversa['personal'],
+              isConversaPrivate: pNewConversa['personal'],
               participantes: pNewConversa['participantes'].cast<String>() as List<String>,
             );
             newConversas.add(
               newConversaPathData,
             );
+            Print.green("NEW CONVERSA ADDED: " + newConversaPathData.toString());
           }
         }
+        var conversaIdList = conversas.map((element) => element.conversaId).toList();
+        var newConversasIdList = newConversas.map((element) => element.conversaId).toList();
+        List<String> idsToRemove = conversaIdList.toSet().difference(newConversasIdList.toSet()).toList();
+
+        Print.green("---------- CONVERSAS LISTENER FIRED ----------");
+        for (var conversaId in idsToRemove) {
+          try {
+            Print.magenta("CANCELANDO LISTENER DA CONVERSA: " + conversaId);
+            var conversaController = Get.find<ConversaController>(tag: conversaId);
+            conversaController.cancelStream();
+            conversaController.dispose();
+          } catch (e) {}
+        }
+
         conversas.removeRange(0, conversas.length);
         conversas.addAll(newConversas);
-        if (conversas.isEmpty) {
-          addConversaGeral();
-        }
+        update();
       },
     );
   }
 
   void addConversaGeral() {
+    for (var conversa in conversas) {
+      if (conversa.conversaId == 'geral') {
+        return;
+      }
+    }
     conversas.add(
       ConversaPathData(
         criadorNumber: '',
@@ -70,10 +82,46 @@ class PathConversasController extends GetxController {
         descricao: ':)',
         criadorId: 'asd',
         thumbnail: '',
-        personal: false,
+        isConversaPrivate: false,
         participantes: [],
       ),
     );
+  }
+
+  void removeConversa(String conversaId, bool isConversaPrivate) async {
+    Print.red("REMOVING CONVERSA: " + conversaId);
+    var conversaController = Get.find<ConversaController>(tag: conversaId);
+    try {
+      conversaController.dispose();
+    } catch (e) {
+      Print.red("CONTROLLER ALREADY DISPOSED");
+    }
+
+    if (isConversaPrivate) {
+      await FirebaseFirestore.instance.collection("conversas").doc(conversaId).delete();
+    }
+    for (var conversa in conversas) {
+      if (conversa.conversaId == conversaId) {
+        conversas.remove(conversa);
+        return;
+      }
+    }
+  }
+
+  void removeConversaGeral() {
+    Print.red("REMOVING CONVERSA: GERAL");
+    try {
+      Get.find<ConversaController>(tag: 'geral').dispose();
+    } catch (e) {
+      Print.red("CONTROLLER ALREADY DISPOSED");
+    }
+
+    for (var conversa in conversas) {
+      if (conversa.conversaId == 'geral') {
+        conversas.remove(conversa);
+        return;
+      }
+    }
   }
 
   addNewPath({
@@ -83,7 +131,7 @@ class PathConversasController extends GetxController {
     bool personal = false,
     String? thumbnail,
   }) async {
-    var creatorPhoneNumber = Get.find<UserController>().user.value?.phoneNumber;
+    var creatorPhoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
     if (creatorPhoneNumber == null) {
       return;
     }
@@ -91,7 +139,7 @@ class PathConversasController extends GetxController {
     await FirebaseFirestore.instance.collection('conversas').add({
       'titulo': titulo,
       'descricao': descricao,
-      'criador': Get.find<UserController>().user.value?.uid,
+      'criador': FirebaseAuth.instance.currentUser?.uid,
       'thumbnail': thumbnail,
       'participantes': participantes,
       'personal': personal,
@@ -102,13 +150,11 @@ class PathConversasController extends GetxController {
 class ConversaPathData {
   String conversaId;
   String criadorId;
-
   String criadorNumber;
-
   String titulo;
   String descricao;
   List<String> participantes;
-  bool personal;
+  bool isConversaPrivate;
   dynamic thumbnail;
   ConversaPathData({
     required this.conversaId,
@@ -117,7 +163,7 @@ class ConversaPathData {
     required this.titulo,
     required this.descricao,
     required this.participantes,
-    required this.personal,
+    required this.isConversaPrivate,
     required this.thumbnail,
   });
 
@@ -138,7 +184,7 @@ class ConversaPathData {
       titulo: titulo ?? this.titulo,
       descricao: descricao ?? this.descricao,
       participantes: participantes ?? this.participantes,
-      personal: personal ?? this.personal,
+      isConversaPrivate: personal ?? this.isConversaPrivate,
       thumbnail: thumbnail ?? this.thumbnail,
     );
   }
@@ -151,7 +197,7 @@ class ConversaPathData {
       'titulo': titulo,
       'descricao': descricao,
       'participantes': participantes,
-      'personal': personal,
+      'personal': isConversaPrivate,
       'thumbnail': thumbnail,
     };
   }
@@ -164,7 +210,7 @@ class ConversaPathData {
       titulo: map['titulo'],
       descricao: map['descricao'],
       participantes: List<String>.from(map['participantes']),
-      personal: map['personal'],
+      isConversaPrivate: map['personal'],
       thumbnail: map['thumbnail'],
     );
   }
@@ -175,18 +221,18 @@ class ConversaPathData {
 
   @override
   String toString() {
-    return 'ConversaPathData(conversaId: $conversaId, criadorId: $criadorId, criadorNumber: $criadorNumber, titulo: $titulo, descricao: $descricao, participantes: $participantes, personal: $personal, thumbnail: $thumbnail)';
+    return 'ConversaPathData(conversaId: $conversaId, criadorId: $criadorId, criadorNumber: $criadorNumber, titulo: $titulo, descricao: $descricao, participantes: $participantes, personal: $isConversaPrivate, thumbnail: $thumbnail)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is ConversaPathData && other.conversaId == conversaId && other.criadorId == criadorId && other.criadorNumber == criadorNumber && other.titulo == titulo && other.descricao == descricao && listEquals(other.participantes, participantes) && other.personal == personal && other.thumbnail == thumbnail;
+    return other is ConversaPathData && other.conversaId == conversaId && other.criadorId == criadorId && other.criadorNumber == criadorNumber && other.titulo == titulo && other.descricao == descricao && listEquals(other.participantes, participantes) && other.isConversaPrivate == isConversaPrivate && other.thumbnail == thumbnail;
   }
 
   @override
   int get hashCode {
-    return conversaId.hashCode ^ criadorId.hashCode ^ criadorNumber.hashCode ^ titulo.hashCode ^ descricao.hashCode ^ participantes.hashCode ^ personal.hashCode ^ thumbnail.hashCode;
+    return conversaId.hashCode ^ criadorId.hashCode ^ criadorNumber.hashCode ^ titulo.hashCode ^ descricao.hashCode ^ participantes.hashCode ^ isConversaPrivate.hashCode ^ thumbnail.hashCode;
   }
 }

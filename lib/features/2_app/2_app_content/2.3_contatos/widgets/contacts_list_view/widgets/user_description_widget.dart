@@ -9,7 +9,7 @@ class UserDescription extends StatelessWidget {
     required this.contact,
   }) : super(key: key);
 
-  final PathConversasController pathConversasController = Get.find();
+  final ConversasPathController pathConversasController = Get.find();
   final Contact contact;
 
   @override
@@ -30,7 +30,8 @@ class UserDescription extends StatelessWidget {
             ),
             TextButton(
               onPressed: () async {
-                // go back to initial screen
+                //* Go back to initial screen
+                Get.back();
                 Get.back();
                 await pathConversasController.addNewPath(
                   titulo: contact.displayName,
@@ -103,7 +104,7 @@ class PhotoFromUser extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(100),
-      child: Image.memory(contact.photoOrThumbnail!, width: 41),
+      child: Image.memory(contact.photoOrThumbnail!, width: 40),
     );
   }
 }

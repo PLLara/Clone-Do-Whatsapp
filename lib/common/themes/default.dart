@@ -11,7 +11,9 @@ ThemeData defaultDarkTheme() {
     ),
     appBarTheme: const AppBarTheme(
       elevation: 1,
+      backgroundColor: Color(0xff1F2C34),
     ),
+    scaffoldBackgroundColor: const Color(0xff121B22),
     inputDecorationTheme: const InputDecorationTheme(
       labelStyle: TextStyle(color: Colors.white),
       floatingLabelStyle: TextStyle(color: Colors.white),

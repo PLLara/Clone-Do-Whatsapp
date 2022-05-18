@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/common/navigator/go_to_page.dart';
+import 'package:whatsapp2/common/themes/unavailable_text.dart';
+import 'package:whatsapp2/features/2_app/1_appbar/1_appbar_widget.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/configuracoes_widget.dart';
-
-import '../../../2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
-import '../1_appbar_widget.dart';
+import 'package:whatsapp2/state/contacts_state.dart';
 
 class AppBarDropDown extends StatelessWidget {
   const AppBarDropDown({
@@ -16,38 +18,44 @@ class AppBarDropDown extends StatelessWidget {
     return PopupMenuButton(
       onSelected: (e) {
         if (e == 'Config') {
-          Get.to(
-            () => const Configuracoes(
-              key: Key('config'),
-            ),
-            transition: Transition.topLevel,
-            duration: const Duration(milliseconds: 400),
-            curve: Curves.easeInOut,
-          );
+          goToPage(
+              const Configuracoes(
+                key: Key('config'),
+              ),
+              Get.to);
         }
 
         if (e == 'TestLab') {
-          Get.to(
-            () => const TestLab(
-              key: Key("testlab"),
-            ),
-          );
+          goToPage(
+              const TestLab(
+                key: Key("testlab"),
+              ),
+              Get.to);
         }
 
         if (e == 'danger') {
-          Get.find<PathConversasController>().addConversaGeral();
+          Get.find<ConversasPathController>().addConversaGeral();
+        }
+        if (e == 'clear_contacts') {
+          Get.find<ContactsController>().setContacts([]);
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,
           value: 'newGroup',
-          child: const Text('Novo Grupo'),
+          child: Text(
+            'Novo Grupo',
+            style: getUnavailableTextTheme(context),
+          ),
         ),
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,
           value: 'favorites',
-          child: const Text('Mensagens Favoritas'),
+          child: Text(
+            'Mensagens Favoritas',
+            style: getUnavailableTextTheme(context),
+          ),
         ),
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,

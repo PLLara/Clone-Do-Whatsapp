@@ -7,13 +7,14 @@ import '../../state/location_state.dart';
 import '../5_confirm_number_dialog/5_confirm_number_dialog.dart';
 
 class NextButton extends StatelessWidget {
-  NextButton({
+  const NextButton({
     Key? key,
   }) : super(key: key);
-  final LocationController locationController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    final LocationController locationController = Get.find();
+
     return ElevatedButton(
       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
       onPressed: () {

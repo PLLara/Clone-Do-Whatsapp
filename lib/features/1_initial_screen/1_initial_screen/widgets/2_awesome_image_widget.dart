@@ -15,7 +15,9 @@ class AwesomeImage extends StatelessWidget {
         width: 300,
         child: Image(
           color: Theme.of(context).primaryColor,
-          image: const AssetImage('assets/background.png'),
+          image: const AssetImage(
+            'assets/background.png',
+          ),
         ),
       ),
     );

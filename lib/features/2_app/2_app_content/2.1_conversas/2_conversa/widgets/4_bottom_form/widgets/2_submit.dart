@@ -6,12 +6,12 @@ import 'package:provider/src/provider.dart';
 
 import '../../../state/conversa_state.dart';
 import '../../../state/path_cubit.dart';
-import '1_text_image_form.dart';
+import '1_text_image_form/1_text_image_form.dart';
 
 class Submit extends StatelessWidget {
-  const Submit({
-    Key? key,
-  }) : super(key: key);
+  const Submit({Key? key, this.optionalMediaLink}) : super(key: key);
+
+  final String? optionalMediaLink;
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +20,22 @@ class Submit extends StatelessWidget {
     );
     return CircleAvatar(
       backgroundColor: const Color(0xff00A884),
-      radius: 20,
+      radius: 23,
       child: IconButton(
-        padding: const EdgeInsets.all(5),
-        icon: const Icon(Icons.send),
+        iconSize: 22,
+        icon: Container(
+          padding: const EdgeInsets.only(left: 3.0),
+          child: const Icon(Icons.send_rounded),
+        ),
         color: Colors.white,
         onPressed: () {
-          if (conversaController.controller.text.trim() != '') {
+          if (conversaController.sendMessageController.text.trim() != '') {
             sendMessage(
               path: conversaController.route,
-              mensagem: conversaController.controller.text,
+              mensagem: conversaController.sendMessageController.text,
+              mediaLink: optionalMediaLink,
             );
-            conversaController.controller.clear();
+            conversaController.sendMessageController.clear();
           }
         },
       ),

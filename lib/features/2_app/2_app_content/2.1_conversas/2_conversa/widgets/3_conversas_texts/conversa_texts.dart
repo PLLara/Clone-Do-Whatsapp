@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
-import 'package:whatsapp2/common/state/contacts_state.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
-
+import '../../../../../../../state/contacts_state.dart';
 import '../../model/message_model.dart';
 import '../../state/color_list.dart';
+
+import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
 
 class ConversaTexts extends StatelessWidget {
   const ConversaTexts({
@@ -136,116 +138,152 @@ class _MessageScaffoldState extends State<MessageScaffold> {
     const double size = 10;
     const double margin = 12;
 
-    return Padding(
-      padding: widget.padding,
-      child: Stack(
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: widget.alignment,
+    return BlocBuilder<PathCubit, ConversaPathData>(
+      builder: (context, state) {
+        state.isConversaPrivate;
+        return Padding(
+          padding: widget.padding,
+          child: Stack(
             children: [
-              Flexible(
-                child: Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: margin,
-                    vertical: 1,
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: widget.color,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: IntrinsicWidth(
-                    child: Column(
-                      crossAxisAlignment: widget.alignment == MainAxisAlignment.start ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-                      children: [
-                        widget.showNumber
-                            ? Material(
-                                color: Colors.transparent,
-                                child: InkWell(
-                                  onTap: () {},
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: [
-                                      Text(
-                                        userName == '' ? userNumber : userName,
-                                        style: TextStyle(color: colors[int.parse(userNumber) % colors.length], fontWeight: FontWeight.w700),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : const SizedBox(),
-                        widget.mensagem.mediaLink != ''
-                            ? TextButton(
-                                onPressed: () {
-                                  Get.to(
-                                    () => Scaffold(
-                                      appBar: AppBar(),
-                                      body: Center(
-                                        child: Hero(
-                                          tag: widget.mensagem.mediaLink,
-                                          child: CachedNetworkImage(
-                                            imageUrl: widget.mensagem.mediaLink,
-                                            placeholder: (context, url) => const Loading(),
-                                          ),
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: widget.alignment,
+                children: [
+                  Flexible(
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: margin,
+                        vertical: 1,
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: widget.color,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: IntrinsicWidth(
+                        child: Column(
+                          crossAxisAlignment: widget.alignment == MainAxisAlignment.start ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+                          children: [
+                            widget.showNumber && !state.isConversaPrivate
+                                ? Padding(
+                                    padding: const EdgeInsets.only(bottom: 8.0),
+                                    child: Material(
+                                      color: Colors.transparent,
+                                      child: InkWell(
+                                        onTap: () {},
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Text(
+                                              userName == '' ? userNumber : userName,
+                                              style: TextStyle(
+                                                color: colors[int.parse(userNumber) % colors.length],
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ),
-                                  );
-                                },
-                                child: Hero(
-                                  tag: widget.mensagem.mediaLink,
-                                  child: CachedNetworkImage(
-                                    imageUrl: widget.mensagem.mediaLink,
-                                    placeholder: (context, url) => const Loading(),
+                                  )
+                                : const SizedBox(),
+                            widget.mensagem.mediaLink != ''
+                                ? TextButton(
+                                    style: TextButton.styleFrom(
+                                      padding: EdgeInsets.zero,
+                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    ),
+                                    onPressed: () {
+                                      Get.to(
+                                        () => Scaffold(
+                                          appBar: AppBar(),
+                                          body: Center(
+                                            child: Hero(
+                                              tag: widget.mensagem.mediaLink,
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.circular(8.0),
+                                                child: CachedNetworkImage(
+                                                  imageUrl: widget.mensagem.mediaLink,
+                                                  placeholder: (context, url) => const Loading(),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        transition: getxTransitions.Transition.topLevel, // ! GAMBIARRA POR COLISÃO DE NOME
+                                        duration: const Duration(milliseconds: 400),
+                                        curve: Curves.easeInOut,
+                                      );
+                                    },
+                                    child: Hero(
+                                      tag: widget.mensagem.mediaLink,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: CachedNetworkImage(
+                                          imageUrl: widget.mensagem.mediaLink,
+                                          placeholder: (context, url) => const Loading(),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 8.0),
+                                  child: SelectableText(
+                                    textoMensagem,
+                                    textAlign: TextAlign.start,
                                   ),
                                 ),
-                              )
-                            : const SizedBox(),
-                        SelectableText(textoMensagem),
-                        Text(
-                          data,
-                          style: const TextStyle(color: Color(0xaaffffff), fontSize: 12),
+                              ],
+                            ),
+                            Text(
+                              data,
+                              style: const TextStyle(color: Color(0xaaffffff), fontSize: 12),
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
+              widget.showNumber
+                  ? Positioned(
+                      left: margin / 4,
+                      top: 1,
+                      child: widget.distinct
+                          ? Container(
+                              width: size * 3,
+                              height: size,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: widget.color,
+                              ),
+                            )
+                          : const SizedBox(),
+                    )
+                  : Positioned(
+                      right: margin / 4,
+                      top: 1,
+                      child: widget.distinct
+                          ? Container(
+                              width: size * 3,
+                              height: size,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: widget.color,
+                              ),
+                            )
+                          : const SizedBox(),
+                    )
             ],
           ),
-          widget.showNumber
-              ? Positioned(
-                  left: margin / 4,
-                  top: 1,
-                  child: widget.distinct
-                      ? Container(
-                          width: size * 3,
-                          height: size,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: widget.color,
-                          ),
-                        )
-                      : const SizedBox(),
-                )
-              : Positioned(
-                  right: margin / 4,
-                  top: 1,
-                  child: widget.distinct
-                      ? Container(
-                          width: size * 3,
-                          height: size,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(15),
-                            color: widget.color,
-                          ),
-                        )
-                      : const SizedBox(),
-                )
-        ],
-      ),
+        );
+      },
     );
   }
 }

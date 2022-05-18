@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:open_file/open_file.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:whatsapp2/common/navigator/go_to_page.dart';
 import 'package:whatsapp2/common/themes/default.dart';
-import 'package:whatsapp2/common/widgets/loading.dart';
-import 'package:whatsapp2/features/2_app/1_appbar&tabbar/1_appbar/widgets/app_bar_dropdown.dart';
-import 'package:whatsapp2/features/2_app/1_appbar&tabbar/1_appbar/widgets/search_conversas.dart';
+import 'package:whatsapp2/features/2_app/1_appbar/widgets/app_bar_dropdown.dart';
+import 'package:whatsapp2/features/2_app/1_appbar/widgets/search_conversas.dart';
 
 AppBar MyAppBar(myTabs) {
   return AppBar(
@@ -16,7 +16,10 @@ AppBar MyAppBar(myTabs) {
       SearchInConversas(),
       AppBarDropDown(),
     ],
-    title: const Text("Whatsapp 2"),
+    title: const Text(
+      "Whatsapp 2",
+      style: TextStyle(color: Colors.grey),
+    ),
     bottom: TabBar(
       indicatorColor: defaultDarkTheme().primaryColor,
       labelColor: defaultDarkTheme().primaryColor,
@@ -117,11 +120,12 @@ Future<void> getDir(String path, {first = false}) async {
   if (!first) {
     Get.back();
   }
-  Get.to(
-    () => FileManager(
+  goToPage(
+    FileManager(
       key: Key(path),
       entities: entities,
     ),
+    Get.to,
   );
 }
 

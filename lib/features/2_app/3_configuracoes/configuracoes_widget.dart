@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/common/navigator/go_to_page.dart';
 import 'package:whatsapp2/common/themes/default.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/widgets/1_user_identity/user_identity.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/widgets/common/configuration_option.dart';
@@ -21,7 +22,7 @@ class Configuracoes extends StatelessWidget {
         children: [
           Column(
             children: [
-              UserIdentity(),
+              const UserIdentity(),
               const Divider(
                 height: 0,
                 color: Colors.black,
@@ -34,27 +35,27 @@ class Configuracoes extends StatelessWidget {
                     subtitle: "Detalhes, e sei lá oq mais",
                     icon: Icons.vpn_key,
                     callback: () {
-                      Get.to(
-                        () => Scaffold(
-                          appBar: AppBar(),
-                          body: Column(
-                            children: [
-                              TextButton(
-                                onPressed: () {
-                                  Get.changeTheme(defaultLightTheme());
-                                },
-                                child: const Text("Light Theme"),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Get.changeTheme(defaultDarkTheme());
-                                },
-                                child: const Text("Dark Theme"),
-                              ),
-                            ],
+                      goToPage(
+                          Scaffold(
+                            appBar: AppBar(),
+                            body: Column(
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Get.changeTheme(defaultLightTheme());
+                                  },
+                                  child: const Text("Light Theme"),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Get.changeTheme(defaultDarkTheme());
+                                  },
+                                  child: const Text("Dark Theme"),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      );
+                          Get.to);
                     },
                   ),
                   const ConfigurationOption(

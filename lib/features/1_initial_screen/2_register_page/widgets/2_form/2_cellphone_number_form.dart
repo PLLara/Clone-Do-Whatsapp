@@ -26,7 +26,7 @@ class CellphoneNumberForm extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
-          mainAxisSize: MainAxisSize.max,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Column(
               children: [

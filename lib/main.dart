@@ -1,11 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:whatsapp2/common/state/user_state.dart';
-import 'package:whatsapp2/common/state/contacts_state.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:palestine_console/palestine_console.dart';
 import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
+import 'package:whatsapp2/state/camera_state.dart';
+import 'package:whatsapp2/state/contacts_state.dart';
+import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'common/themes/default.dart';
 import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
-import 'features/2_app/1_appbar&tabbar/2_tab_controller/2_tab_controller.dart';
+import 'features/2_app/tab_controller.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,11 +18,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await GetStorage.init();
   runApp(
     MyApp(),
   );
@@ -80,6 +83,12 @@ class MyApp extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
+    Get.put(
+      ContactsController(),
+    );
+    Get.put(
+      DesktopSelectedConversaController(),
+    );
     return GetMaterialApp(
       smartManagement: SmartManagement.keepFactory,
       title: 'Whatsapp 2',
@@ -92,24 +101,16 @@ class MyApp extends StatelessWidget {
 }
 
 class LoggedOrNorController extends StatefulWidget {
-  final ContactsController contactsController = Get.put(
-    ContactsController(),
-    permanent: true,
-  );
-
-  final UserController userController = Get.put(
-    UserController(),
-    permanent: true,
+  final CameraStateController cameraController = Get.put(
+    CameraStateController(),
   );
 
   LoggedOrNorController({
     Key? key,
   }) : super(key: key) {
-    print("--------------------TENTANDO INICIAR O STATE-----------------------");
-    contactsController.getContactsFromDevice();
+    Print.green("-------------------- TENTANDO INICIAR O STATE -----------------------");
     FirebaseAuth.instance.userChanges().listen(
       (User? user) {
-        userController.changeUser(user);
         if (user != null) {
           FirebaseFirestore firestore = FirebaseFirestore.instance;
           firestore.collection('usuarios').doc(user.uid).set({
@@ -118,6 +119,10 @@ class LoggedOrNorController extends StatefulWidget {
             'numero': user.phoneNumber,
             'foto': user.photoURL
           });
+        } else {
+          Get.offAllNamed('/');
+          Get.find<ContactsController>().dispose();
+          Get.find<ConversasPathController>().dispose();
         }
       },
     );
@@ -150,15 +155,20 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
     );
   }
 
+  var contacts = Get.find<ContactsController>();
+
   @override
   Widget build(BuildContext context) {
     if (_logged) {
-      return Obx(() {
-        if (Get.find<ContactsController>().contatos.isEmpty) {
-          return const ScaffoldLoading();
-        }
-        return const TabSwitcher();
-      });
+      return Obx(
+        () {
+          if (contacts.contatos.isEmpty) {
+            contacts.getContactsFromDevice();
+            return const ScaffoldLoading();
+          }
+          return const TabSwitcher();
+        },
+      );
     }
     return const InicialScreen();
   }

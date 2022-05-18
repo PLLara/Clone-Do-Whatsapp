@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:get/get.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/1_appbar/appbar.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/2_background/background.dart';
@@ -14,14 +12,14 @@ class Conversa extends StatefulWidget {
   const Conversa({
     Key? key,
     required this.path,
+    required this.injectedConversaPhoto,
+    required this.injectedTitle,
   }) : super(key: key);
+  final Widget injectedConversaPhoto;
+  final Widget injectedTitle;
+
   @override
   State<Conversa> createState() => _ConversaState();
-
-  void dispose() {
-    Get.find<ConversaController>().dispose();
-    print("Conversa deletada");
-  }
 }
 
 class _ConversaState extends State<Conversa> {
@@ -31,7 +29,10 @@ class _ConversaState extends State<Conversa> {
       create: (context) => PathCubit(widget.path),
       child: Scaffold(
         backgroundColor: const Color(0xff0B141A),
-        appBar: ConversaAppBarBind(),
+        appBar: ConversaAppBarBind(
+          injectedConversaPhoto: widget.injectedConversaPhoto,
+          injectedTitle: widget.injectedTitle,
+        ),
         body: const ConversaBody(),
       ),
     );

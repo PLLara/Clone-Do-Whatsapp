@@ -50,7 +50,7 @@ class ContactListTile extends StatelessWidget {
       MaterialPageRoute(
         builder: (e) => UserDescription(
           contact: contact,
-          key: Key(contact.phones[0].number),
+          key: Key(contact.displayName),
         ),
       ),
     );

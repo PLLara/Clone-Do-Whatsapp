@@ -17,8 +17,6 @@ class DialogoDeConfirmacaoDeNumero extends StatefulWidget {
     Key? key,
   }) : super(key: key);
 
-  final LocationController locationController = Get.find();
-
   @override
   State<DialogoDeConfirmacaoDeNumero> createState() => _DialogoDeConfirmacaoDeNumeroState();
 }
@@ -38,7 +36,8 @@ class _DialogoDeConfirmacaoDeNumeroState extends State<DialogoDeConfirmacaoDeNum
   }
 
   List<Widget> ActionsList(BuildContext context) {
-    var parsedPhoneNumber = "+55" + widget.locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '');
+    final LocationController locationController = Get.find();
+    var parsedPhoneNumber = "+55" + locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '');
 
     return [
       Padding(

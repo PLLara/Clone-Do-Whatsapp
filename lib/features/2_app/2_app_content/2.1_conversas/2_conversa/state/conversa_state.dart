@@ -2,6 +2,7 @@
 
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -12,103 +13,75 @@ enum States { loading, ready, error }
 
 class ConversaController extends GetxController {
   final String route;
-  late final StreamSubscription<DatabaseEvent> addedValueStream;
-  late final StreamSubscription<DatabaseEvent> removedValueStream;
-  final TextEditingController controller = TextEditingController();
+  late final StreamSubscription<DatabaseEvent> streamMensagensAdicionadas;
+  late final StreamSubscription<DatabaseEvent> streamMensagensRemovidas;
+  final TextEditingController sendMessageController = TextEditingController();
+  final FocusNode focusNode = FocusNode();
 
   @override
   void dispose() {
-    addedValueStream.cancel();
-    removedValueStream.cancel();
-    controller.dispose();
+    Print.green("DISPOSING CONVERSACONTROLLER FOR ROUTE: " + route);
+    streamMensagensAdicionadas.cancel();
+    streamMensagensRemovidas.cancel();
     super.dispose();
   }
 
-  final Rx<States> state = States.ready.obs;
+  cancelStream() async {
+    await streamMensagensAdicionadas.cancel();
+    await streamMensagensRemovidas.cancel();
+  }
 
+  final Rx<States> state = States.ready.obs;
   final RxList<MessageModel> papo = <MessageModel>[].obs;
   final RxBool iniciado = false.obs;
-
   final RxInt quantidadeDeMensagensNaoLidas = 0.obs;
+  final RxBool emojiKeyboardClosed = false.obs;
+
+  bool firstFalsePositive = true;
 
   ConversaController({required this.route});
 
-  messageWasAdded() {
-    quantidadeDeMensagensNaoLidas.value += 1;
-  }
-
-  MessageModel parseMessage(DataSnapshot element) {
-    try {
-      if (element.key != null) {
-        var parsedValue = (element.value as Map);
-        return MessageModel(
-          id: element.key ?? 'error',
-          date: DateTime.parse(parsedValue['date']),
-          message: parsedValue['mensagem'] ?? 'ERROR',
-          mediaLink: parsedValue['mediaLink'] ?? 'ERROR',
-          usuario: parsedValue['usuario'] ?? 'ERROR',
-        );
-      } else {
-        print("!!!!!!!!!!ERROR!!!!!!!!!!!!");
-        return MessageModel(
-          id: 'ERROR-ERROR-ERROR',
-          date: DateTime.now(),
-          message: 'ERROR-ERROR-ERROR',
-          mediaLink: 'ERROR-ERROR-ERROR',
-          usuario: 'ERROR-ERROR-ERROR',
-        );
-      }
-    } catch (e) {
-      print(e.toString());
-
-      return MessageModel(
-        id: 'ERROR-ERROR-ERROR',
-        date: DateTime.now(),
-        message: 'ERROR-ERROR-ERROR',
-        mediaLink: 'ERROR-ERROR-ERROR',
-        usuario: 'ERROR-ERROR-ERROR',
-      );
-    }
-  }
-
   start() async {
-    iniciado.value = true;
-    final reference = FirebaseDatabase.instance.ref(route);
-    print("-------------------INICIANDO DO STATE--------------------------");
-
+    iniciado.value = false;
     state.value = States.loading;
+    Print.magenta("------------------- INICIANDO A CONVERSA ${papo.length} --------------------------");
+    // ! Definindo as variaveis
+    final reference = FirebaseDatabase.instance.ref(route);
     var ref = await reference.once();
     var lista = <MessageModel>[];
 
+    // ! Pegando os dados
+    print("${papo.length}");
     ref.snapshot.children.toList().forEach(
       (element) {
-        messageWasAdded();
-        lista.add(parseMessage(element));
+        MessageModel mensagemParseada = parseMessage(element);
+        lista.add(mensagemParseada);
+        messageWasAdded(mensagemParseada);
       },
     );
-
     papo.addAll(lista);
     sort();
+    print("${papo.length}");
+
+    // ! Definindo listeners
+    definirStreams();
     state.value = States.ready;
-    startStream();
+    focusNode.addListener(() {
+      closeEmogiKeyboard();
+    });
+    update();
   }
 
-  startStream() {
+  definirStreams() {
     final reference = FirebaseDatabase.instance.ref(route);
+    definirStreamDeMensagensAdicionadas(reference);
+    definirStreamDeMensagensRemovidas(reference);
+  }
 
-    addedValueStream = reference.orderByKey().limitToLast(1).onValue.listen((event) {
-      bool seEuDeveriaAdicionarAMensagem(DatabaseEvent event) => event.snapshot.value != null && iniciado.value;
-      if (seEuDeveriaAdicionarAMensagem(event)) {
-        Print.green("----- MESSAGE ADDED -----");
-        papo.insert(0, parseMessage(event.snapshot.children.last));
-      }
-      messageWasAdded();
-    });
-
-    removedValueStream = reference.onChildRemoved.listen(
+  void definirStreamDeMensagensRemovidas(DatabaseReference reference) {
+    streamMensagensRemovidas = reference.onChildRemoved.listen(
       (event) {
         MessageModel? messageToBeRemoved;
-
         for (MessageModel legal in papo) {
           if (legal.id == parseMessage(event.snapshot).id) {
             print("----- MESSAGE REMOVED -----");
@@ -122,6 +95,49 @@ class ConversaController extends GetxController {
     );
   }
 
+  void definirStreamDeMensagensAdicionadas(DatabaseReference reference) {
+    streamMensagensAdicionadas = reference.orderByKey().limitToLast(1).onValue.listen(
+      (event) {
+        try {
+          if (firstFalsePositive) {
+            firstFalsePositive = false; // ! isso aqui é culpa do firebase ;=;
+            return;
+          }
+          var mensagemParseada = parseMessage(event.snapshot.children.last);
+          papo.insert(0, mensagemParseada);
+          messageWasAdded(mensagemParseada);
+          sort();
+          Print.green("----- MESSAGE ADDED -----");
+        } catch (e) {}
+      },
+    );
+  }
+
+  messageWasAdded(MessageModel mensagem) {
+    if (mensagem.usuario != FirebaseAuth.instance.currentUser?.phoneNumber) {
+      quantidadeDeMensagensNaoLidas.value += 1;
+      update();
+    }
+  }
+
+  hasNewMessage() {
+    if (quantidadeDeMensagensNaoLidas.value > 0) {
+      quantidadeDeMensagensNaoLidas.value = 0;
+      return true;
+    }
+    return false;
+  }
+
+  openEmogiKeyboard() {
+    emojiKeyboardClosed.value = true;
+    update();
+  }
+
+  closeEmogiKeyboard() {
+    emojiKeyboardClosed.value = false;
+    update();
+  }
+
   sort() {
     papo.sort(
       (a, b) {
@@ -129,6 +145,42 @@ class ConversaController extends GetxController {
         var dateB = DateTime.parse(b.date.toString());
         return dateB.compareTo(dateA);
       },
+    );
+  }
+}
+
+MessageModel parseMessage(DataSnapshot element) {
+  try {
+    if (element.key != null) {
+      var parsedValue = (element.value as Map);
+      var time = DateTime.parse(parsedValue['date']);
+      time = time.subtract(const Duration(hours: 3));
+      return MessageModel(
+        id: element.key ?? 'error',
+        date: time,
+        message: parsedValue['mensagem'] ?? 'ERROR',
+        mediaLink: parsedValue['mediaLink'] ?? 'ERROR',
+        usuario: parsedValue['usuario'] ?? 'ERROR',
+      );
+    } else {
+      Print.red("!!!!!!!!!!ERROR!!!!!!!!!!!!");
+      return MessageModel(
+        id: 'ERROR-ERROR-ERROR',
+        date: DateTime.now(),
+        message: 'ERROR-ERROR-ERROR',
+        mediaLink: 'ERROR-ERROR-ERROR',
+        usuario: 'ERROR-ERROR-ERROR',
+      );
+    }
+  } catch (e) {
+    print(e.toString());
+
+    return MessageModel(
+      id: 'ERROR-ERROR-ERROR',
+      date: DateTime.now(),
+      message: 'ERROR-ERROR-ERROR',
+      mediaLink: 'ERROR-ERROR-ERROR',
+      usuario: 'ERROR-ERROR-ERROR',
     );
   }
 }

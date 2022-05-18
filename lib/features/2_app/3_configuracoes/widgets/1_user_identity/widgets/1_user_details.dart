@@ -3,19 +3,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/common/state/user_state.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/1_text_image_form.dart';
 
 import '../../../../../../common/widgets/user_photo.dart';
 import '../../common/configuration_option.dart';
 import '../user_identity.dart';
 
 class UserDetails extends StatelessWidget {
-  UserDetails({
+  const UserDetails({
     Key? key,
   }) : super(key: key);
-
-  final UserController userController = Get.find<UserController>();
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +38,8 @@ class UserDetails extends StatelessWidget {
                   ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
+              child: const Padding(
+                padding: EdgeInsets.all(20.0),
                 child: Hero(
                   tag: 'avatar',
                   child: UserPhotoWidget(
@@ -52,31 +49,27 @@ class UserDetails extends StatelessWidget {
               ),
             ),
           ),
-          Obx(
-            () {
-              return ConfigurationOption(
-                title: 'Nome',
-                subtitle: userController.user.value?.displayName ?? '',
-                icon: Icons.person,
-                endIcon: Icons.edit,
-                callback: () {
-                  showModalBottomSheet(
-                    context: context,
-                    constraints: BoxConstraints(
-                      maxHeight: MediaQuery.of(context).size.height * 0.5,
-                      minHeight: MediaQuery.of(context).size.height * 0.5,
+          ConfigurationOption(
+            title: 'Nome',
+            subtitle: FirebaseAuth.instance.currentUser?.displayName ?? '',
+            icon: Icons.person,
+            endIcon: Icons.edit,
+            callback: () {
+              showModalBottomSheet(
+                context: context,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.5,
+                  minHeight: MediaQuery.of(context).size.height * 0.5,
+                ),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    top: Radius.circular(
+                      5.0,
                     ),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(
-                          5.0,
-                        ),
-                      ),
-                    ),
-                    isScrollControlled: true,
-                    builder: (context) => const ChangeNameBottomSheet(),
-                  );
-                },
+                  ),
+                ),
+                isScrollControlled: true,
+                builder: (context) => const ChangeNameBottomSheet(),
               );
             },
           ),

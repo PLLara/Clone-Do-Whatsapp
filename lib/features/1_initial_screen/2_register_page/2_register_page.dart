@@ -22,8 +22,8 @@ class RegisterPage extends StatelessWidget {
           padding: const EdgeInsets.all(30.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const FormWrapper(),
+            children: const [
+              FormWrapper(),
               NextButton()
             ],
           ),

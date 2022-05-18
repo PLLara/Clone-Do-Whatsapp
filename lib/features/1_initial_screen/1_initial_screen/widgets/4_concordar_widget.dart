@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/common/navigator/go_to_page.dart';
 
 class Concordar extends StatelessWidget {
   final Widget nextScreen;
@@ -20,12 +21,7 @@ class Concordar extends StatelessWidget {
         width: double.infinity,
         child: ElevatedButton(
           onPressed: () {
-            Get.to(()=>
-              nextScreen,
-              transition: Transition.topLevel,
-              duration: const Duration(milliseconds: 400),
-              curve: Curves.easeInOut,
-            );
+            goToPage(nextScreen, Get.to);
           },
           child: const Text("CONCORDAR E AVANÇAR"),
         ),
@@ -33,4 +29,3 @@ class Concordar extends StatelessWidget {
     );
   }
 }
-
