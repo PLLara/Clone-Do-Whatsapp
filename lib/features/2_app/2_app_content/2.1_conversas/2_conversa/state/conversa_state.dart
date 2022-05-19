@@ -26,6 +26,14 @@ class ConversaController extends GetxController {
     super.dispose();
   }
 
+  @override
+  onClose() {
+    Print.green("CLOSING CONVERSACONTROLLER FOR ROUTE: " + route);
+    streamMensagensAdicionadas.cancel();
+    streamMensagensRemovidas.cancel();
+    super.onClose();
+  }
+
   cancelStream() async {
     await streamMensagensAdicionadas.cancel();
     await streamMensagensRemovidas.cancel();
