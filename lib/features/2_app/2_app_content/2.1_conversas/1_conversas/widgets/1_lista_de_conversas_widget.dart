@@ -98,10 +98,24 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
                           textAlign: TextAlign.center,
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 12.0),
+                          padding: const EdgeInsets.all(12.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              minimumSize: const Size.fromHeight(50), // NEW
+                              minimumSize: const Size.fromHeight(50),
+                              primary: Colors.red,
+                            ),
+                            onPressed: () {
+                              Get.find<ConversasPathController>().addConversaGeral();
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text("Entrar por minha conta e risco"),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              minimumSize: const Size.fromHeight(50),
                             ),
                             onPressed: () {
                               Navigator.of(context).pop();
@@ -109,13 +123,6 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
                             child: const Text("VOLTAR AO APP"),
                           ),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            Get.find<ConversasPathController>().addConversaGeral();
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text("Entrar por minha conta e risco"),
-                        )
                       ],
                     ),
                   ),
@@ -319,8 +326,6 @@ class MensagensNaoLidasEDataWidget extends StatelessWidget {
     final ConversaController conversaController = Get.find<ConversaController>(
       tag: conversaPath.conversaId,
     );
-    var hasNewMessage = conversaController.quantidadeDeMensagensNaoLidas.toString() == '0';
-
     return Column(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.end,

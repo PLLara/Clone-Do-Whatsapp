@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: file_names, non_constant_identifier_names
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -57,7 +57,7 @@ class _FileManagerState extends State<FileManager> {
                   getDir(entitie.path);
                   return;
                 }
-                File arquivo = File(entitie.path);
+                // File arquivo = File(entitie.path);
                 OpenFile.open(entitie.path);
               },
               title: Text(entitie.path.split('/').last),

@@ -116,7 +116,9 @@ class ConversaController extends GetxController {
           messageWasAdded(mensagemParseada);
           sort();
           Print.green("----- MESSAGE ADDED -----");
-        } catch (e) {}
+        } catch (e) {
+          Print.red("----- MESSAGE NOT ADDED -----");
+        }
       },
     );
   }

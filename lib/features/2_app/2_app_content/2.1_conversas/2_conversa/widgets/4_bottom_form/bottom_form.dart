@@ -1,4 +1,5 @@
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
@@ -44,17 +45,28 @@ class _BottomFormState extends State<BottomForm> {
             ),
           ),
           Obx(
-            () => Offstage(
-              offstage: !conversaController.emojiKeyboardClosed.value,
-              child: SizedBox(
-                height: 250,
-                child: EmojiPicker(
-                  onEmojiSelected: (Category category, Emoji emoji) {
-                    _onEmojiSelected(emoji, conversaController.sendMessageController);
-                  },
+            () {
+              if (kIsWeb) {
+                return Offstage(
+                  offstage: !conversaController.emojiKeyboardClosed.value,
+                  child: Container(
+                    color: conversaController.emojiKeyboardClosed.value ? Colors.black : Colors.white,
+                    child: const Text("SISTEMA DE EMOGI NÃO IMPLEMENTADO NA WEB ):"),
+                  ),
+                );
+              }
+              return Offstage(
+                offstage: !conversaController.emojiKeyboardClosed.value,
+                child: SizedBox(
+                  height: 250,
+                  child: EmojiPicker(
+                    onEmojiSelected: (category, Emoji emoji) {
+                      _onEmojiSelected(emoji, conversaController.sendMessageController);
+                    },
+                  ),
                 ),
-              ),
-            ),
+              );
+            },
           )
         ],
       ),

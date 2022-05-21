@@ -91,15 +91,8 @@ class TakePicture extends StatelessWidget {
               var capturedImage = await controller.takePicture();
               Image imagem;
 
-              // ! Treating errors
-              if (capturedImage == null) {
-                return Get.defaultDialog(
-                  title: "Camera Error!",
-                );
-              }
-              Print.green("---------- FOTO TIRADA : ${capturedImage.path} ----------");
-
               // ! Fazendo o upload da imagem e criando o widget da imagem
+              Print.green("---------- FOTO TIRADA : ${capturedImage.path} ----------");
               if (kIsWeb) {
                 Uint8List? imageBytes = (await http.get(Uri.parse(capturedImage.path))).bodyBytes;
                 dbImageReference.putData(imageBytes, SettableMetadata(contentType: 'image/png')).then((p0) {

@@ -31,8 +31,8 @@ class NextButton extends StatelessWidget {
         }
 
         Get.dialog(
-          DialogoDeConfirmacaoDeNumero(
-            key: const Key('dialogoconfirmacaonumero'),
+          const DialogoDeConfirmacaoDeNumero(
+            key: Key('dialogoconfirmacaonumero'),
           ),
         );
       },

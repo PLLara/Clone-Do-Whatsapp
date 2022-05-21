@@ -32,7 +32,7 @@ class Configuracoes extends StatelessWidget {
                 children: [
                   ConfigurationOption(
                     title: "Conta",
-                    subtitle: "Detalhes, e sei lá oq mais",
+                    subtitle: const Text("Detalhes, e sei lá oq mais"),
                     icon: Icons.vpn_key,
                     callback: () {
                       goToPage(
@@ -61,12 +61,12 @@ class Configuracoes extends StatelessWidget {
                   ),
                   const ConfigurationOption(
                     title: "Conversas",
-                    subtitle: "Tema, papel de parede, histórico",
+                    subtitle: Text("Tema, papel de parede, histórico"),
                     icon: Icons.sms,
                   ),
                   const ConfigurationOption(
                     title: "Ajuda",
-                    subtitle: "Central de ajuda política de privacidade",
+                    subtitle: Text("Central de ajuda política de privacidade"),
                     icon: Icons.help_outline,
                   ),
                 ],

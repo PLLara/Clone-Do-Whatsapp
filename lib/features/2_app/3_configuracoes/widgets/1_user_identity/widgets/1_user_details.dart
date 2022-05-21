@@ -1,15 +1,17 @@
+// ignore_for_file: file_names
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/1_text_image_form.dart';
-import '../../../../../../common/widgets/user_photo.dart';
+import 'package:whatsapp2/features/2_app/3_configuracoes/widgets/1_user_identity/user_name.dart';
+import '../../../../../../common/widgets/eu/user_photo.dart';
 import '../../common/configuration_option.dart';
 import '../user_identity.dart';
 
-class UserDetails extends StatelessWidget {
-  const UserDetails({
+class ChangeUserDetails extends StatelessWidget {
+  const ChangeUserDetails({
     Key? key,
   }) : super(key: key);
 
@@ -32,7 +34,7 @@ class UserDetails extends StatelessWidget {
                     ),
                   ),
                   isScrollControlled: true,
-                  builder: (context) => const ChangePhotoUrl(
+                  builder: (context) => const ChangePhotoBottomSheet(
                     key: Key('ChangePhotoUrl'),
                   ),
                 );
@@ -50,7 +52,7 @@ class UserDetails extends StatelessWidget {
           ),
           ConfigurationOption(
             title: 'Nome',
-            subtitle: FirebaseAuth.instance.currentUser?.displayName ?? '',
+            subtitle: const UserNameWidget(),
             icon: Icons.person,
             endIcon: Icons.edit,
             callback: () {
@@ -78,7 +80,7 @@ class UserDetails extends StatelessWidget {
           ),
           ConfigurationOption(
             title: 'Telefone',
-            subtitle: FirebaseAuth.instance.currentUser?.phoneNumber ?? '',
+            subtitle: Text(FirebaseAuth.instance.currentUser?.phoneNumber ?? ''),
             icon: Icons.phone,
           ),
         ],
@@ -87,8 +89,8 @@ class UserDetails extends StatelessWidget {
   }
 }
 
-class ChangePhotoUrl extends StatelessWidget {
-  const ChangePhotoUrl({
+class ChangePhotoBottomSheet extends StatelessWidget {
+  const ChangePhotoBottomSheet({
     Key? key,
   }) : super(key: key);
 
@@ -113,9 +115,8 @@ class ChangePhotoUrl extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.max,
             children: [
-              IconButton(
-                iconSize: 50,
-                icon: Column(
+              TextButton(
+                child: Column(
                   children: const [
                     Icon(Icons.photo_camera),
                     Text("Camera"),
@@ -123,9 +124,8 @@ class ChangePhotoUrl extends StatelessWidget {
                 ),
                 onPressed: () {},
               ),
-              IconButton(
-                iconSize: 50,
-                icon: Column(
+              TextButton(
+                child: Column(
                   children: const [
                     Icon(Icons.image),
                     Text("Galeria"),

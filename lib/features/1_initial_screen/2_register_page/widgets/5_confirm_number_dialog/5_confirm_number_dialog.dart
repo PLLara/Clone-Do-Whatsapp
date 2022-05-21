@@ -13,7 +13,7 @@ import '../../state/location_state.dart';
 import '../../state/verify_phone_number.dart';
 
 class DialogoDeConfirmacaoDeNumero extends StatefulWidget {
-  DialogoDeConfirmacaoDeNumero({
+  const DialogoDeConfirmacaoDeNumero({
     Key? key,
   }) : super(key: key);
 

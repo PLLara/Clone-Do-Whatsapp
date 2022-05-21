@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
+import 'package:whatsapp2/features/2_app/state_and_tab_controller.dart';
+import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/local/conversa_state.dart';
 
 enum Status { waiting, success, empty }
@@ -67,7 +69,9 @@ class ConversasPathController extends GetxController {
             var conversaController = Get.find<ConversaController>(tag: conversaId);
             conversaController.cancelStream();
             conversaController.dispose();
-          } catch (e) {}
+          } catch (e) {
+            Print.red("ERRO AO CANCELAR LISTENER DA CONVERSA: " + conversaId);
+          }
         }
 
         conversas.removeRange(0, conversas.length);
@@ -99,6 +103,7 @@ class ConversasPathController extends GetxController {
 
   void removeConversa(String conversaId, bool isConversaPrivate) async {
     Print.red("REMOVING CONVERSA: " + conversaId);
+    Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
     var conversaController = Get.find<ConversaController>(tag: conversaId);
     try {
       conversaController.dispose();
@@ -115,12 +120,15 @@ class ConversasPathController extends GetxController {
         return;
       }
     }
+    Get.delete<ConversaController>();
   }
 
   void removeConversaGeral() {
+    Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
     Print.red("REMOVING CONVERSA: GERAL");
     try {
       Get.find<ConversaController>(tag: 'geral').dispose();
+      Get.delete<ConversaController>(tag: 'geral');
     } catch (e) {
       Print.red("CONTROLLER ALREADY DISPOSED");
     }
@@ -184,7 +192,7 @@ class ConversaPathData {
     String? descricao,
     List<String>? participantes,
     bool? personal,
-    dynamic? thumbnail,
+    dynamic thumbnail,
   }) {
     return ConversaPathData(
       conversaId: conversaId ?? this.conversaId,
@@ -193,7 +201,7 @@ class ConversaPathData {
       titulo: titulo ?? this.titulo,
       descricao: descricao ?? this.descricao,
       participantes: participantes ?? this.participantes,
-      isConversaPrivate: personal ?? this.isConversaPrivate,
+      isConversaPrivate: personal ?? isConversaPrivate,
       thumbnail: thumbnail ?? this.thumbnail,
     );
   }

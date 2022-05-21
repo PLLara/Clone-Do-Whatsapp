@@ -7,7 +7,7 @@ import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'common/themes/default.dart';
 import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
-import 'features/2_app/tab_controller.dart';
+import 'features/2_app/state_and_tab_controller.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -154,7 +154,7 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
   @override
   Widget build(BuildContext context) {
     if (_logged) {
-      return const TabSwitcher();
+      return const TabSwitcherAndProvider();
     }
     return const InicialScreen();
   }

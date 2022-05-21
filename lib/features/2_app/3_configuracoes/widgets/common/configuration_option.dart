@@ -4,14 +4,21 @@ import 'package:flutter/material.dart';
 
 class ConfigurationOption extends StatelessWidget {
   final String title;
-  final String subtitle;
+  final Widget subtitle;
   final IconData icon;
 
   final IconData? endIcon;
 
   final VoidCallback? callback;
 
-  const ConfigurationOption({Key? key, required this.title, required this.subtitle, required this.icon, this.endIcon, this.callback}) : super(key: key);
+  const ConfigurationOption({
+    Key? key,
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    this.endIcon,
+    this.callback,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +34,7 @@ class ConfigurationOption extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.bodyText1,
       ),
-      subtitle: Text(
-        subtitle,
-        style: Theme.of(context).textTheme.bodyText1,
-      ),
+      subtitle: subtitle,
       trailing: Icon(endIcon),
     );
   }
