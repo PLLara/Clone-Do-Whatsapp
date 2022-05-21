@@ -7,7 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:uuid/uuid.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
+import 'package:whatsapp2/state/local/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/1_text_image_form.dart';
 

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:http/http.dart' as http;
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/widgets/get_image_from_gallery.dart';
-import '../../../../state/conversa_state.dart';
+import '../../../../../../../../../state/local/conversa_state.dart';
 import '../../../../state/path_cubit.dart';
 
 class TextAndImageForm extends StatefulWidget {

@@ -36,26 +36,27 @@ class Configuracoes extends StatelessWidget {
                     icon: Icons.vpn_key,
                     callback: () {
                       goToPage(
-                          Scaffold(
-                            appBar: AppBar(),
-                            body: Column(
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Get.changeTheme(defaultLightTheme());
-                                  },
-                                  child: const Text("Light Theme"),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Get.changeTheme(defaultDarkTheme());
-                                  },
-                                  child: const Text("Dark Theme"),
-                                ),
-                              ],
-                            ),
+                        Scaffold(
+                          appBar: AppBar(),
+                          body: Column(
+                            children: [
+                              TextButton(
+                                onPressed: () {
+                                  Get.changeTheme(defaultLightTheme());
+                                },
+                                child: const Text("Light Theme"),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Get.changeTheme(defaultDarkTheme());
+                                },
+                                child: const Text("Dark Theme"),
+                              ),
+                            ],
                           ),
-                          Get.to);
+                        ),
+                        Get.to,
+                      );
                     },
                   ),
                   const ConfigurationOption(

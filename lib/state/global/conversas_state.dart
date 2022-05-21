@@ -5,22 +5,31 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
+import 'package:whatsapp2/state/local/conversa_state.dart';
 
 enum Status { waiting, success, empty }
 
 class ConversasPathController extends GetxController {
-  ConversasPathController() {
-    setPathListener();
-  }
-
   RxList<ConversaPathData> conversas = <ConversaPathData>[].obs;
   Rx<Status> status = Status.waiting.obs;
   late StreamSubscription conversasStream;
 
+  @override
+  void onInit() {
+    setPathListener();
+    super.onInit();
+  }
+
+  @override
+  onClose() {
+    Print.red("---------- DISPOSING CONVERSAS PATH CONTROLLER ----------");
+    conversasStream.cancel();
+    conversas.clear();
+    super.onClose();
+  }
+
   setPathListener() async {
     Print.magenta("---------- INITIALIZING PATH CONVERSAS CONTROLLER LISTENER ----------");
-
     var myPhoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber ?? '';
     var conversasSnapshots = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots();
     conversasStream = conversasSnapshots.listen(
@@ -30,7 +39,7 @@ class ConversasPathController extends GetxController {
           var pNewConversa = newConversa.data();
           var iParticipateInConversa = (pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber);
           if (iParticipateInConversa) {
-            Print.green("${pNewConversa['']} ${pNewConversa['participantes']} contains $myPhoneNumber");
+            Print.green("${pNewConversa['participantes']} contains $myPhoneNumber");
             var newConversaPathData = ConversaPathData(
               criadorNumber: myPhoneNumber,
               conversaId: newConversa.id,
@@ -41,10 +50,10 @@ class ConversasPathController extends GetxController {
               isConversaPrivate: pNewConversa['personal'],
               participantes: pNewConversa['participantes'].cast<String>() as List<String>,
             );
+            Print.green("NEW CONVERSA ADDED: " + newConversaPathData.toString());
             newConversas.add(
               newConversaPathData,
             );
-            Print.green("NEW CONVERSA ADDED: " + newConversaPathData.toString());
           }
         }
         var conversaIdList = conversas.map((element) => element.conversaId).toList();

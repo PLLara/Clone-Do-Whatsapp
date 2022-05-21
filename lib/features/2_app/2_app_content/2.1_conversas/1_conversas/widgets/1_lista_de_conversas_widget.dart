@@ -3,19 +3,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
-import 'package:palestine_console/palestine_console.dart';
 import 'package:whatsapp2/common/desktop/width.dart';
 import 'package:whatsapp2/common/navigator/go_to_page.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
+import 'package:whatsapp2/common/widgets/generic_null_user.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/conversa_page.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_page.dart';
+import 'package:whatsapp2/state/global/contacts_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
+import 'package:whatsapp2/state/local/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/widgets/contacts_list_view/widgets/user_description_widget.dart';
-import 'package:whatsapp2/state/contacts_state.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
-
-import '../../../../../../common/widgets/generic_null_user.dart';
-import '../../../2.3_contatos/contatos_page.dart';
 
 class ConversationsList extends StatelessWidget {
   ConversationsList({
@@ -158,9 +156,9 @@ class _ConversaListTileState extends State<ConversaListTile> {
     Get.put(
       ConversaController(route: widget.conversaPath.conversaId),
       tag: widget.conversaPath.conversaId,
-      permanent: true,
     );
 
+    // ! Código horrível :/
     var otherPessoa = Contact();
     otherPessoa = contactsController.procurarContatoDoDestinatario(widget.conversaPath, otherPessoa);
     if (widget.conversaPath.isConversaPrivate) {

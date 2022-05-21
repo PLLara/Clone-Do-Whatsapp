@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/src/provider.dart';
 
-import '../../../state/conversa_state.dart';
+import '../../../../../../../../state/local/conversa_state.dart';
 import '../../../state/path_cubit.dart';
 import '1_text_image_form/1_text_image_form.dart';
 

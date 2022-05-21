@@ -2,11 +2,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
-import 'package:whatsapp2/state/camera_state.dart';
-import 'package:whatsapp2/state/contacts_state.dart';
-import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
+import 'package:whatsapp2/state/global/camera_state.dart';
+import 'package:whatsapp2/state/global/contacts_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'common/themes/default.dart';
 import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
 import 'features/2_app/tab_controller.dart';
@@ -83,12 +81,6 @@ class MyApp extends StatelessWidget {
   }
   @override
   Widget build(BuildContext context) {
-    Get.put(
-      ContactsController(),
-    );
-    Get.put(
-      DesktopSelectedConversaController(),
-    );
     return GetMaterialApp(
       smartManagement: SmartManagement.keepFactory,
       title: 'Whatsapp 2',
@@ -113,16 +105,20 @@ class LoggedOrNorController extends StatefulWidget {
       (User? user) {
         if (user != null) {
           FirebaseFirestore firestore = FirebaseFirestore.instance;
-          firestore.collection('usuarios').doc(user.uid).set({
+          firestore.collection('usuarios').doc(user.phoneNumber).set({
+            'id': user.uid,
             'nome': user.displayName,
             'email': user.email,
             'numero': user.phoneNumber,
             'foto': user.photoURL
           });
         } else {
+          Print.red('---------- EXITING USER SESSION AND DISPOSING CONTROLLERS ----------');
           Get.offAllNamed('/');
-          Get.find<ContactsController>().dispose();
-          Get.find<ConversasPathController>().dispose();
+
+          Get.delete<ConversasPathController>();
+          Get.delete<ContactsController>();
+          Get.delete<CameraStateController>();
         }
       },
     );
@@ -155,20 +151,10 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
     );
   }
 
-  var contacts = Get.find<ContactsController>();
-
   @override
   Widget build(BuildContext context) {
     if (_logged) {
-      return Obx(
-        () {
-          if (contacts.contatos.isEmpty) {
-            contacts.getContactsFromDevice();
-            return const ScaffoldLoading();
-          }
-          return const TabSwitcher();
-        },
-      );
+      return const TabSwitcher();
     }
     return const InicialScreen();
   }

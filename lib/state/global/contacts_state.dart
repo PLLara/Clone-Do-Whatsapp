@@ -6,14 +6,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
-import '../../features/2_app/2_app_content/2.1_conversas/1_conversas/data/contacts_source.dart';
-import '../common/functions/internet.dart';
+import 'package:whatsapp2/common/functions/internet.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/data/contacts_source.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class ContactsController extends GetxController {
   RxList<Contact> contatos = <Contact>[].obs;
-  ContactsController();
-  var contatosCollection = FirebaseFirestore.instance.collection('usuarios');
+
+  @override
+  onInit() {
+    getContactsFromDevice();
+    super.onInit();
+  }
 
   Future getContactsFromDevice() async {
     Print.magenta('---------- INITIALIZING CONTACTS CONTROLLER ---------');
@@ -42,6 +46,7 @@ class ContactsController extends GetxController {
   }
 
   void syncContactsFromDeviceWithWebInfo(List<Contact> newContatos) {
+    CollectionReference<Map<String, dynamic>> contatosCollection = FirebaseFirestore.instance.collection('usuarios');
     // TODO: Código bagunçado
     contatosCollection.get().then((contatoSnapshot) async {
       for (var contato in contatoSnapshot.docs) {
@@ -113,16 +118,16 @@ class ContactsController extends GetxController {
   getNameBasedOnNumber(String number) {
     for (var contact in contatos) {
       for (var phone in contact.phones) {
-        if (phone.number.replaceAll('-', '').replaceAll(' ', '') == number) {
+        if (parseNumber(phone.number) == number) {
           return contact.displayName;
-        } else {
-          print("${phone.number.replaceAll('-', '').replaceAll(' ', '')} != ${number}");
         }
       }
     }
     return number;
   }
 }
+
+String parseNumber(String number) => number.replaceAll('-', '').replaceAll(' ', '');
 
 List<Contact> parseContatosList(List<Contact> newContatos, String myPhoneNumber) {
   for (var contact in newContatos) {
@@ -136,10 +141,9 @@ List<Contact> parseContatosList(List<Contact> newContatos, String myPhoneNumber)
     if (contact.phones.isEmpty) {
       return true;
     }
-    if (contact.phones[0].number.contains(myPhoneNumber)) {
-      Print.green("ACHEI EU MESMO E ME REMOVI DOS CONTATO $contact");
+    if (parseNumber(contact.phones[0].number).contains(myPhoneNumber)) {
       return false;
-    } else {}
+    }
     return true;
   }).toList();
   return newContatos;

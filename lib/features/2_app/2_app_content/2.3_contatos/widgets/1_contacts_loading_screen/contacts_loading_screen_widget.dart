@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/features/1_initial_screen/2_register_page/state/location_state.dart';
 import 'package:whatsapp2/features/1_initial_screen/2_register_page/widgets/2_form/2_cellphone_number_form.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class ContactsLoadingScreen extends StatelessWidget {
   const ContactsLoadingScreen({

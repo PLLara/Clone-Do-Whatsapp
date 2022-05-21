@@ -1,18 +1,16 @@
 // ignore_for_file: invalid_use_of_protected_member
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/conversa_state.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/color_list.dart';
+import 'package:whatsapp2/state/global/contacts_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
+import 'package:whatsapp2/state/local/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
-import '../../../../../../../state/contacts_state.dart';
-import '../../model/message_model.dart';
-import '../../state/color_list.dart';
-
 import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
 
 class ConversaTexts extends StatelessWidget {

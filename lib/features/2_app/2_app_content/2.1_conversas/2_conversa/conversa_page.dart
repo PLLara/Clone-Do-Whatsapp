@@ -5,7 +5,7 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/2_background/background.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/3_conversas_texts/conversa_texts.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/bottom_form.dart';
-import '../1_conversas/state/conversas_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class Conversa extends StatefulWidget {
   final ConversaPathData path;

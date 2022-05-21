@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class UserDescription extends StatelessWidget {
   UserDescription({

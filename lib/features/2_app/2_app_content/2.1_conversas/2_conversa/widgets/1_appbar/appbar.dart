@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, file_names
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 
 AppBar ConversaAppBarBind({
   required Widget injectedConversaPhoto,
@@ -11,6 +12,7 @@ AppBar ConversaAppBarBind({
     leadingWidth: 80,
     leading: TextButton(
       onPressed: () {
+        Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
         Get.back();
       },
       child: Row(

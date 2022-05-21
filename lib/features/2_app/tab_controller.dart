@@ -3,9 +3,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/desktop/width.dart';
+import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
+import 'package:whatsapp2/state/global/contacts_state.dart';
+import 'package:whatsapp2/state/global/conversas_state.dart';
 import '1_appbar/1_appbar_widget.dart';
-import '2_app_content/2.1_conversas/1_conversas/state/conversas_state.dart';
 import '2_app_content/2.2_camera/camera_widget.dart';
 import '2_app_content/2.1_conversas/1_conversas/conversas_page.dart';
 
@@ -19,35 +21,74 @@ class TabSwitcher extends StatefulWidget {
 }
 
 class _TabSwitcherState extends State<TabSwitcher> {
-  final desktopSelectedConversaController = Get.find<DesktopSelectedConversaController>();
   @override
   Widget build(BuildContext context) {
-    Get.put(ConversasPathController(), permanent: true);
+    // ! Desktop only
+    final desktopSelectedConversaController = Get.put(
+      DesktopSelectedConversaController(),
+    );
+
+    // ! State Controllers
+    var conversas = Get.put(
+      ConversasPathController(),
+    );
+    var contacts = Get.put(
+      ContactsController(),
+    );
 
     var size = MediaQuery.of(context).size;
     if (isDesktop(size)) {
-      return Scaffold(
-        body: Row(
-          children: [
-            Expanded(
-              flex: 34,
-              child: Conversas(),
-            ),
-            Expanded(
-              flex: 66,
-              child: Obx(
-                () {
-                  if (desktopSelectedConversaController.conversaOpen.value) {
-                    return desktopSelectedConversaController.selectedWidget.value;
-                  } else {
-                    return Placeholder();
-                  }
-                },
+      return Obx(() {
+        if (contacts.contatos.isEmpty) {
+          return const ScaffoldLoading();
+        }
+        return Container(
+          color: Color(0xff0A1014),
+          padding: EdgeInsets.symmetric(vertical: 20),
+          child: Row(
+            children: [
+              Expanded(
+                flex: 1,
+                child: SizedBox(),
               ),
-            ),
-          ],
-        ),
-      );
+              Expanded(
+                flex: 10,
+                child: Scaffold(
+                  body: Row(
+                    children: [
+                      Expanded(
+                        flex: 34,
+                        child: Scaffold(
+                          appBar: AppBar(
+                            leading: Container(),
+                          ),
+                          body: Conversas(),
+                        ),
+                      ),
+                      Expanded(
+                        flex: 66,
+                        child: Obx(
+                          () {
+                            if (desktopSelectedConversaController.conversaOpen.value) {
+                              return desktopSelectedConversaController.selectedWidget.value;
+                            } else {
+                              return Placeholder();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 1,
+                child: SizedBox(),
+              ),
+            ],
+          ),
+        );
+      });
     }
     List<TabData> myTabs = [
       TabData(
@@ -71,19 +112,24 @@ class _TabSwitcherState extends State<TabSwitcher> {
         myWidget: Camera(),
       ),
     ];
-    return DefaultTabController(
-      child: Scaffold(
-        backgroundColor: Color(0xff121B22),
-        appBar: MyAppBar(myTabs),
-        body: TabBarView(
-          physics: const ClampingScrollPhysics(),
-          children: [
-            for (var tab in myTabs) tab.myWidget
-          ],
+    return Obx(() {
+      if (contacts.contatos.isEmpty) {
+        return const ScaffoldLoading();
+      }
+      return DefaultTabController(
+        child: Scaffold(
+          backgroundColor: Color(0xff121B22),
+          appBar: MyAppBar(myTabs),
+          body: TabBarView(
+            physics: const ClampingScrollPhysics(),
+            children: [
+              for (var tab in myTabs) tab.myWidget
+            ],
+          ),
         ),
-      ),
-      length: myTabs.length,
-    );
+        length: myTabs.length,
+      );
+    });
   }
 }
 
