@@ -82,9 +82,7 @@ class DesktopSelectedConversa extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final desktopSelectedConversaController = Get.put(
-      DesktopSelectedConversaController(),
-    );
+    final desktopSelectedConversaController = Get.find<DesktopSelectedConversaController>();
     return Expanded(
       flex: 66,
       child: Obx(

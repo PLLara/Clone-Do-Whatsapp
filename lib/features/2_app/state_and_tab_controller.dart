@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:whatsapp2/common/desktop/width.dart';
 import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
 import 'package:whatsapp2/features/2_app/web_layout.dart';
+import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'package:whatsapp2/state/global/user_state.dart';
@@ -24,6 +25,9 @@ class TabSwitcherAndProvider extends StatelessWidget {
     Get.put(UserStateController());
     var contacts = Get.put(
       ContactsController(),
+    );
+    Get.put(
+      DesktopSelectedConversaController(),
     );
 
     var windowSize = MediaQuery.of(context).size;
