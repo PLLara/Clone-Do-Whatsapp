@@ -43,6 +43,7 @@ dependencies:
   firebase_messaging_platform_interface: ^3.4.0
   get_storage: ^2.0.3
   emoji_picker_flutter: ^1.1.2
+  awesome_notifications: ^0.6.21
 
 dev_dependencies:
   flutter_lints: ^1.0.0
