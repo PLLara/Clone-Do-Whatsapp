@@ -44,9 +44,8 @@ class AppBarDropDown extends StatelessWidget {
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,
           value: 'newGroup',
-          child: Text(
+          child: const Text(
             'Novo Grupo',
-            style: getUnavailableTextTheme(context),
           ),
         ),
         PopupMenuItem(

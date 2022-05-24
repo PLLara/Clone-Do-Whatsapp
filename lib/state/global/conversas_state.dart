@@ -127,10 +127,9 @@ class ConversasPathController extends GetxController {
     Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
     Print.red("REMOVING CONVERSA: GERAL");
     try {
-      Get.find<ConversaController>(tag: 'geral').dispose();
       Get.delete<ConversaController>(tag: 'geral');
     } catch (e) {
-      Print.red("CONTROLLER ALREADY DISPOSED");
+      Print.red(e.toString());
     }
 
     for (var conversa in conversas) {
