@@ -11,8 +11,9 @@ class WelcomeToWhatsapp extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        "Welcome to Whatsapp",
+        "BEM VINDO AO Clone do Zap",
         style: Theme.of(context).textTheme.headline1,
+        textAlign: TextAlign.center,
       ),
     );
   }

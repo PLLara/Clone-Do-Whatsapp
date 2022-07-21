@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/1_initial_screen/3_confirm_number_page/widgets/form_header.dart';
+import 'package:whatsapp2/features/2_app/web_layout.dart';
 
 import '../2_register_page/state/location_state.dart';
 
@@ -27,87 +28,89 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Column(
-          children: [
-            ConfirmNumberFormHeader(
-              key: const Key('formheader'),
-            ),
-            Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.width / 2,
-                child: loading
-                    ? const Loading()
-                    : TextField(
-                        style: Theme.of(context).textTheme.bodyText1,
-                        onChanged: (verificationCode) async {
-                          if (verificationCode.length == 6) {
-                            setState(() {
-                              loading = true;
-                            });
-                            try {
-                              FirebaseAuth auth = FirebaseAuth.instance;
-                              PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: verificationCode);
-                              await auth.signInWithCredential(credential);
-                              Get.back();
-                              Get.back();
-                              Get.back();
-                              Get.back();
-                              Get.back();
-                              Get.back();
-                            } catch (e) {
-                              Get.defaultDialog(
-                                title: e.toString(),
-                              );
+    return Whatsapp2WebLayoutBase(
+      content: Scaffold(
+        body: SafeArea(
+          child: Column(
+            children: [
+              ConfirmNumberFormHeader(
+                key: const Key('formheader'),
+              ),
+              Center(
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width / 2,
+                  child: loading
+                      ? const Loading()
+                      : TextField(
+                          style: Theme.of(context).textTheme.bodyText1,
+                          onChanged: (verificationCode) async {
+                            if (verificationCode.length == 6) {
+                              setState(() {
+                                loading = true;
+                              });
+                              try {
+                                FirebaseAuth auth = FirebaseAuth.instance;
+                                PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: widget.verificationId, smsCode: verificationCode);
+                                await auth.signInWithCredential(credential);
+                                Get.back();
+                                Get.back();
+                                Get.back();
+                                Get.back();
+                                Get.back();
+                                Get.back();
+                              } catch (e) {
+                                Get.defaultDialog(
+                                  title: e.toString(),
+                                );
+                              }
+                              setState(() {
+                                loading = false;
+                              });
                             }
-                            setState(() {
-                              loading = false;
-                            });
-                          }
-                        },
-                        decoration: const InputDecoration(isDense: true),
-                        keyboardType: TextInputType.number,
-                        autofocus: true,
-                        textAlign: TextAlign.center,
+                          },
+                          decoration: const InputDecoration(isDense: true),
+                          keyboardType: TextInputType.number,
+                          autofocus: true,
+                          textAlign: TextAlign.center,
+                        ),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(top: 16.0),
+                child: Text('Digite o código de 6 digitos.'),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    ListTile(
+                      onTap: () {},
+                      leading: const Icon(
+                        Icons.sms,
+                        color: Colors.amber,
                       ),
-              ),
-            ),
-            const Padding(
-              padding: EdgeInsets.only(top: 16.0),
-              child: Text('Digite o código de 6 digitos.'),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  ListTile(
-                    onTap: () {},
-                    leading: const Icon(
-                      Icons.sms,
-                      color: Colors.amber,
+                      title: Text(
+                        'Remande o SMS',
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     ),
-                    title: Text(
-                      'Remande o SMS',
-                      style: Theme.of(context).textTheme.bodyText2,
+                    const Divider(),
+                    ListTile(
+                      onTap: () {},
+                      leading: const Icon(
+                        Icons.phone,
+                        color: Colors.amber,
+                      ),
+                      title: Text(
+                        "Receba por ligação",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
                     ),
-                  ),
-                  const Divider(),
-                  ListTile(
-                    onTap: () {},
-                    leading: const Icon(
-                      Icons.phone,
-                      color: Colors.amber,
-                    ),
-                    title: Text(
-                      "Receba por ligação",
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

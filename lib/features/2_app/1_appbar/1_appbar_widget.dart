@@ -16,7 +16,7 @@ AppBar MyAppBar(myTabs) {
       AppBarDropDown(),
     ],
     title: const Text(
-      "Whatsapp 2",
+      "Clone do Zap",
       style: TextStyle(color: Colors.grey),
     ),
     bottom: TabBar(

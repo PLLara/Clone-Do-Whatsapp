@@ -6,6 +6,7 @@ import 'package:whatsapp2/features/1_initial_screen/2_register_page/widgets/1_fo
 import 'package:whatsapp2/features/1_initial_screen/2_register_page/widgets/2_form/2_cellphone_number_form.dart';
 import 'package:whatsapp2/features/1_initial_screen/2_register_page/widgets/3_form_footer/3_form_footer.dart';
 import 'package:whatsapp2/features/1_initial_screen/2_register_page/widgets/4_next_button/4_next_button.dart';
+import 'package:whatsapp2/features/2_app/web_layout.dart';
 import 'state/location_state.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -40,12 +41,14 @@ class FormWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const FormHeader(),
-        CellphoneNumberForm(),
-        const FormFooter()
-      ],
+    return Whatsapp2WebLayoutBase(
+      content: Column(
+        children: [
+          const FormHeader(),
+          CellphoneNumberForm(),
+          const FormFooter()
+        ],
+      ),
     );
   }
 }

@@ -41,7 +41,12 @@ class UserIdentity extends StatelessWidget {
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(user.metadata.creationTime.toString()),
+                      Text(
+                        user.metadata.creationTime.toString(),
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
                     ],
                   ),
                 ),

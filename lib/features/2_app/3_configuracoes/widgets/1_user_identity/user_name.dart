@@ -15,7 +15,12 @@ class UserNameWidget extends StatelessWidget {
         if (user == null) {
           return const Text("");
         }
-        return Text(user.displayName ?? '');
+        return Text(
+          user.displayName ?? '',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        );
       },
     );
   }

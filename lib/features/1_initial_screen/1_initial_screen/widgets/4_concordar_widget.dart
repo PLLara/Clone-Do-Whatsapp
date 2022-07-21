@@ -23,6 +23,7 @@ class Concordar extends StatelessWidget {
           onPressed: () {
             goToPage(nextScreen, Get.to);
           },
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.yellow[700])),
           child: const Text("CONCORDAR E AVANÇAR"),
         ),
       ),

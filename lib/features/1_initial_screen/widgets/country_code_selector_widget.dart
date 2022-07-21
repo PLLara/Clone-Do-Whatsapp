@@ -302,20 +302,19 @@ class _CountryCodeSelectorState extends State<CountryCodeSelector> {
             height: 4,
             indent: 0,
             thickness: 1,
+            key: Key("divider"),
           );
         },
         itemCount: actualLocations.length,
-        itemBuilder: CountryListBuilder,
+        itemBuilder: (BuildContext context, int index) {
+          var location = actualLocations[index];
+          return CountryListTile(
+            onSelectCountry: widget.onSelectCountry,
+            location: location,
+            key: Key(location.countryName),
+          );
+        },
       ),
-    );
-  }
-
-  Widget CountryListBuilder(BuildContext context, int index) {
-    var location = actualLocations[index];
-    return CountryListTile(
-      onSelectCountry: widget.onSelectCountry,
-      location: location,
-      key: Key(location.countryName),
     );
   }
 }
@@ -354,7 +353,14 @@ class CountryListTile extends StatelessWidget {
         countryFlag,
         style: const TextStyle(fontSize: 20),
       ),
-      title: Text(countryName),
+      title: Text(
+        countryName,
+        style: TextStyle(
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+          color: Colors.white,
+        ),
+      ),
       trailing: Text("+" + countryNumber.toString()),
     );
   }

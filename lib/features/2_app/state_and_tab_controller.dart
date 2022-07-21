@@ -1,5 +1,6 @@
 // ignore_for_file: non_constant_identifier_names, prefer_const_constructors
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/desktop/width.dart';
@@ -26,22 +27,18 @@ class TabSwitcherAndProvider extends StatelessWidget {
     var contacts = Get.put(
       ContactsController(),
     );
-    Get.put(
-      DesktopSelectedConversaController(),
-    );
+    Get.put(DesktopSelectedConversaController());
 
-    var windowSize = MediaQuery.of(context).size;
     return Obx(
       () {
         // ! Loading contatos
         if (contacts.contatos.isEmpty) {
           return const ScaffoldLoading(); // Garantindo que os contatos estejam carregados
         }
-        // ! Versão desktop
-        if (isDesktop(windowSize)) {
-          return Whatsapp2WebLayout();
+        // ! Versão Desktop
+        if (kIsWeb && isDesktop(MediaQuery.of(context).size)) {
+          return const WebZap2Interface();
         }
-
         // ! Versão mobile
         return DefaultTabController(
           child: Scaffold(

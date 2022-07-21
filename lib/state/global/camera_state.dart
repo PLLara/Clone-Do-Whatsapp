@@ -20,7 +20,7 @@ class CameraStateController extends GetxController {
   ).obs;
 
   CameraStateController() {
-    initCameras();
+    // initCameras();
   }
 
   initCameras() async {

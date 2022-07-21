@@ -1,10 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:palestine_console/palestine_console.dart';
+import 'package:whatsapp2/common/desktop/width.dart';
+import 'package:whatsapp2/features/2_app/web_layout.dart';
+import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/global/camera_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
+import 'package:whatsapp2/state/global/user_state.dart';
 import 'common/themes/default.dart';
 import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
 import 'features/2_app/state_and_tab_controller.dart';
@@ -20,6 +25,7 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await GetStorage.init();
+
   runApp(
     MyApp(),
   );
@@ -27,66 +33,66 @@ void main() async {
 
 class MyApp extends StatelessWidget {
   MyApp({Key? key}) : super(key: key) {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-    messaging
-        .requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    )
-        .then(
-      (value) {
-        print('Permission granted: $value');
-      },
-    ).catchError(
-      (error) {
-        print('Permission error: $error');
-      },
-    );
+    // FirebaseMessaging messaging = FirebaseMessaging.instance;
+    // messaging
+    //     .requestPermission(
+    //   alert: true,
+    //   announcement: false,
+    //   badge: true,
+    //   carPlay: false,
+    //   criticalAlert: false,
+    //   provisional: false,
+    //   sound: true,
+    // )
+    //     .then(
+    //   (value) {
+    //     print('Permission granted: $value');
+    //   },
+    // ).catchError(
+    //   (error) {
+    //     print('Permission error: $error');
+    //   },
+    // );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    //   print('Got a message whilst in the foreground!');
+    //   print('Message data: ${message.data}');
+    //   if (message.notification != null) {
+    //     print('Message also contained a notification: ${message.notification}');
+    //   }
+    // });
 
-      if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
-      }
-    });
-
-    try {
-      FirebaseMessaging.instance.subscribeToTopic('all').then(
-        (value) {
-          messaging
-              .getToken(
-            vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
-          )
-              .then(
-            (value) {
-              print("My FCM token is: $value");
-            },
-          ).catchError(
-            (e) {
-              print("Error: $e");
-            },
-          );
-        },
-      );
-    } catch (e) {
-      print("Error: $e");
-    }
+    // try {
+    //   FirebaseMessaging.instance.subscribeToTopic('all').then(
+    //     (value) {
+    //       messaging
+    //           .getToken(
+    //         vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
+    //       )
+    //           .then(
+    //         (value) {
+    //           print("My FCM token is: $value");
+    //         },
+    //       ).catchError(
+    //         (e) {
+    //           print("Error: $e");
+    //         },
+    //       );
+    //     },
+    //   );
+    // } catch (e) {
+    //   print("Error: $e");
+    // }
   }
   @override
   Widget build(BuildContext context) {
+    // ! Versão desktop
     return GetMaterialApp(
       smartManagement: SmartManagement.keepFactory,
-      title: 'Whatsapp 2',
+      title: 'Clone do Zap',
       theme: defaultDarkTheme(),
-      home: LoggedOrNorController(
-        key: const Key('loggedOrNot'),
+      home: Whatsapp2WebLayoutBase(
+        content: LoggedOrNorController(),
       ),
     );
   }
@@ -115,7 +121,6 @@ class LoggedOrNorController extends StatefulWidget {
         } else {
           Print.red('---------- EXITING USER SESSION AND DISPOSING CONTROLLERS ----------');
           Get.offAllNamed('/');
-
           Get.delete<ConversasPathController>();
           Get.delete<ContactsController>();
           Get.delete<CameraStateController>();

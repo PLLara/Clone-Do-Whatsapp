@@ -1,28 +1,39 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/common/desktop/width.dart';
 import 'package:whatsapp2/common/widgets/eu/user_photo.dart';
 import 'package:whatsapp2/features/2_app/1_appbar/widgets/app_bar_dropdown.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/conversas_page.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 
-class Whatsapp2WebLayout extends StatelessWidget {
-  const Whatsapp2WebLayout({
+class Whatsapp2WebLayoutBase extends StatelessWidget {
+  const Whatsapp2WebLayoutBase({
     Key? key,
+    required this.content,
   }) : super(key: key);
+
+  final Widget content;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: const Color(0xff0A1014),
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      child: Row(
-        children: const [
-          ExpandedPadding(), // left
-          WebZap2Interface(), // o app em si :)
-          ExpandedPadding(), // right
-        ],
-      ),
-    );
+    if (kIsWeb && isDesktop(MediaQuery.of(context).size)) {
+      return Container(
+        color: const Color(0xff0A1014),
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          children: [
+            const ExpandedPadding(), // left
+            Expanded(
+              child: content,
+              flex: 12,
+            ),
+            const ExpandedPadding(), // right
+          ],
+        ),
+      );
+    }
+    return content;
   }
 }
 
@@ -106,7 +117,7 @@ class DesktopSelectedConversa extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
-                    "Whatsapp 2",
+                    "Clone do Zap",
                     style: Theme.of(context).textTheme.displayLarge,
                   )
                 ],

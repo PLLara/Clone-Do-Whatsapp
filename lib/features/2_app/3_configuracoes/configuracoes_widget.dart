@@ -32,7 +32,12 @@ class Configuracoes extends StatelessWidget {
                 children: [
                   ConfigurationOption(
                     title: "Conta",
-                    subtitle: const Text("Detalhes, e sei lá oq mais"),
+                    subtitle: const Text(
+                      "Detalhes, e sei lá oq mais",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                     icon: Icons.vpn_key,
                     callback: () {
                       goToPage(
@@ -59,15 +64,17 @@ class Configuracoes extends StatelessWidget {
                       );
                     },
                   ),
-                  const ConfigurationOption(
+                  ConfigurationOption(
                     title: "Conversas",
-                    subtitle: Text("Tema, papel de parede, histórico"),
+                    subtitle: const Text("Tema, papel de parede, histórico"),
                     icon: Icons.sms,
+                    callback: () {},
                   ),
-                  const ConfigurationOption(
+                  ConfigurationOption(
                     title: "Ajuda",
-                    subtitle: Text("Central de ajuda política de privacidade"),
+                    subtitle: const Text("Central de ajuda política de privacidade"),
                     icon: Icons.help_outline,
+                    callback: () {},
                   ),
                 ],
               ),
