@@ -10,10 +10,10 @@ import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 class Whatsapp2WebLayoutBase extends StatelessWidget {
   const Whatsapp2WebLayoutBase({
     Key? key,
-    required this.content,
+    required this.child,
   }) : super(key: key);
 
-  final Widget content;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +25,7 @@ class Whatsapp2WebLayoutBase extends StatelessWidget {
           children: [
             const ExpandedPadding(), // left
             Expanded(
-              child: content,
+              child: child,
               flex: 12,
             ),
             const ExpandedPadding(), // right
@@ -33,7 +33,7 @@ class Whatsapp2WebLayoutBase extends StatelessWidget {
         ),
       );
     }
-    return content;
+    return child;
   }
 }
 
@@ -44,8 +44,7 @@ class WebZap2Interface extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      flex: 10,
+    return Whatsapp2WebLayoutBase(
       child: Scaffold(
         body: Row(
           children: [

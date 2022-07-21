@@ -1,17 +1,15 @@
-// ignore_for_file: invalid_use_of_protected_member, library_prefixes
-import 'package:cached_network_image/cached_network_image.dart';
+// ignore_for_file: invalid_use_of_protected_member, library_prefixes, constant_identifier_names, non_constant_identifier_names
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/color_list.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/3_conversas_texts/widgets/1_corpo/1_corpo.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/3_conversas_texts/widgets/2_peteco/2_peteco.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'package:whatsapp2/state/local/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
 
 class ConversaTexts extends StatelessWidget {
   const ConversaTexts({
@@ -50,9 +48,7 @@ class ConversaTexts extends StatelessWidget {
 
 class MensagemWidget extends StatelessWidget {
   final List<MessageModel> mensagens;
-
   final int index;
-
   const MensagemWidget({
     required this.mensagens,
     required this.index,
@@ -61,29 +57,30 @@ class MensagemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ! Péssimo código, horrível, horrorosa, que não vai ser mais usado no futuro.
     var mensagem = mensagens[index];
-    var aMensagemEMinha = mensagem.usuario == FirebaseAuth.instance.currentUser?.phoneNumber;
-
     var mensagemAnterior = index < mensagens.length - 1 ? mensagens[index + 1] : mensagens[index];
-    var aMensagemEDistinta = mensagem.usuario != mensagemAnterior.usuario;
 
-    if (aMensagemEMinha) {
+    var isMine = mensagem.usuario == FirebaseAuth.instance.currentUser?.phoneNumber;
+    var isDistinct = mensagem.usuario != mensagemAnterior.usuario;
+
+    if (isMine) {
       return MessageScaffold(
         mensagem: mensagem,
         padding: const EdgeInsets.only(left: 60),
         alignment: MainAxisAlignment.end,
         color: const Color(0xff005C4B),
         showNumber: false,
-        distinct: aMensagemEDistinta,
+        distinct: isDistinct,
       );
     }
 
     return MessageScaffold(
       mensagem: mensagem,
       padding: const EdgeInsets.only(right: 60),
-      color: const Color(0xff202C33),
       alignment: MainAxisAlignment.start,
-      distinct: aMensagemEDistinta,
+      color: const Color(0xff202C33),
+      distinct: isDistinct,
     );
   }
 }
@@ -97,6 +94,7 @@ class MessageScaffold extends StatefulWidget {
   final MessageModel mensagem;
 
   const MessageScaffold({
+    // ! TODO: PROP DRILLING
     Key? key,
     required this.mensagem,
     required this.padding,
@@ -115,170 +113,66 @@ class _MessageScaffoldState extends State<MessageScaffold> {
 
   @override
   Widget build(BuildContext context) {
-    String data = (widget.mensagem.date.toString()).split(' ')[1].substring(0, 5);
-    String userNumber = widget.mensagem.usuario;
-    String userName = '';
-    String textoMensagem = widget.mensagem.message;
+    // ! TODO: Refazer o código.
+    String dia = (widget.mensagem.date.toString()).split(' ')[1].substring(0, 5);
+    String numero = widget.mensagem.usuario;
+    String nome = '';
+    String mensagem = widget.mensagem.message;
 
-    for (var element in contactsController.contatos) {
-      if (element.phones.isEmpty) {
+    for (var contato in contactsController.contatos) {
+      if (contato.phones.isEmpty) {
         continue;
       }
-      if (element.phones[0].normalizedNumber.length < 8) {
+      if (contato.phones[0].normalizedNumber.length < 8) {
         continue;
       }
-      var someNumber = element.phones[0].normalizedNumber.substring(element.phones[0].normalizedNumber.length - 8);
-      if (someNumber == userNumber.substring(userNumber.length - 8)) {
-        userName = element.displayName;
+      var someNumber = contato.phones[0].normalizedNumber.substring(contato.phones[0].normalizedNumber.length - 8);
+      if (someNumber == numero.substring(numero.length - 8)) {
+        nome = contato.displayName;
       }
     }
 
-    const double size = 10;
-    const double margin = 12;
-
+    // ! AUX CONSTANTS
+    const double SIZE = 10;
+    const double MARGIN = 12;
     return BlocBuilder<PathCubit, ConversaPathData>(
       builder: (context, state) {
-        state.isConversaPrivate;
+        var padding = widget.padding;
+        var alignment = widget.alignment;
+
         return Padding(
-          padding: widget.padding,
-          child: Stack(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: widget.alignment,
+          padding: padding,
+          child: LayoutBuilder(
+            builder: (a, constraints) {
+              var color = widget.color;
+              var showNumber = widget.showNumber;
+              var myMensagem = widget.mensagem;
+              var distinct = widget.distinct;
+
+              return Stack(
                 children: [
-                  Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: margin,
-                        vertical: 1,
-                      ),
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: widget.color,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: IntrinsicWidth(
-                        child: Column(
-                          crossAxisAlignment: widget.alignment == MainAxisAlignment.start ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-                          children: [
-                            widget.showNumber && !state.isConversaPrivate
-                                ? Padding(
-                                    padding: const EdgeInsets.only(bottom: 8.0),
-                                    child: Material(
-                                      color: Colors.transparent,
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.max,
-                                          children: [
-                                            Text(
-                                              userName == '' ? userNumber : userName,
-                                              style: TextStyle(
-                                                color: colors[int.parse(userNumber) % colors.length],
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            widget.mensagem.mediaLink != ''
-                                ? TextButton(
-                                    style: TextButton.styleFrom(
-                                      padding: EdgeInsets.zero,
-                                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                                    ),
-                                    onPressed: () {
-                                      Get.to(
-                                        () => Scaffold(
-                                          appBar: AppBar(),
-                                          body: Center(
-                                            child: Hero(
-                                              tag: widget.mensagem.mediaLink,
-                                              child: ClipRRect(
-                                                borderRadius: BorderRadius.circular(8.0),
-                                                child: CachedNetworkImage(
-                                                  imageUrl: widget.mensagem.mediaLink,
-                                                  placeholder: (context, url) => const Loading(),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        transition: getxTransitions.Transition.topLevel, // ! GAMBIARRA POR COLISÃO DE NOME
-                                        duration: const Duration(milliseconds: 400),
-                                        curve: Curves.easeInOut,
-                                      );
-                                    },
-                                    child: Hero(
-                                      tag: widget.mensagem.mediaLink,
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(8.0),
-                                        child: CachedNetworkImage(
-                                          imageUrl: widget.mensagem.mediaLink,
-                                          placeholder: (context, url) => const Loading(),
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 8.0),
-                                  child: SelectableText(
-                                    textoMensagem,
-                                    textAlign: TextAlign.start,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Text(
-                              data,
-                              style: const TextStyle(color: Color(0xaaffffff), fontSize: 12),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  MensagemCorpo(
+                    alignment: alignment,
+                    MARGIN: MARGIN,
+                    color: color,
+                    showNumber: showNumber,
+                    nome: nome,
+                    numero: numero,
+                    myMensagem: myMensagem,
+                    mensagem: mensagem,
+                    dia: dia,
+                    constraints: constraints,
                   ),
+                  MensagemPeteco(
+                    showNumber,
+                    MARGIN,
+                    distinct,
+                    SIZE,
+                    color,
+                  )
                 ],
-              ),
-              widget.showNumber
-                  ? Positioned(
-                      left: margin / 4,
-                      top: 1,
-                      child: widget.distinct
-                          ? Container(
-                              width: size * 3,
-                              height: size,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: widget.color,
-                              ),
-                            )
-                          : const SizedBox(),
-                    )
-                  : Positioned(
-                      right: margin / 4,
-                      top: 1,
-                      child: widget.distinct
-                          ? Container(
-                              width: size * 3,
-                              height: size,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
-                                color: widget.color,
-                              ),
-                            )
-                          : const SizedBox(),
-                    )
-            ],
+              );
+            },
           ),
         );
       },

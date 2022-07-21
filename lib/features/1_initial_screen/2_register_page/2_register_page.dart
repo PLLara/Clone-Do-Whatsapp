@@ -42,7 +42,7 @@ class FormWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Whatsapp2WebLayoutBase(
-      content: Column(
+      child: Column(
         children: [
           const FormHeader(),
           CellphoneNumberForm(),

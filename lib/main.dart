@@ -20,6 +20,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
+  Paint.enableDithering = false;
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -91,9 +93,7 @@ class MyApp extends StatelessWidget {
       smartManagement: SmartManagement.keepFactory,
       title: 'Clone do Zap',
       theme: defaultDarkTheme(),
-      home: Whatsapp2WebLayoutBase(
-        content: LoggedOrNorController(),
-      ),
+      home: LoggedOrNorController(),
     );
   }
 }
@@ -161,6 +161,8 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
     if (_logged) {
       return const TabSwitcherAndProvider();
     }
-    return const InicialScreen();
+    return const Whatsapp2WebLayoutBase(
+      child: InicialScreen(),
+    );
   }
 }

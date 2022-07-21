@@ -29,7 +29,7 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
   @override
   Widget build(BuildContext context) {
     return Whatsapp2WebLayoutBase(
-      content: Scaffold(
+      child: Scaffold(
         body: SafeArea(
           child: Column(
             children: [

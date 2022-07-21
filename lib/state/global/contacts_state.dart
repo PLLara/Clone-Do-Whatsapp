@@ -134,9 +134,7 @@ List<Contact> parseContatosList(List<Contact> newContatos, String myPhoneNumber)
     contact.websites = [];
     contact.isStarred = false;
   }
-
   myPhoneNumber = myPhoneNumber.substring(myPhoneNumber.length - 8);
-
   newContatos = newContatos.where((contact) {
     if (contact.phones.isEmpty) {
       return true;
