@@ -76,14 +76,6 @@ List<TabData> myTabs = [
   ),
   TabData(
     myTab: const Tab(
-      text: 'STATUS',
-    ),
-    myWidget: Scaffold(
-      body: Center(child: Text(":)")),
-    ),
-  ),
-  TabData(
-    myTab: const Tab(
       text: '📷︎',
     ),
     myWidget: Camera(),

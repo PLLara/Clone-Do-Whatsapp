@@ -9,15 +9,15 @@ import 'package:whatsapp2/features/1_initial_screen/widgets/country_code_selecto
 import '../../state/change_current_location.dart';
 
 class CellphoneNumberForm extends StatelessWidget {
-  final LocationController locationController = Get.find();
+  final LocationController cLocation = Get.find();
 
   CellphoneNumberForm({
     Key? key,
   }) : super(key: key) {
     changeCurrentLocation(
       location: const Location('Brasil', 'br', 55),
-      locationController: locationController,
-      countryCodeInputController: locationController.countryCodeInputController.value,
+      locationController: cLocation,
+      countryCodeInputController: cLocation.countryCodeInputController.value,
     );
   }
   @override
@@ -30,17 +30,11 @@ class CellphoneNumberForm extends StatelessWidget {
           children: [
             Column(
               children: [
-                ContrySelectButton(
-                  locationController: locationController,
-                  countryCodeInputController: locationController.countryCodeInputController.value,
-                ),
-                const SizedBox(
+                ContrySelectButton(),
+                SizedBox(
                   height: 10,
                 ),
-                CellphoneInput(
-                  countryCodeInputController: locationController.countryCodeInputController.value,
-                  phoneNumberInputController: locationController.phoneNumberInputController.value,
-                ),
+                ControlledFormLoginInputCelphone(),
               ],
             ),
           ],
@@ -51,14 +45,11 @@ class CellphoneNumberForm extends StatelessWidget {
 }
 
 class ContrySelectButton extends StatelessWidget {
-  const ContrySelectButton({
+  ContrySelectButton({
     Key? key,
-    required this.locationController,
-    required this.countryCodeInputController,
   }) : super(key: key);
 
-  final LocationController locationController;
-  final TextEditingController countryCodeInputController;
+  final LocationController cLocation = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +63,10 @@ class ContrySelectButton extends StatelessWidget {
               builder: (e) => CountryCodeSelector(
                 key: const Key('countrycodeselector'),
                 onSelectCountry: (Location location) {
+                  var countryCodeInputController = cLocation.countryCodeInputController.value;
                   changeCurrentLocation(
                     location: location,
-                    locationController: locationController,
+                    locationController: cLocation,
                     countryCodeInputController: countryCodeInputController,
                   );
                 },
@@ -90,7 +82,7 @@ class ContrySelectButton extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(),
-                  Text(locationController.selectedLocation.value.countryName),
+                  Text(cLocation.selectedLocation.value.countryName),
                   const Icon(Icons.arrow_drop_down)
                 ],
               ),
@@ -108,18 +100,16 @@ class ContrySelectButton extends StatelessWidget {
   }
 }
 
-class CellphoneInput extends StatelessWidget {
-  const CellphoneInput({
+class ControlledFormLoginInputCelphone extends StatelessWidget {
+  ControlledFormLoginInputCelphone({
     Key? key,
-    required this.countryCodeInputController,
-    required this.phoneNumberInputController,
   }) : super(key: key);
 
-  final TextEditingController countryCodeInputController;
-  final TextEditingController phoneNumberInputController;
+  final LocationController cLocation = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    var controllerPhoneNumber = cLocation.phoneNumberInputController.value;
     return Row(
       mainAxisSize: MainAxisSize.max,
       children: [
@@ -127,7 +117,7 @@ class CellphoneInput extends StatelessWidget {
           flex: 3,
           child: TextFormField(
             style: Theme.of(context).textTheme.bodyText1,
-            controller: countryCodeInputController,
+            controller: cLocation.countryCodeInputController.value,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
               isDense: true,
@@ -143,8 +133,12 @@ class CellphoneInput extends StatelessWidget {
           flex: 8,
           child: TextFormField(
             style: Theme.of(context).textTheme.bodyText1,
-            controller: phoneNumberInputController,
+            controller: controllerPhoneNumber,
             keyboardType: TextInputType.number,
+            onFieldSubmitted: (value) {
+              cLocation.buttonNextPressed();
+            },
+            textInputAction: TextInputAction.search,
             autocorrect: false,
             inputFormatters: [
               MaskedInputFormatter('(##)#####-####')

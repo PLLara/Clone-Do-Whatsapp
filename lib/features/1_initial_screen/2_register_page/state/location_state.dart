@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:whatsapp2/features/1_initial_screen/2_register_page/widgets/5_confirm_number_dialog/5_confirm_number_dialog.dart';
 
 List<Location> defaultLocations = const [
   Location('Afghanistão', 'af', 93),
@@ -240,6 +241,27 @@ class LocationController extends GetxController {
 
   changeLocation(Location location) {
     selectedLocation.value = location;
+  }
+
+  // ! View Contamidated Functions
+  void buttonNextPressed() {
+    var isNumberSmall = phoneNumberInputController.value.text.length < 10;
+
+    if (isNumberSmall) {
+      Get.defaultDialog(
+        title: "Insira um número válido",
+        content: const Text(
+          "O numero fornecido possui menos de 10 caracteres.",
+          textAlign: TextAlign.center,
+        ),
+      );
+      return;
+    }
+    Get.dialog(
+      const DialogoDeConfirmacaoDeNumero(
+        key: Key('dialogoconfirmacaonumero'),
+      ),
+    );
   }
 }
 
