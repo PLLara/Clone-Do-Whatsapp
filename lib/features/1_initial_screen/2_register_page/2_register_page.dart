@@ -45,7 +45,7 @@ class FormWrapper extends StatelessWidget {
       child: Column(
         children: [
           const FormHeader(),
-          CellphoneNumberForm(),
+          ControlledFormLoginPhoneNumber(),
           const FormFooter()
         ],
       ),

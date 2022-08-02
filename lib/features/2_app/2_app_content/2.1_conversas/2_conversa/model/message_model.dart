@@ -51,6 +51,16 @@ class MessageModel {
     );
   }
 
+  factory MessageModel.error() {
+    return MessageModel(
+      id: 'ERROR-ERROR-ERROR',
+      date: DateTime.now(),
+      message: 'ERROR-ERROR-ERROR',
+      mediaLink: 'ERROR-ERROR-ERROR',
+      usuario: 'ERROR-ERROR-ERROR',
+    );
+  }
+
   String toJson() => json.encode(toMap());
 
   factory MessageModel.fromJson(String source) => MessageModel.fromMap(json.decode(source));

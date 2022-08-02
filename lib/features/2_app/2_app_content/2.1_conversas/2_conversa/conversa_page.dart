@@ -53,7 +53,7 @@ class ConversaBody extends StatelessWidget {
         Column(
           mainAxisSize: MainAxisSize.max,
           children: const [
-            ConversaTexts(),
+            ConversaMessages(),
             BottomForm()
           ],
         ),

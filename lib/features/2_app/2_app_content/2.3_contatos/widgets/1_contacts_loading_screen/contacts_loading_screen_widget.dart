@@ -31,7 +31,7 @@ class ContactsLoadingScreen extends StatelessWidget {
                       mainAxisSize: MainAxisSize.max,
                       children: [
                         Text("Chame alguém pelo número", style: Theme.of(context).textTheme.headline2),
-                        CellphoneNumberForm(),
+                        ControlledFormLoginPhoneNumber(),
                         TextButton(
                           onPressed: () {
                             showDialog(

@@ -8,10 +8,10 @@ import 'package:whatsapp2/features/1_initial_screen/widgets/country_code_selecto
 
 import '../../state/change_current_location.dart';
 
-class CellphoneNumberForm extends StatelessWidget {
+class ControlledFormLoginPhoneNumber extends StatelessWidget {
   final LocationController cLocation = Get.find();
 
-  CellphoneNumberForm({
+  ControlledFormLoginPhoneNumber({
     Key? key,
   }) : super(key: key) {
     changeCurrentLocation(
@@ -31,7 +31,7 @@ class CellphoneNumberForm extends StatelessWidget {
             Column(
               children: [
                 ContrySelectButton(),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 ControlledFormLoginInputCelphone(),
