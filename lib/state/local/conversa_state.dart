@@ -173,24 +173,11 @@ MessageModel parseMessage(DataSnapshot element) {
         usuario: parsedValue['usuario'] ?? 'ERROR',
       );
     } else {
-      Print.red("!!!!!!!!!!ERROR!!!!!!!!!!!!");
-      return MessageModel(
-        id: 'ERROR-ERROR-ERROR',
-        date: DateTime.now(),
-        message: 'ERROR-ERROR-ERROR',
-        mediaLink: 'ERROR-ERROR-ERROR',
-        usuario: 'ERROR-ERROR-ERROR',
-      );
+      return MessageModel.error();
     }
   } catch (e) {
     print(e.toString());
 
-    return MessageModel(
-      id: 'ERROR-ERROR-ERROR',
-      date: DateTime.now(),
-      message: 'ERROR-ERROR-ERROR',
-      mediaLink: 'ERROR-ERROR-ERROR',
-      usuario: 'ERROR-ERROR-ERROR',
-    );
+    return MessageModel.error();
   }
 }

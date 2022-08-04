@@ -65,7 +65,7 @@ class MensagemCorpo extends StatelessWidget {
                   ),
                   MensagemText(
                     constraints: constraints,
-                    mensagem: mensagem,
+                    textMessage: mensagem,
                   ),
                   MensagemDate(dia: dia),
                 ],

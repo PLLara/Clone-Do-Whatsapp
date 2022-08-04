@@ -13,29 +13,11 @@ class NextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final LocationController locationController = Get.find();
+    final LocationController cLocation = Get.find();
 
     return ElevatedButton(
       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.amber)),
-      onPressed: () {
-        var oTamanhoDoNumeroForPequenoDemais = locationController.phoneNumberInputController.value.text.length < 10;
-        if (oTamanhoDoNumeroForPequenoDemais) {
-          Get.defaultDialog(
-            title: "Insira um número válido",
-            content: const Text(
-              "O numero fornecido possui menos de 10 caracteres.",
-              textAlign: TextAlign.center,
-            ),
-          );
-          return;
-        }
-
-        Get.dialog(
-          const DialogoDeConfirmacaoDeNumero(
-            key: Key('dialogoconfirmacaonumero'),
-          ),
-        );
-      },
+      onPressed: cLocation.buttonNextPressed,
       child: const Text('Próximo'),
     );
   }
