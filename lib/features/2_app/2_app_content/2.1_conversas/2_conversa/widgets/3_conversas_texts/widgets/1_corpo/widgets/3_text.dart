@@ -17,8 +17,8 @@ class MensagemText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     findUrl(textMessage).forEach(
-      (element) {
-        MetadataFetch.extract(element).then(
+      (url) {
+        MetadataFetch.extract('https://zap2-reverse-proxy.herokuapp.com?q=' + url).then(
           (value) {
             if (value == null) {
               return;
