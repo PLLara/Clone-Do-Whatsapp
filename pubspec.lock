@@ -564,6 +564,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+<<<<<<< HEAD
+=======
   metadata_fetch:
     dependency: "direct main"
     description:
@@ -578,6 +580,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
+>>>>>>> 924e4ce660aaf7ef19acccd8c486650f81909621
   msix:
     dependency: "direct dev"
     description:
@@ -781,48 +784,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  share_plus:
-    dependency: "direct main"
-    description:
-      name: share_plus
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.1.0"
-  share_plus_linux:
-    dependency: transitive
-    description:
-      name: share_plus_linux
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
-  share_plus_macos:
-    dependency: transitive
-    description:
-      name: share_plus_macos
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  share_plus_platform_interface:
-    dependency: transitive
-    description:
-      name: share_plus_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0"
-  share_plus_web:
-    dependency: transitive
-    description:
-      name: share_plus_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.4"
-  share_plus_windows:
-    dependency: transitive
-    description:
-      name: share_plus_windows
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.3"
   shared_preferences:
     dependency: "direct main"
     description:
@@ -961,6 +922,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
+<<<<<<< HEAD
+=======
   url_launcher:
     dependency: "direct main"
     description:
@@ -1017,6 +980,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
+>>>>>>> 924e4ce660aaf7ef19acccd8c486650f81909621
   uuid:
     dependency: "direct main"
     description:

@@ -1,7 +1,5 @@
 // ignore_for_file: invalid_use_of_protected_member, library_prefixes, constant_identifier_names, non_constant_identifier_names
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +7,6 @@ import 'package:video_player/video_player.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
-import 'dart:html' as html;
 import 'package:http/http.dart' as http;
 
 class MensagemArquivoMaybe extends StatelessWidget {
@@ -169,9 +166,9 @@ class _MensagemVideoState extends State<MensagemVideo> {
       return TextButton(
         onPressed: () async {
           var dUrl = "data:application/octet-stream;charset=utf-16le;base64,${(base64.encode((await http.get(Uri.parse(url))).bodyBytes.toList())).toString()}";
-          html.AnchorElement(href: dUrl)
-            ..setAttribute("download", "gambiarra_kkkkkkkk_jesusCristoEuPrecisoRefazerOSistemaDeEnvioDeArquivoTodinho")
-            ..click();
+          // html.AnchorElement(href: dUrl)
+          //   ..setAttribute("download", "gambiarra_kkkkkkkk_jesusCristoEuPrecisoRefazerOSistemaDeEnvioDeArquivoTodinho")
+          //   ..click();
         },
         child: const Text("Aquivo Desconhecido kkkkkkk"),
       );

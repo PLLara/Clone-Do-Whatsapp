@@ -7,7 +7,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:uuid/uuid.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:http/http.dart' as http;
@@ -110,11 +109,7 @@ class TakePicture extends StatelessWidget {
                 content: imagem,
                 actions: [
                   TextButton(
-                    onPressed: () {
-                      Share.shareFiles([
-                        capturedImage.path
-                      ], text: 'eu amo o vitao');
-                    },
+                    onPressed: () {},
                     child: const Text("ENVIAR"),
                   )
                 ],
