@@ -1,15 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/common/desktop/width.dart';
 import 'package:whatsapp2/features/2_app/web_layout.dart';
-import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/global/camera_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
-import 'package:whatsapp2/state/global/user_state.dart';
 import 'common/themes/default.dart';
 import 'features/1_initial_screen/1_initial_screen/1_initial_screen_page.dart';
 import 'features/2_app/state_and_tab_controller.dart';
