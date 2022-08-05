@@ -1,0 +1,5 @@
+{
+    "scripts":{
+        "deploy":"git add . && git commit -m 'deploy' && git push && flutter build web && firebase deploy --only hosting"
+    }
+}
