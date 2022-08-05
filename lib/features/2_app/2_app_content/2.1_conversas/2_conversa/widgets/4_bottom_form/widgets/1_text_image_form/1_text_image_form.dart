@@ -11,16 +11,16 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 import '../../../../../../../../../state/local/conversa_state.dart';
 import '../../../../state/path_cubit.dart';
 
-class TextAndImageForm extends StatefulWidget {
-  const TextAndImageForm({
+class TextImageForm extends StatefulWidget {
+  const TextImageForm({
     Key? key,
   }) : super(key: key);
 
   @override
-  State<TextAndImageForm> createState() => _TextAndImageFormState();
+  State<TextImageForm> createState() => _TextImageFormState();
 }
 
-class _TextAndImageFormState extends State<TextAndImageForm> {
+class _TextImageFormState extends State<TextImageForm> {
   @override
   Widget build(BuildContext context) {
     final ConversaController conversaController = Get.find<ConversaController>(
@@ -52,8 +52,8 @@ class _TextAndImageFormState extends State<TextAndImageForm> {
                   },
                   icon: const Icon(Icons.emoji_emotions, color: Colors.grey),
                 ),
-                const GetTexto(),
-                const GetAnexos()
+                const TextImageFormText(),
+                const TextImageFormImage()
               ],
             ),
           ),
@@ -63,8 +63,8 @@ class _TextAndImageFormState extends State<TextAndImageForm> {
   }
 }
 
-class GetTexto extends StatelessWidget {
-  const GetTexto({
+class TextImageFormText extends StatelessWidget {
+  const TextImageFormText({
     Key? key,
   }) : super(key: key);
 
@@ -73,6 +73,8 @@ class GetTexto extends StatelessWidget {
     final ConversaController conversaController = Get.find<ConversaController>(
       tag: context.read<PathCubit>().state.conversaId,
     );
+
+    final FocusNode myFocusNode = FocusNode();
 
     return Flexible(
       flex: 5,
@@ -88,6 +90,7 @@ class GetTexto extends StatelessWidget {
               mediaLink: '',
             );
             conversaController.sendMessageController.clear();
+            conversaController.focusNode.requestFocus();
           }
         },
         decoration: const InputDecoration(
@@ -106,22 +109,19 @@ class GetTexto extends StatelessWidget {
   }
 }
 
-class GetAnexos extends StatelessWidget {
-  const GetAnexos({
+class TextImageFormImage extends StatelessWidget {
+  const TextImageFormImage({
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      flex: 1,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        mainAxisSize: MainAxisSize.max,
-        children: const [
-          GetImageFromGallery(),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      mainAxisSize: MainAxisSize.max,
+      children: const [
+        GetImageFromGallery(),
+      ],
     );
   }
 }
