@@ -564,8 +564,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
-<<<<<<< HEAD
-=======
   metadata_fetch:
     dependency: "direct main"
     description:
@@ -573,14 +571,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.1"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
->>>>>>> 924e4ce660aaf7ef19acccd8c486650f81909621
   msix:
     dependency: "direct dev"
     description:
@@ -922,8 +912,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.0"
-<<<<<<< HEAD
-=======
   url_launcher:
     dependency: "direct main"
     description:
@@ -944,7 +932,7 @@ packages:
       name: url_launcher_ios
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "6.0.16"
+    version: "6.0.17"
   url_launcher_linux:
     dependency: transitive
     description:
@@ -972,7 +960,7 @@ packages:
       name: url_launcher_web
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.11"
+    version: "2.0.12"
   url_launcher_windows:
     dependency: transitive
     description:
@@ -980,7 +968,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.1"
->>>>>>> 924e4ce660aaf7ef19acccd8c486650f81909621
   uuid:
     dependency: "direct main"
     description:
