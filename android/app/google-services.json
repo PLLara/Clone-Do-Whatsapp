@@ -15,19 +15,27 @@
       },
       "oauth_client": [
         {
-          "client_id": "1005267707114-56n4mfnan52hdthl49043d3g7hjt0fm5.apps.googleusercontent.com",
+          "client_id": "1005267707114-931dnttvdl339eu1vtlcjsk2ohu8sdp1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.whatsapp2.app",
-            "certificate_hash": "39dcd5cbeda4684f95394e23793f07f9c043de85"
+            "certificate_hash": "a3b05f4a6fcd85bad5f17ed0d451d07ca035f72e"
           }
         },
         {
-          "client_id": "1005267707114-bc9m6roicnvlo1ssh4edsorrce8pv2ee.apps.googleusercontent.com",
+          "client_id": "1005267707114-i8nmggbsr9s1vbh0eao9orn5o4oh68ci.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.whatsapp2.app",
-            "certificate_hash": "80e0c83529eb1dbc8fa0b47351320e3d1548b8e3"
+            "certificate_hash": "3e4b44d71715530fe202b21ed166fecd0f2f990a"
+          }
+        },
+        {
+          "client_id": "1005267707114-o0qo5bbqo7oc3eu4tkduaopecncmgdnc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whatsapp2.app",
+            "certificate_hash": "4cc4bce22f175353c192acecf00a797503881001"
           }
         },
         {
@@ -46,6 +54,13 @@
             {
               "client_id": "1005267707114-6aqj4vtnif5t1ebubkb3jlk8qv1rsqsm.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "1005267707114-v2uphrqus1k8vscslj7f4cl22i2eguhu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.whatsapp2.app"
+              }
             }
           ]
         }
