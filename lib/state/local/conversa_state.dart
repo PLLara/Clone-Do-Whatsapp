@@ -13,12 +13,24 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 enum States { loading, ready, error }
 
 class ConversaController extends GetxController {
+  // !
   final String route;
+  final RxList<MessageModel> papo = <MessageModel>[].obs;
   late final StreamSubscription<DatabaseEvent> streamMensagensAdicionadas;
   late final StreamSubscription<DatabaseEvent> streamMensagensRemovidas;
+  final RxBool iniciado = false.obs;
+  final Rx<States> state = States.ready.obs;
+
+  // *
   final TextEditingController sendMessageController = TextEditingController();
   final FocusNode focusNode = FocusNode();
+  final RxInt quantidadeDeMensagensNaoLidas = 0.obs;
+  final RxBool emojiKeyboardClosed = false.obs;
 
+  // !
+  bool firstFalsePositive = true;
+
+  ConversaController({required this.route});
   @override
   void onInit() {
     start();
@@ -27,17 +39,15 @@ class ConversaController extends GetxController {
 
   @override
   void dispose() {
-    Print.green("DISPOSING CONVERSACONTROLLER FOR ROUTE: " + route);
-    streamMensagensAdicionadas.cancel();
-    streamMensagensRemovidas.cancel();
+    Print.red("DISPOSING CONVERSACONTROLLER FOR ROUTE: $route");
+    cancelStream();
     super.dispose();
   }
 
   @override
   onClose() {
-    Print.green("CLOSING CONVERSACONTROLLER FOR ROUTE: " + route);
-    streamMensagensAdicionadas.cancel();
-    streamMensagensRemovidas.cancel();
+    Print.red("CLOSING CONVERSACONTROLLER FOR ROUTE: $route");
+    cancelStream();
     super.onClose();
   }
 
@@ -46,28 +56,18 @@ class ConversaController extends GetxController {
     await streamMensagensRemovidas.cancel();
   }
 
-  final Rx<States> state = States.ready.obs;
-  final RxList<MessageModel> papo = <MessageModel>[].obs;
-  final RxBool iniciado = false.obs;
-  final RxInt quantidadeDeMensagensNaoLidas = 0.obs;
-  final RxBool emojiKeyboardClosed = false.obs;
-
-  bool firstFalsePositive = true;
-
-  ConversaController({required this.route});
-
   start() async {
+    // !
+    Print.magenta("INICIANDO A CONVERSA JA COM ${papo.length} MENSAGEMS --------------------------");
     iniciado.value = false;
     state.value = States.loading;
-    Print.magenta("------------------- INICIANDO A CONVERSA ${papo.length} --------------------------");
+
     // ! Definindo as variaveis
     final reference = FirebaseDatabase.instance.ref(route);
     var ref = await reference.once();
     var lista = <MessageModel>[];
 
     // ! Pegando os dados
-    print("${papo.length}");
-
     for (final element in ref.snapshot.children.toList()) {
       MessageModel mensagemParseada = parseMessage(element);
       await recieveUrlData(mensagemParseada);
@@ -75,8 +75,9 @@ class ConversaController extends GetxController {
       messageWasAdded(mensagemParseada);
     }
 
+    // * Adicionando os dados iniciais
     papo.addAll(lista);
-    sort();
+    sortMessagesByDate();
 
     // ! Definindo listeners
     definirStreams();
@@ -85,7 +86,9 @@ class ConversaController extends GetxController {
       closeEmogiKeyboard();
     });
     update();
-    Print.magenta("------------------- FINALIZANDO INICIALIZAÇÃO ${papo.length} --------------------------");
+
+    // !
+    Print.magenta("FINALIZANDO INICIALIZAÇÃO ${papo.length} --------------------------");
   }
 
   definirStreams() {
@@ -100,7 +103,7 @@ class ConversaController extends GetxController {
         MessageModel? messageToBeRemoved;
         for (MessageModel legal in papo) {
           if (legal.id == parseMessage(event.snapshot).id) {
-            print("----- MESSAGE REMOVED -----");
+            Print.red("----- MESSAGE REMOVED -----");
             messageToBeRemoved = legal;
           }
         }
@@ -122,14 +125,24 @@ class ConversaController extends GetxController {
           MessageModel mensagemParseada = parseMessage(event.snapshot.children.last);
 
           await recieveUrlData(mensagemParseada);
-
           papo.insert(0, mensagemParseada);
           messageWasAdded(mensagemParseada);
           // sort();
-          Print.green("----- MESSAGE ADDED -----");
+          Print.green("----- MESSAGE ADDED (${mensagemParseada.message}) -----");
         } catch (e) {
           Print.red("----- MESSAGE NOT ADDED -----");
+          print(e);
         }
+      },
+    );
+  }
+
+  sortMessagesByDate() {
+    papo.sort(
+      (a, b) {
+        var dateA = DateTime.parse(a.date.toString());
+        var dateB = DateTime.parse(b.date.toString());
+        return dateB.compareTo(dateA);
       },
     );
   }
@@ -140,11 +153,11 @@ class ConversaController extends GetxController {
       Metadata? metadata;
 
       // !
-      if (cache[url] != null) {
-        metadata = cache[url];
+      if (metadataCache[url] != null) {
+        metadata = metadataCache[url];
         print('found cached url');
       } else {
-        metadata = await MetadataFetch.extract('https://zap2-reverse-proxy.herokuapp.com?q=' + url);
+        metadata = await MetadataFetch.extract('https://zap2-reverse-proxy.herokuapp.com?q=$url');
       }
 
       //*
@@ -153,7 +166,7 @@ class ConversaController extends GetxController {
       } else {
         print(metadata.title);
         mensagemParseada.metaData = metadata;
-        cache[url] = metadata;
+        metadataCache[url] = metadata;
       }
     }
   }
@@ -182,38 +195,32 @@ class ConversaController extends GetxController {
     emojiKeyboardClosed.value = false;
     update();
   }
-
-  sort() {
-    papo.sort(
-      (a, b) {
-        var dateA = DateTime.parse(a.date.toString());
-        var dateB = DateTime.parse(b.date.toString());
-        return dateB.compareTo(dateA);
-      },
-    );
-  }
 }
 
 MessageModel parseMessage(DataSnapshot element) {
   try {
-    if (element.key != null) {
-      var parsedValue = (element.value as Map);
-      var time = DateTime.parse(parsedValue['date']);
-      time = time.subtract(const Duration(hours: 3));
-      return MessageModel(
-        id: element.key ?? 'error',
-        date: time,
-        message: parsedValue['mensagem'] ?? 'ERROR',
-        mediaLink: parsedValue['mediaLink'] ?? 'ERROR',
-        usuario: parsedValue['usuario'] ?? 'ERROR',
-        metaData: null,
-      );
-    } else {
+    // !
+    if (element.key == null) {
       return MessageModel.error();
     }
-  } catch (e) {
-    print(e.toString());
 
+    // *
+    Map parsedValue = (element.value as Map);
+    DateTime time = DateTime.parse(parsedValue['date']);
+    time = time.subtract(const Duration(hours: 3));
+
+    // *
+    return MessageModel(
+      id: element.key ?? 'ERROR',
+      date: time,
+      message: parsedValue['mensagem'] ?? 'ERROR',
+      mediaLink: parsedValue['mediaLink'] ?? 'ERROR',
+      usuario: parsedValue['usuario'] ?? 'ERROR',
+      metaData: null,
+    );
+  } catch (e) {
+    // !
+    print(e.toString());
     return MessageModel.error();
   }
 }
@@ -229,4 +236,4 @@ List<String> findUrls(String text) {
   return urls;
 }
 
-Map<String, Metadata> cache = {};
+Map<String, Metadata> metadataCache = {};

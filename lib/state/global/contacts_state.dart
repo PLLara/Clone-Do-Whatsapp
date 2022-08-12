@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:whatsapp2/common/functions/internet.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/data/contacts_source.dart';
-import 'package:whatsapp2/state/global/conversas_state.dart';
+import 'package:whatsapp2/model/conversa.dart';
 
 class ContactsController extends GetxController {
   RxList<Contact> contatos = <Contact>[].obs;

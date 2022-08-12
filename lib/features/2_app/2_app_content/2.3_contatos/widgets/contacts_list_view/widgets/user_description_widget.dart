@@ -33,7 +33,7 @@ class UserDescription extends StatelessWidget {
                 //* Go back to initial screen
                 Get.back();
                 Get.back();
-                await pathConversasController.addNewConversa(
+                await pathConversasController.addNewConversaToServer(
                   titulo: contact.displayName,
                   participantes: [
                     contact.phones[0].number
@@ -85,7 +85,7 @@ class PlaceholderPhotoFromUser extends StatelessWidget {
             color: Colors.white30,
             borderRadius: BorderRadius.circular(100),
           ),
-          child: const Icon(Icons.person),
+          child: const Icon(Icons.person, size: 30, color: Colors.white),
         ),
       ],
     );

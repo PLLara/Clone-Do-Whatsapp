@@ -1,9 +1,9 @@
 // ignore_for_file: file_names
-import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/1_text_image_form.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/widgets/1_user_identity/user_name.dart';
 import '../../../../../../common/widgets/eu/user_photo.dart';

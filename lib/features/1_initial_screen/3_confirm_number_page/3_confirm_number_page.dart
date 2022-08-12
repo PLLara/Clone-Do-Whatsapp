@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/widgets/loading.dart';
 import 'package:whatsapp2/features/1_initial_screen/3_confirm_number_page/widgets/form_header.dart';
-import 'package:whatsapp2/features/2_app/web_layout.dart';
+import 'package:whatsapp2/features/2_app/0_web_layout/web_layout.dart';
 
 import '../2_register_page/state/location_state.dart';
 

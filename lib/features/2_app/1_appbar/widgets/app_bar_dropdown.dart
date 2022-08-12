@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/navigator/go_to_page.dart';
 import 'package:whatsapp2/common/themes/unavailable_text.dart';
-import 'package:whatsapp2/features/2_app/1_appbar/1_appbar_widget.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/configuracoes_widget.dart';
-import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class AppBarDropDown extends StatelessWidget {
@@ -16,28 +14,28 @@ class AppBarDropDown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      onSelected: (e) {
-        if (e == 'Config') {
-          goToPage(
+      onSelected: (optionSelected) {
+        switch (optionSelected) {
+          case 'config':
+            goToPage(
               const Configuracoes(
                 key: Key('config'),
               ),
-              Get.to);
-        }
-
-        if (e == 'TestLab') {
-          goToPage(
-              const TestLab(
-                key: Key("testlab"),
+              Get.to,
+            );
+            break;
+          case 'testlab':
+            goToPage(
+              const Configuracoes(
+                key: Key('config'),
               ),
-              Get.to);
-        }
-
-        if (e == 'danger') {
-          Get.find<ConversasPathController>().addConversaGeral();
-        }
-        if (e == 'clear_contacts') {
-          Get.find<ContactsController>().setContacts([]);
+              Get.to,
+            );
+            break;
+          case 'danger':
+            Get.find<ConversasPathController>().addConversaGeral();
+            break;
+          default:
         }
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
@@ -68,12 +66,12 @@ class AppBarDropDown extends StatelessWidget {
         ),
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,
-          value: 'TestLab',
+          value: 'testlab',
           child: const Text('TestLab'),
         ),
         PopupMenuItem(
           textStyle: Theme.of(context).textTheme.bodyText1,
-          value: 'Config',
+          value: 'config',
           child: const Text('Configurações'),
         ),
         PopupMenuItem(

@@ -74,8 +74,6 @@ class TextImageFormText extends StatelessWidget {
       tag: context.read<PathCubit>().state.conversaId,
     );
 
-    final FocusNode myFocusNode = FocusNode();
-
     return Flexible(
       flex: 5,
       child: TextField(
@@ -101,7 +99,7 @@ class TextImageFormText extends StatelessWidget {
           ),
         ),
         style: const TextStyle(
-          fontSize: 18.0,
+          fontSize: 16.0,
           color: Colors.white,
         ),
       ),

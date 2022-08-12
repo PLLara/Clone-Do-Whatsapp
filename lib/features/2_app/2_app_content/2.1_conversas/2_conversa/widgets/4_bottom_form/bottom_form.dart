@@ -35,26 +35,26 @@ class _BottomFormState extends State<BottomForm> {
     if (kIsWeb) {
       return Container(
         color: const Color(0xff202C33),
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(8),
         child: Row(
           children: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.abc)),
-            TextImageFormImage(),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
+            const TextImageFormImage(),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
-                  color: Color.fromARGB(255, 40, 54, 62),
+                  color: const Color.fromARGB(255, 40, 54, 62),
                 ),
-                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
                 child: Row(
-                  children: [
-                    const TextImageFormText(),
+                  children: const [
+                    TextImageFormText(),
                   ],
                 ),
               ),
             ),
-            IconButton(onPressed: () {}, icon: Icon(Icons.abc)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.abc)),
           ],
         ),
       );

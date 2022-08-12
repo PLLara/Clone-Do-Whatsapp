@@ -9,42 +9,12 @@ import 'package:whatsapp2/common/widgets/generic_null_user.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/conversa_page.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_page.dart';
+import 'package:whatsapp2/model/conversa.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'package:whatsapp2/state/local/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/widgets/contacts_list_view/widgets/user_description_widget.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
-
-class ConversationsList extends StatelessWidget {
-  ConversationsList({
-    Key? key,
-  }) : super(key: key);
-
-  final ConversasPathController pathConversasController = Get.find();
-  final ContactsController contactsController = Get.find<ContactsController>();
-
-  @override
-  Widget build(BuildContext context) {
-    return Obx(
-      () {
-        // * Setting variables:
-        var conversas = pathConversasController.conversas;
-        if (conversas.isEmpty) {
-          return const SemConversasCriarNovaWidget();
-        }
-
-        return ListView.builder(
-          itemCount: conversas.length,
-          itemBuilder: (_, index) {
-            return ConversaListTile(
-              conversaPath: conversas[index],
-            );
-          },
-        );
-      },
-    );
-  }
-}
 
 class SemConversasCriarNovaWidget extends StatelessWidget {
   const SemConversasCriarNovaWidget({
@@ -67,7 +37,7 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
               onPressed: () {
                 goToPage(Contatos(), Get.to);
               },
-              child: const Text(
+              child: Text(
                 "Criar nova conversa",
               ),
               style: ElevatedButton.styleFrom(

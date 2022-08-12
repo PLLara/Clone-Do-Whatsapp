@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/conversa_page.dart';
+import 'package:whatsapp2/model/conversa.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class DesktopSelectedConversaController extends GetxController {
@@ -28,7 +29,7 @@ var conversaNula = Conversa(
     criadorNumber: 'placeholder',
     descricao: 'placeholder',
     isConversaPrivate: false,
-    participantes: [],
+    participantes: const [],
     thumbnail: null,
     titulo: '',
   ),

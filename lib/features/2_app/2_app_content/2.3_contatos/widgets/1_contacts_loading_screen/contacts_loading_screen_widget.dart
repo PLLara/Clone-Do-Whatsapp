@@ -24,7 +24,7 @@ class ContactsLoadingScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 Get.to(
-                  Scaffold(
+                  () => Scaffold(
                     appBar: AppBar(),
                     body: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -80,7 +80,7 @@ class AddConversaDialog extends StatelessWidget {
                   Get.back();
                   Get.back();
                   Get.back();
-                  await pathConversasController.addNewConversa(
+                  await pathConversasController.addNewConversaToServer(
                     titulo: "",
                     participantes: [
                       parsedPhoneNumber

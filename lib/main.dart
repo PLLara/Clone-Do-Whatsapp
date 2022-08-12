@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/features/2_app/web_layout.dart';
+import 'package:whatsapp2/features/2_app/0_web_layout/web_layout.dart';
 import 'package:whatsapp2/state/global/camera_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
@@ -94,9 +94,9 @@ class MyApp extends StatelessWidget {
 }
 
 class LoggedOrNorController extends StatefulWidget {
-  final CameraStateController cameraController = Get.put(
-    CameraStateController(),
-  );
+  // final CameraStateController cameraController = Get.put(
+  //   CameraStateController(),
+  // );
 
   LoggedOrNorController({
     Key? key,
@@ -118,7 +118,7 @@ class LoggedOrNorController extends StatefulWidget {
           Get.offAllNamed('/');
           Get.delete<ConversasPathController>();
           Get.delete<ContactsController>();
-          Get.delete<CameraStateController>();
+          // Get.delete<CameraStateController>();
         }
       },
     );

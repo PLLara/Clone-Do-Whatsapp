@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/conversa_page.dart';
+import 'package:whatsapp2/model/conversa.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/local/conversa_state.dart';
 
@@ -32,9 +29,12 @@ class ConversasPathController extends GetxController {
   }
 
   setPathListener() async {
+    // !
     Print.magenta("---------- INITIALIZING PATH CONVERSAS CONTROLLER LISTENER ----------");
     var myPhoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber ?? '';
     var conversasSnapshots = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots();
+
+    // *
     conversasStream = conversasSnapshots.listen(
       (event) async {
         Print.green("---------- CONVERSAS LISTENER FIRED ----------");
@@ -42,32 +42,94 @@ class ConversasPathController extends GetxController {
         List<ConversaPathData> newConversas = [];
         for (var newConversa in event.docs) {
           // *
-          var pNewConversa = newConversa.data();
+          var newConversaData = newConversa.data();
+          // Print.green("${newConversaData['participantes']} contains $myPhoneNumber");
 
           // *
-          Print.green("${pNewConversa['participantes']} contains $myPhoneNumber");
           var newConversaPathData = ConversaPathData(
             criadorNumber: myPhoneNumber,
             conversaId: newConversa.id,
-            titulo: pNewConversa['titulo'],
-            descricao: pNewConversa['descricao'],
-            criadorId: pNewConversa['criador'],
-            thumbnail: pNewConversa['thumbnail'],
-            isConversaPrivate: pNewConversa['personal'],
-            participantes: pNewConversa['participantes'].cast<String>() as List<String>,
+            titulo: newConversaData['titulo'],
+            descricao: newConversaData['descricao'],
+            criadorId: newConversaData['criador'],
+            thumbnail: newConversaData['thumbnail'],
+            isConversaPrivate: newConversaData['personal'],
+            participantes: newConversaData['participantes'].cast<String>() as List<String>,
           );
-          Print.green("NEW CONVERSA ADDED: " + newConversaPathData.toString());
+          Print.green("NEW CONVERSA ADDED: $newConversaPathData");
           newConversas.add(
             newConversaPathData,
           );
         }
+
+        // ! Determinando quais conversas foram removidas e deletando o seu estado
+        RxList<ConversaPathData> oldConversas = conversas;
+
+        List<String> oldConversasIds = oldConversas.map((conversa) => conversa.conversaId).toList();
+        List<String> newConversasIds = newConversas.map((conversa) => conversa.conversaId).toList();
+        List<String> removedConversasIds = oldConversasIds.where((id) => !newConversasIds.contains(id)).toList();
+
+        List<ConversaPathData> removedConversas = oldConversas.where((conversa) => removedConversasIds.contains(conversa.conversaId)).toList();
+        for (var conversa in removedConversas) {
+          Print.red("REMOVING CONVERSA: ${conversa.conversaId}");
+          Get.find<ConversaController>(tag: conversa.conversaId);
+        }
+
+        // ! Adicionando a conversa geral de volta
         if (conversas.any((element) => element.conversaId == 'geral')) {
           newConversas.add(getConversaGeral());
         }
+
+        // ! Atualizando o estado
         conversas.value = newConversas;
         update();
       },
     );
+  }
+
+  void removeConversa(String conversaId, bool isConversaPrivate) async {
+    Print.red("REMOVING CONVERSA: $conversaId");
+    Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
+    var conversaController = Get.find<ConversaController>(tag: conversaId);
+    try {
+      conversaController.dispose();
+    } catch (e) {
+      Print.red("CONTROLLER ALREADY DISPOSED");
+    }
+
+    if (isConversaPrivate) {
+      await FirebaseFirestore.instance.collection("conversas").doc(conversaId).delete();
+    }
+
+    for (var conversa in conversas) {
+      if (conversa.conversaId == conversaId) {
+        conversas.remove(conversa);
+        return;
+      }
+    }
+    Get.delete<ConversaController>();
+  }
+
+  addNewConversaToServer({
+    required String titulo,
+    required List<String> participantes,
+    String descricao = '',
+    bool personal = false,
+    String? thumbnail,
+  }) async {
+    var creatorPhoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
+    if (creatorPhoneNumber == null) {
+      return;
+    }
+    participantes.add(creatorPhoneNumber);
+    await FirebaseFirestore.instance.collection('conversas').add({
+      'titulo': titulo,
+      'descricao': descricao,
+      'criador': FirebaseAuth.instance.currentUser?.uid,
+      'thumbnail': thumbnail,
+      'participantes': participantes,
+      'personal': personal,
+    });
   }
 
   void addConversaGeral() {
@@ -94,29 +156,6 @@ class ConversasPathController extends GetxController {
     );
   }
 
-  void removeConversa(String conversaId, bool isConversaPrivate) async {
-    Print.red("REMOVING CONVERSA: " + conversaId);
-    Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
-    var conversaController = Get.find<ConversaController>(tag: conversaId);
-    try {
-      conversaController.dispose();
-    } catch (e) {
-      Print.red("CONTROLLER ALREADY DISPOSED");
-    }
-
-    if (isConversaPrivate) {
-      await FirebaseFirestore.instance.collection("conversas").doc(conversaId).delete();
-    }
-
-    for (var conversa in conversas) {
-      if (conversa.conversaId == conversaId) {
-        conversas.remove(conversa);
-        return;
-      }
-    }
-    Get.delete<ConversaController>();
-  }
-
   void removeConversaGeral() {
     Get.find<DesktopSelectedConversaController>().clearSelectedWidget();
     Print.red("REMOVING CONVERSA: GERAL");
@@ -133,116 +172,4 @@ class ConversasPathController extends GetxController {
       }
     }
   }
-
-  addNewConversa({
-    required String titulo,
-    required List<String> participantes,
-    String descricao = '',
-    bool personal = false,
-    String? thumbnail,
-  }) async {
-    var creatorPhoneNumber = FirebaseAuth.instance.currentUser?.phoneNumber;
-    if (creatorPhoneNumber == null) {
-      return;
-    }
-    participantes.add(creatorPhoneNumber);
-    await FirebaseFirestore.instance.collection('conversas').add({
-      'titulo': titulo,
-      'descricao': descricao,
-      'criador': FirebaseAuth.instance.currentUser?.uid,
-      'thumbnail': thumbnail,
-      'participantes': participantes,
-      'personal': personal,
-    });
-  }
-}
-
-class ConversaPathData extends Equatable {
-  String conversaId;
-  String criadorId;
-  String criadorNumber;
-  String titulo;
-  String descricao;
-  List<String> participantes;
-  bool isConversaPrivate;
-  dynamic thumbnail;
-  ConversaPathData({
-    required this.conversaId,
-    required this.criadorId,
-    required this.criadorNumber,
-    required this.titulo,
-    required this.descricao,
-    required this.participantes,
-    required this.isConversaPrivate,
-    required this.thumbnail,
-  });
-
-  ConversaPathData copyWith({
-    String? conversaId,
-    String? criadorId,
-    String? criadorNumber,
-    String? titulo,
-    String? descricao,
-    List<String>? participantes,
-    bool? personal,
-    dynamic thumbnail,
-  }) {
-    return ConversaPathData(
-      conversaId: conversaId ?? this.conversaId,
-      criadorId: criadorId ?? this.criadorId,
-      criadorNumber: criadorNumber ?? this.criadorNumber,
-      titulo: titulo ?? this.titulo,
-      descricao: descricao ?? this.descricao,
-      participantes: participantes ?? this.participantes,
-      isConversaPrivate: personal ?? isConversaPrivate,
-      thumbnail: thumbnail ?? this.thumbnail,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'conversaId': conversaId,
-      'criadorId': criadorId,
-      'criadorNumber': criadorNumber,
-      'titulo': titulo,
-      'descricao': descricao,
-      'participantes': participantes,
-      'personal': isConversaPrivate,
-      'thumbnail': thumbnail,
-    };
-  }
-
-  factory ConversaPathData.fromMap(Map<String, dynamic> map) {
-    return ConversaPathData(
-      conversaId: map['conversaId'],
-      criadorId: map['criadorId'],
-      criadorNumber: map['criadorNumber'],
-      titulo: map['titulo'],
-      descricao: map['descricao'],
-      participantes: List<String>.from(map['participantes']),
-      isConversaPrivate: map['personal'],
-      thumbnail: map['thumbnail'],
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory ConversaPathData.fromJson(String source) => ConversaPathData.fromMap(json.decode(source));
-
-  @override
-  String toString() {
-    return 'ConversaPathData(conversaId: $conversaId, criadorId: $criadorId, criadorNumber: $criadorNumber, titulo: $titulo, descricao: $descricao, participantes: $participantes, personal: $isConversaPrivate, thumbnail: $thumbnail)';
-  }
-
-  @override
-  List<Object?> get props => [
-        conversaId,
-        criadorId,
-        criadorNumber,
-        titulo,
-        descricao,
-        participantes,
-        isConversaPrivate,
-        thumbnail,
-      ];
 }

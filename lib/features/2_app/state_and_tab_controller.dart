@@ -5,13 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/desktop/width.dart';
 import 'package:whatsapp2/common/widgets/scaffold_loading.dart';
-import 'package:whatsapp2/features/2_app/web_layout.dart';
+import 'package:whatsapp2/features/2_app/0_web_layout/web_layout.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'package:whatsapp2/state/global/user_state.dart';
 import '1_appbar/1_appbar_widget.dart';
-import '2_app_content/2.2_camera/camera_widget.dart';
 import '2_app_content/2.1_conversas/1_conversas/conversas_page.dart';
 
 class TabSwitcherAndProvider extends StatelessWidget {
@@ -41,6 +40,7 @@ class TabSwitcherAndProvider extends StatelessWidget {
         }
         // ! Versão mobile
         return DefaultTabController(
+          length: myTabs.length,
           child: Scaffold(
             backgroundColor: Color(0xff121B22),
             appBar: MyAppBar(myTabs),
@@ -51,7 +51,6 @@ class TabSwitcherAndProvider extends StatelessWidget {
               ],
             ),
           ),
-          length: myTabs.length,
         );
       },
     );
@@ -74,10 +73,10 @@ List<TabData> myTabs = [
     ),
     myWidget: Conversas(),
   ),
-  TabData(
-    myTab: const Tab(
-      text: '📷︎',
-    ),
-    myWidget: Camera(),
-  ),
+  // TabData(
+  //   myTab: const Tab(
+  //     text: '📷︎',
+  //   ),
+  //   myWidget: Camera(),
+  // ),
 ];

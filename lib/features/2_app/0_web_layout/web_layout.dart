@@ -1,41 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/desktop/width.dart';
+import 'package:whatsapp2/common/navigator/go_to_page.dart';
 import 'package:whatsapp2/common/widgets/eu/user_photo.dart';
 import 'package:whatsapp2/features/2_app/1_appbar/widgets/app_bar_dropdown.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/conversas_page.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/1_conversas/widgets/2_create_new_conversa_widget.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_page.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
-
-class Whatsapp2WebLayoutBase extends StatelessWidget {
-  const Whatsapp2WebLayoutBase({
-    Key? key,
-    required this.child,
-  }) : super(key: key);
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    if (kIsWeb && isDesktop(MediaQuery.of(context).size)) {
-      return Container(
-        color: const Color(0xff0A1014),
-        padding: const EdgeInsets.symmetric(vertical: 20),
-        child: Row(
-          children: [
-            const ExpandedPadding(), // left
-            Expanded(
-              child: child,
-              flex: 12,
-            ),
-            const ExpandedPadding(), // right
-          ],
-        ),
-      );
-    }
-    return child;
-  }
-}
 
 class WebZap2Interface extends StatelessWidget {
   const WebZap2Interface({
@@ -56,11 +28,20 @@ class WebZap2Interface extends StatelessWidget {
                     padding: EdgeInsets.all(8.0),
                     child: UserPhotoWidget(),
                   ),
-                  actions: const [
-                    AppBarDropDown(),
+                  actions: [
+                    isDesktop(MediaQuery.of(context).size)
+                        ? IconButton(
+                            onPressed: () {
+                              goToPage(Contatos(), Get.to);
+                            },
+                            icon: const Icon(Icons.sms),
+                          )
+                        : const SizedBox(),
+                    const AppBarDropDown(),
                   ],
                 ),
-                body: const Conversas(),
+                body: Conversas(),
+                floatingActionButton: isDesktop(MediaQuery.of(context).size) ? null : const CreateNewConversaWidget(),
               ),
             ),
             const DesktopSelectedConversa(),
@@ -71,17 +52,33 @@ class WebZap2Interface extends StatelessWidget {
   }
 }
 
-class ExpandedPadding extends StatelessWidget {
-  const ExpandedPadding({
+class Whatsapp2WebLayoutBase extends StatelessWidget {
+  const Whatsapp2WebLayoutBase({
     Key? key,
+    required this.child,
   }) : super(key: key);
+
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
-      flex: 1,
-      child: SizedBox(),
-    );
+    if (isDesktop(MediaQuery.of(context).size)) {
+      return Container(
+        color: const Color(0xff0A1014),
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Row(
+          children: [
+            const ExpandedPadding(), // left
+            Expanded(
+              flex: 12,
+              child: child,
+            ),
+            const ExpandedPadding(), // right
+          ],
+        ),
+      );
+    }
+    return child;
   }
 }
 
@@ -125,6 +122,20 @@ class DesktopSelectedConversa extends StatelessWidget {
           }
         },
       ),
+    );
+  }
+}
+
+class ExpandedPadding extends StatelessWidget {
+  const ExpandedPadding({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const Expanded(
+      flex: 1,
+      child: SizedBox(),
     );
   }
 }
