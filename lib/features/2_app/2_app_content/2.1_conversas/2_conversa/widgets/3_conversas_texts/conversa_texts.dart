@@ -27,13 +27,18 @@ class ConversaMessages extends StatelessWidget {
           return ListView.builder(
             reverse: true,
             physics: const BouncingScrollPhysics(),
-            itemCount: conversaController.papo.length,
+            itemCount: conversaController.papo.length + 1,
             itemBuilder: (e, index) {
+              if (index == 0) {
+                return SizedBox(
+                  height: 30,
+                );
+              }
               return MensagemWidget(
                 mensagens: conversaController.papo.value,
-                index: index,
+                index: index - 1,
                 key: Key(
-                  mensageKey(index),
+                  mensageKey(index - 1),
                 ),
               );
             },

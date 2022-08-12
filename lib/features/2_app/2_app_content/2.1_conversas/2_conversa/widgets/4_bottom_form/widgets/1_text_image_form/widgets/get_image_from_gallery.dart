@@ -45,7 +45,7 @@ class GetImageFromGallery extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
                       children: const [
-                        TextAndImageForm(),
+                        TextImageForm(),
                       ],
                     ),
                   ),

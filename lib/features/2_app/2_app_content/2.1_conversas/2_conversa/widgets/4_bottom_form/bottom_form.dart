@@ -26,10 +26,39 @@ class _BottomFormState extends State<BottomForm> {
 
   @override
   Widget build(BuildContext context) {
+    // !
     final ConversaController conversaController = Get.find<ConversaController>(
       tag: context.read<PathCubit>().state.conversaId,
     );
 
+    // *
+    if (kIsWeb) {
+      return Container(
+        color: const Color(0xff202C33),
+        padding: EdgeInsets.all(16),
+        child: Row(
+          children: [
+            IconButton(onPressed: () {}, icon: Icon(Icons.abc)),
+            TextImageFormImage(),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                  color: Color.fromARGB(255, 40, 54, 62),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  children: [
+                    const TextImageFormText(),
+                  ],
+                ),
+              ),
+            ),
+            IconButton(onPressed: () {}, icon: Icon(Icons.abc)),
+          ],
+        ),
+      );
+    }
     return SizedBox(
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -39,7 +68,7 @@ class _BottomFormState extends State<BottomForm> {
             child: Row(
               mainAxisSize: MainAxisSize.max,
               children: const [
-                TextAndImageForm(),
+                TextImageForm(),
                 Submit(),
               ],
             ),
