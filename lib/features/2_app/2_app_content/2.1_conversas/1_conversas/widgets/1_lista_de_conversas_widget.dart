@@ -217,15 +217,12 @@ class _ConversaListTileGenericState extends State<ConversaListTileGeneric> {
     final ConversaController conversaController = Get.find<ConversaController>(
       tag: widget.conversaPath.conversaId,
     );
-    if (conversaController.papo.isEmpty) {
-      conversaController.start();
-    }
 
     MessageModel ultimaMensagem;
     try {
       ultimaMensagem = conversaController.papo.last;
     } catch (e) {
-      ultimaMensagem = MessageModel(id: '', date: DateTime.now(), message: '', mediaLink: '', usuario: '');
+      ultimaMensagem = MessageModel(id: '', date: DateTime.now(), message: '', mediaLink: '', usuario: '', metaData: null);
     }
     return ListTile(
       leading: widget.injectedConversaPhoto,
@@ -236,7 +233,7 @@ class _ConversaListTileGenericState extends State<ConversaListTileGeneric> {
           try {
             ultimaMensagem = conversaController.papo.first;
           } catch (e) {
-            ultimaMensagem = MessageModel(id: '', date: DateTime.now(), message: '', mediaLink: '', usuario: '');
+            ultimaMensagem = MessageModel(id: '', date: DateTime.now(), message: '', mediaLink: '', usuario: '', metaData: null);
           }
           return Text(
             "${contactsController.getNameBasedOnNumber(ultimaMensagem.usuario)}: ${ultimaMensagem.message}",

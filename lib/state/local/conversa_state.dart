@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:metadata_fetch/metadata_fetch.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
 
@@ -17,6 +18,12 @@ class ConversaController extends GetxController {
   late final StreamSubscription<DatabaseEvent> streamMensagensRemovidas;
   final TextEditingController sendMessageController = TextEditingController();
   final FocusNode focusNode = FocusNode();
+
+  @override
+  void onInit() {
+    start();
+    super.onInit();
+  }
 
   @override
   void dispose() {
@@ -60,16 +67,16 @@ class ConversaController extends GetxController {
 
     // ! Pegando os dados
     print("${papo.length}");
-    ref.snapshot.children.toList().forEach(
-      (element) {
-        MessageModel mensagemParseada = parseMessage(element);
-        lista.add(mensagemParseada);
-        messageWasAdded(mensagemParseada);
-      },
-    );
+
+    for (final element in ref.snapshot.children.toList()) {
+      MessageModel mensagemParseada = parseMessage(element);
+      await recieveUrlData(mensagemParseada);
+      lista.add(mensagemParseada);
+      messageWasAdded(mensagemParseada);
+    }
+
     papo.addAll(lista);
     sort();
-    print("${papo.length}");
 
     // ! Definindo listeners
     definirStreams();
@@ -78,6 +85,7 @@ class ConversaController extends GetxController {
       closeEmogiKeyboard();
     });
     update();
+    Print.magenta("------------------- FINALIZANDO INICIALIZAÇÃO ${papo.length} --------------------------");
   }
 
   definirStreams() {
@@ -105,22 +113,49 @@ class ConversaController extends GetxController {
 
   void definirStreamDeMensagensAdicionadas(DatabaseReference reference) {
     streamMensagensAdicionadas = reference.orderByKey().limitToLast(1).onValue.listen(
-      (event) {
+      (event) async {
         try {
           if (firstFalsePositive) {
             firstFalsePositive = false; // ! isso aqui é culpa do firebase ;=;
             return;
           }
-          var mensagemParseada = parseMessage(event.snapshot.children.last);
+          MessageModel mensagemParseada = parseMessage(event.snapshot.children.last);
+
+          await recieveUrlData(mensagemParseada);
+
           papo.insert(0, mensagemParseada);
           messageWasAdded(mensagemParseada);
-          sort();
+          // sort();
           Print.green("----- MESSAGE ADDED -----");
         } catch (e) {
           Print.red("----- MESSAGE NOT ADDED -----");
         }
       },
     );
+  }
+
+  Future<void> recieveUrlData(MessageModel mensagemParseada) async {
+    for (final url in findUrls(mensagemParseada.message)) {
+      // !
+      Metadata? metadata;
+
+      // !
+      if (cache[url] != null) {
+        metadata = cache[url];
+        print('found cached url');
+      } else {
+        metadata = await MetadataFetch.extract('https://zap2-reverse-proxy.herokuapp.com?q=' + url);
+      }
+
+      //*
+      if (metadata == null || metadata.title == null) {
+        // *
+      } else {
+        print(metadata.title);
+        mensagemParseada.metaData = metadata;
+        cache[url] = metadata;
+      }
+    }
   }
 
   messageWasAdded(MessageModel mensagem) {
@@ -171,6 +206,7 @@ MessageModel parseMessage(DataSnapshot element) {
         message: parsedValue['mensagem'] ?? 'ERROR',
         mediaLink: parsedValue['mediaLink'] ?? 'ERROR',
         usuario: parsedValue['usuario'] ?? 'ERROR',
+        metaData: null,
       );
     } else {
       return MessageModel.error();
@@ -181,3 +217,16 @@ MessageModel parseMessage(DataSnapshot element) {
     return MessageModel.error();
   }
 }
+
+List<String> findUrls(String text) {
+  RegExp exp = RegExp(r'(?:(?:https?|ftp):\/\/)?[\w/\-?=%.]+\.[\w/\-?=%.]+');
+  Iterable<RegExpMatch> matches = exp.allMatches(text);
+
+  List<String> urls = [];
+  for (var match in matches) {
+    urls.add(text.substring(match.start, match.end));
+  }
+  return urls;
+}
+
+Map<String, Metadata> cache = {};

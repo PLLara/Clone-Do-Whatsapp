@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:palestine_console/palestine_console.dart';
-import 'package:whatsapp2/features/2_app/state_and_tab_controller.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/conversa_page.dart';
 import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/local/conversa_state.dart';
 
@@ -36,46 +37,34 @@ class ConversasPathController extends GetxController {
     var conversasSnapshots = FirebaseFirestore.instance.collection('conversas').where('participantes', arrayContains: myPhoneNumber).snapshots();
     conversasStream = conversasSnapshots.listen(
       (event) async {
+        Print.green("---------- CONVERSAS LISTENER FIRED ----------");
+
         List<ConversaPathData> newConversas = [];
         for (var newConversa in event.docs) {
+          // *
           var pNewConversa = newConversa.data();
-          var iParticipateInConversa = (pNewConversa['participantes'] as List<dynamic>).contains(myPhoneNumber);
-          if (iParticipateInConversa) {
-            Print.green("${pNewConversa['participantes']} contains $myPhoneNumber");
-            var newConversaPathData = ConversaPathData(
-              criadorNumber: myPhoneNumber,
-              conversaId: newConversa.id,
-              titulo: pNewConversa['titulo'],
-              descricao: pNewConversa['descricao'],
-              criadorId: pNewConversa['criador'],
-              thumbnail: pNewConversa['thumbnail'],
-              isConversaPrivate: pNewConversa['personal'],
-              participantes: pNewConversa['participantes'].cast<String>() as List<String>,
-            );
-            Print.green("NEW CONVERSA ADDED: " + newConversaPathData.toString());
-            newConversas.add(
-              newConversaPathData,
-            );
-          }
-        }
-        var conversaIdList = conversas.map((element) => element.conversaId).toList();
-        var newConversasIdList = newConversas.map((element) => element.conversaId).toList();
-        List<String> idsToRemove = conversaIdList.toSet().difference(newConversasIdList.toSet()).toList();
 
-        Print.green("---------- CONVERSAS LISTENER FIRED ----------");
-        for (var conversaId in idsToRemove) {
-          try {
-            Print.magenta("CANCELANDO LISTENER DA CONVERSA: " + conversaId);
-            var conversaController = Get.find<ConversaController>(tag: conversaId);
-            conversaController.cancelStream();
-            conversaController.dispose();
-          } catch (e) {
-            Print.red("ERRO AO CANCELAR LISTENER DA CONVERSA: " + conversaId);
-          }
+          // *
+          Print.green("${pNewConversa['participantes']} contains $myPhoneNumber");
+          var newConversaPathData = ConversaPathData(
+            criadorNumber: myPhoneNumber,
+            conversaId: newConversa.id,
+            titulo: pNewConversa['titulo'],
+            descricao: pNewConversa['descricao'],
+            criadorId: pNewConversa['criador'],
+            thumbnail: pNewConversa['thumbnail'],
+            isConversaPrivate: pNewConversa['personal'],
+            participantes: pNewConversa['participantes'].cast<String>() as List<String>,
+          );
+          Print.green("NEW CONVERSA ADDED: " + newConversaPathData.toString());
+          newConversas.add(
+            newConversaPathData,
+          );
         }
-
-        conversas.removeRange(0, conversas.length);
-        conversas.addAll(newConversas);
+        if (conversas.any((element) => element.conversaId == 'geral')) {
+          newConversas.add(getConversaGeral());
+        }
+        conversas.value = newConversas;
         update();
       },
     );
@@ -88,16 +77,20 @@ class ConversasPathController extends GetxController {
       }
     }
     conversas.add(
-      ConversaPathData(
-        criadorNumber: '',
-        conversaId: 'geral',
-        titulo: 'Conversa Geral',
-        descricao: ':)',
-        criadorId: 'asd',
-        thumbnail: '',
-        isConversaPrivate: false,
-        participantes: [],
-      ),
+      getConversaGeral(),
+    );
+  }
+
+  ConversaPathData getConversaGeral() {
+    return ConversaPathData(
+      criadorNumber: '',
+      conversaId: 'geral',
+      titulo: 'Conversa Geral',
+      descricao: ':)',
+      criadorId: 'asd',
+      thumbnail: '',
+      isConversaPrivate: false,
+      participantes: const [],
     );
   }
 
@@ -114,6 +107,7 @@ class ConversasPathController extends GetxController {
     if (isConversaPrivate) {
       await FirebaseFirestore.instance.collection("conversas").doc(conversaId).delete();
     }
+
     for (var conversa in conversas) {
       if (conversa.conversaId == conversaId) {
         conversas.remove(conversa);
@@ -140,7 +134,7 @@ class ConversasPathController extends GetxController {
     }
   }
 
-  addNewPath({
+  addNewConversa({
     required String titulo,
     required List<String> participantes,
     String descricao = '',
@@ -163,7 +157,7 @@ class ConversasPathController extends GetxController {
   }
 }
 
-class ConversaPathData {
+class ConversaPathData extends Equatable {
   String conversaId;
   String criadorId;
   String criadorNumber;
@@ -241,14 +235,14 @@ class ConversaPathData {
   }
 
   @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is ConversaPathData && other.conversaId == conversaId && other.criadorId == criadorId && other.criadorNumber == criadorNumber && other.titulo == titulo && other.descricao == descricao && listEquals(other.participantes, participantes) && other.isConversaPrivate == isConversaPrivate && other.thumbnail == thumbnail;
-  }
-
-  @override
-  int get hashCode {
-    return conversaId.hashCode ^ criadorId.hashCode ^ criadorNumber.hashCode ^ titulo.hashCode ^ descricao.hashCode ^ participantes.hashCode ^ isConversaPrivate.hashCode ^ thumbnail.hashCode;
-  }
+  List<Object?> get props => [
+        conversaId,
+        criadorId,
+        criadorNumber,
+        titulo,
+        descricao,
+        participantes,
+        isConversaPrivate,
+        thumbnail,
+      ];
 }

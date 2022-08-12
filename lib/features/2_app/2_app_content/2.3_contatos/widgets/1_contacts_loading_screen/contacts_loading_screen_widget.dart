@@ -80,7 +80,7 @@ class AddConversaDialog extends StatelessWidget {
                   Get.back();
                   Get.back();
                   Get.back();
-                  await pathConversasController.addNewPath(
+                  await pathConversasController.addNewConversa(
                     titulo: "",
                     participantes: [
                       parsedPhoneNumber

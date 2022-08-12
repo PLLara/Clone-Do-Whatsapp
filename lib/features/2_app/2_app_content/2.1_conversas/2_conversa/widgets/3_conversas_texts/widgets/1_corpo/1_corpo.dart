@@ -16,9 +16,10 @@ class MensagemCorpo extends StatelessWidget {
     required this.nome,
     required this.numero,
     required this.myMensagem,
-    required this.mensagem,
+    required this.text,
     required this.dia,
     required this.constraints,
+    required this.mensagem,
   }) : super(key: key);
 
   final MainAxisAlignment alignment;
@@ -28,9 +29,11 @@ class MensagemCorpo extends StatelessWidget {
   final String nome;
   final String numero;
   final MessageModel myMensagem;
-  final String mensagem;
+  final String text;
   final String dia;
   final dynamic constraints;
+
+  final MessageModel mensagem;
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +57,35 @@ class MensagemCorpo extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: alignment == MainAxisAlignment.start ? CrossAxisAlignment.start : CrossAxisAlignment.end,
                 children: [
+                  mensagem.metaData != null
+                      ? TextButton(
+                          onPressed: () {
+                            print('metaData');
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            color: Colors.red,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Expanded(
+                                  flex: 1,
+                                  child: Image.network(
+                                    'https://zap2-reverse-proxy.herokuapp.com?q=' + (mensagem.metaData?.image ?? ''),
+                                    errorBuilder: (e, a, c) => Container(),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 4,
+                                  child: Wrap(children: [
+                                    Text(mensagem.metaData?.title ?? ''),
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
                   MensagemUserNumeroMaybe(
                     nome: nome,
                     numero: numero,
@@ -65,7 +97,7 @@ class MensagemCorpo extends StatelessWidget {
                   ),
                   MensagemText(
                     constraints: constraints,
-                    textMessage: mensagem,
+                    textMessage: text,
                   ),
                   MensagemDate(dia: dia),
                 ],

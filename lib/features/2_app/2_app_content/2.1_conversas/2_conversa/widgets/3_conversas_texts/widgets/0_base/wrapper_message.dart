@@ -141,6 +141,7 @@ class _MessageScaffoldState extends State<MessageScaffold> {
               return Stack(
                 children: [
                   MensagemCorpo(
+                    mensagem: widget.mensagem,
                     alignment: alignment,
                     MARGIN: MARGIN,
                     color: color,
@@ -148,7 +149,7 @@ class _MessageScaffoldState extends State<MessageScaffold> {
                     nome: nome,
                     numero: numero,
                     myMensagem: myMensagem,
-                    mensagem: mensagem,
+                    text: mensagem,
                     dia: dia,
                     constraints: constraints,
                   ),

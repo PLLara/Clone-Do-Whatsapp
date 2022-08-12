@@ -33,7 +33,7 @@ class UserDescription extends StatelessWidget {
                 //* Go back to initial screen
                 Get.back();
                 Get.back();
-                await pathConversasController.addNewPath(
+                await pathConversasController.addNewConversa(
                   titulo: contact.displayName,
                   participantes: [
                     contact.phones[0].number
