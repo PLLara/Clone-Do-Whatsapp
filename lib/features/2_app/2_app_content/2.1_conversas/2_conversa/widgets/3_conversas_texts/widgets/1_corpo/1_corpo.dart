@@ -64,14 +64,14 @@ class MensagemCorpo extends StatelessWidget {
                           },
                           child: Container(
                             padding: const EdgeInsets.all(4),
-                            color: Colors.red,
+                            color: Colors.white,
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 Expanded(
                                   flex: 1,
                                   child: Image.network(
-                                    'https://zap2-reverse-proxy.herokuapp.com?q=' + (mensagem.metaData?.image ?? ''),
+                                    'https://zap2-reverse-proxy.herokuapp.com?q=${mensagem.metaData?.image ?? ''}',
                                     errorBuilder: (e, a, c) => Container(),
                                   ),
                                 ),
@@ -85,7 +85,7 @@ class MensagemCorpo extends StatelessWidget {
                             ),
                           ),
                         )
-                      : SizedBox(),
+                      : const SizedBox(),
                   MensagemUserNumeroMaybe(
                     nome: nome,
                     numero: numero,

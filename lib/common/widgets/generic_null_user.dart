@@ -14,7 +14,7 @@ class GenericNullUser extends StatelessWidget {
         Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: Colors.red,
+            color: Colors.white,
             borderRadius: BorderRadius.circular(100),
           ),
           child: const Icon(

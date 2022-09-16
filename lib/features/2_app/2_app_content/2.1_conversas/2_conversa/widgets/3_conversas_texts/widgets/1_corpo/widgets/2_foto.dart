@@ -243,7 +243,7 @@ class _MensagemVideoState extends State<MensagemVideo> {
                                             child: AnimatedContainer(
                                               duration: const Duration(milliseconds: 300),
                                               curve: Curves.fastLinearToSlowEaseIn,
-                                              color: Colors.red,
+                                              color: Colors.white,
                                               height: 20,
                                               width: c.maxWidth * (_controller.value.position.inMilliseconds / _controller.value.duration.inMilliseconds),
                                             ),

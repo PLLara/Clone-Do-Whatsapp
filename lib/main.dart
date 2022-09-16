@@ -2,7 +2,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:whatsapp2/features/2_app/0_web_layout/web_layout.dart';
-import 'package:whatsapp2/state/global/camera_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'common/themes/default.dart';
@@ -24,63 +23,12 @@ void main() async {
   await GetStorage.init();
 
   runApp(
-    MyApp(),
+    const MyApp(),
   );
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({Key? key}) : super(key: key) {
-    // FirebaseMessaging messaging = FirebaseMessaging.instance;
-    // messaging
-    //     .requestPermission(
-    //   alert: true,
-    //   announcement: false,
-    //   badge: true,
-    //   carPlay: false,
-    //   criticalAlert: false,
-    //   provisional: false,
-    //   sound: true,
-    // )
-    //     .then(
-    //   (value) {
-    //     print('Permission granted: $value');
-    //   },
-    // ).catchError(
-    //   (error) {
-    //     print('Permission error: $error');
-    //   },
-    // );
-
-    // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //   print('Got a message whilst in the foreground!');
-    //   print('Message data: ${message.data}');
-    //   if (message.notification != null) {
-    //     print('Message also contained a notification: ${message.notification}');
-    //   }
-    // });
-
-    // try {
-    //   FirebaseMessaging.instance.subscribeToTopic('all').then(
-    //     (value) {
-    //       messaging
-    //           .getToken(
-    //         vapidKey: "BEHEYXnKisbv8Mlg9tffp2lE9L0wJG_dsN5-IaDLS8wIk1lC95_nruoC7yeCPmO5GTMAx6IRAyKj64ob2gLO5AY",
-    //       )
-    //           .then(
-    //         (value) {
-    //           print("My FCM token is: $value");
-    //         },
-    //       ).catchError(
-    //         (e) {
-    //           print("Error: $e");
-    //         },
-    //       );
-    //     },
-    //   );
-    // } catch (e) {
-    //   print("Error: $e");
-    // }
-  }
+  const MyApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     // ! Versão desktop
@@ -94,10 +42,6 @@ class MyApp extends StatelessWidget {
 }
 
 class LoggedOrNorController extends StatefulWidget {
-  // final CameraStateController cameraController = Get.put(
-  //   CameraStateController(),
-  // );
-
   LoggedOrNorController({
     Key? key,
   }) : super(key: key) {
@@ -118,7 +62,6 @@ class LoggedOrNorController extends StatefulWidget {
           Get.offAllNamed('/');
           Get.delete<ConversasPathController>();
           Get.delete<ContactsController>();
-          // Get.delete<CameraStateController>();
         }
       },
     );
@@ -134,19 +77,9 @@ class _LoggedOrNorControllerState extends State<LoggedOrNorController> {
   _LoggedOrNorControllerState() {
     FirebaseAuth.instance.authStateChanges().listen(
       (User? user) {
-        if (user == null) {
-          setState(
-            () {
-              _logged = false;
-            },
-          );
-        } else {
-          setState(
-            () {
-              _logged = true;
-            },
-          );
-        }
+        setState(() {
+          _logged = user != null;
+        });
       },
     );
   }

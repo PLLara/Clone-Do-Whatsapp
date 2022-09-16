@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:whatsapp2/common/navigator/go_to_page.dart';
 import 'package:whatsapp2/common/themes/unavailable_text.dart';
+import 'package:whatsapp2/features/2_app/1_appbar/1_appbar_widget.dart';
 import 'package:whatsapp2/features/2_app/3_configuracoes/configuracoes_widget.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 
@@ -26,8 +27,8 @@ class AppBarDropDown extends StatelessWidget {
             break;
           case 'testlab':
             goToPage(
-              const Configuracoes(
-                key: Key('config'),
+              const TestLab(
+                key: Key('testlab'),
               ),
               Get.to,
             );
