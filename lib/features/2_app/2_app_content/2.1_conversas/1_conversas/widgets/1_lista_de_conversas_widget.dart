@@ -9,17 +9,17 @@ import 'package:whatsapp2/common/widgets/generic_null_user.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/conversa_page.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_page.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/widgets/contacts_list_view/widgets/user_description_widget.dart';
 import 'package:whatsapp2/model/conversa.dart';
+import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
 import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'package:whatsapp2/state/local/conversa_state.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/widgets/contacts_list_view/widgets/user_description_widget.dart';
-import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 
 class SemConversasCriarNovaWidget extends StatelessWidget {
   const SemConversasCriarNovaWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -31,17 +31,17 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
           children: [
             Text(
               "Nenhuma conversa encontrada",
-              style: Theme.of(context).textTheme.headline1,
+              style: Theme.of(context).textTheme.displayLarge,
             ),
             ElevatedButton(
               onPressed: () {
                 goToPage(Contatos(), Get.to);
               },
-              child: Text(
-                "Criar nova conversa",
-              ),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50), // NEW
+              ),
+              child: const Text(
+                "Criar nova conversa",
               ),
             ),
             TextButton(
@@ -54,7 +54,7 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
                   builder: (e) => AlertDialog(
                     title: Text(
                       "PERIGO",
-                      style: Theme.of(context).textTheme.headline1?.copyWith(color: Colors.red),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(color: Colors.red),
                       textAlign: TextAlign.center,
                     ),
                     content: Column(
@@ -71,8 +71,7 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
                           padding: const EdgeInsets.all(12.0),
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              minimumSize: const Size.fromHeight(50),
-                              primary: Colors.red,
+                              minimumSize: const Size.fromHeight(50), backgroundColor: Colors.red,
                             ),
                             onPressed: () {
                               Get.find<ConversasPathController>().addConversaGeral();
@@ -114,9 +113,9 @@ class SemConversasCriarNovaWidget extends StatelessWidget {
 
 class ConversaListTile extends StatefulWidget {
   const ConversaListTile({
-    Key? key,
+    super.key,
     required this.conversaPath,
-  }) : super(key: key);
+  });
 
   final ConversaPathData conversaPath;
 
@@ -149,7 +148,7 @@ class _ConversaListTileState extends State<ConversaListTile> {
         ),
         injectedTitle: Text(
           otherPessoa.displayName,
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
       );
     }
@@ -159,7 +158,7 @@ class _ConversaListTileState extends State<ConversaListTile> {
       injectedConversaPhoto: const GenericNullUser(),
       injectedTitle: Text(
         widget.conversaPath.titulo,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }
@@ -167,11 +166,11 @@ class _ConversaListTileState extends State<ConversaListTile> {
 
 class ConversaListTileGeneric extends StatefulWidget {
   const ConversaListTileGeneric({
-    Key? key,
+    super.key,
     required this.conversaPath,
     required this.injectedConversaPhoto,
     required this.injectedTitle,
-  }) : super(key: key);
+  });
 
   final ConversaPathData conversaPath;
   final Widget injectedConversaPhoto;
@@ -280,10 +279,10 @@ class _ConversaListTileGenericState extends State<ConversaListTileGeneric> {
 
 class MensagensNaoLidasEDataWidget extends StatelessWidget {
   const MensagensNaoLidasEDataWidget({
-    Key? key,
+    super.key,
     required this.dateTime,
     required this.conversaPath,
-  }) : super(key: key);
+  });
 
   final DateTime dateTime;
   final ConversaPathData conversaPath;

@@ -9,9 +9,9 @@ class Concordar extends StatelessWidget {
   final Widget nextScreen;
 
   const Concordar({
-    Key? key,
+    super.key,
     required this.nextScreen,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

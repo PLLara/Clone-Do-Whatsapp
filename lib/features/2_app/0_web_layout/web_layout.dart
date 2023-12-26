@@ -11,8 +11,8 @@ import 'package:whatsapp2/state/desktop/selected_conversa_state.dart';
 
 class WebZap2Interface extends StatelessWidget {
   const WebZap2Interface({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +54,9 @@ class WebZap2Interface extends StatelessWidget {
 
 class Whatsapp2WebLayoutBase extends StatelessWidget {
   const Whatsapp2WebLayoutBase({
-    Key? key,
+    super.key,
     required this.child,
-  }) : super(key: key);
+  });
 
   final Widget child;
 
@@ -84,8 +84,8 @@ class Whatsapp2WebLayoutBase extends StatelessWidget {
 
 class DesktopSelectedConversa extends StatelessWidget {
   const DesktopSelectedConversa({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -128,8 +128,8 @@ class DesktopSelectedConversa extends StatelessWidget {
 
 class ExpandedPadding extends StatelessWidget {
   const ExpandedPadding({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

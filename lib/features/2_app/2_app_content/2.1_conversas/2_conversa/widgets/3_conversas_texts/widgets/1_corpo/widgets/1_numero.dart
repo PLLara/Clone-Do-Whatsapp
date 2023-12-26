@@ -4,11 +4,11 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 
 class MensagemUserNumeroMaybe extends StatelessWidget {
   const MensagemUserNumeroMaybe({
-    Key? key,
+    super.key,
     required this.nome,
     required this.numero,
     required this.showNumber,
-  }) : super(key: key);
+  });
 
   final String nome;
   final String numero;

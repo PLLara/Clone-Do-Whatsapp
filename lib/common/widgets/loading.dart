@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 
 class Loading extends StatelessWidget {
   const Loading({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
-      children: const [
-        const CircularProgressIndicator(),
+      children: [
+        CircularProgressIndicator(),
       ],
     );
   }

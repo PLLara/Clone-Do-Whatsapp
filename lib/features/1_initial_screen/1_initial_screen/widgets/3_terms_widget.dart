@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class Termos extends StatelessWidget {
   const Termos({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class Termos extends StatelessWidget {
       child: Text(
         "Os termos de uso ainda terão de ser feitos.",
         textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.bodyText1
+        style: Theme.of(context).textTheme.bodyLarge
       ),
     );
   }

@@ -9,8 +9,8 @@ import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class Conversas extends StatelessWidget {
   Conversas({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final ConversasPathController pathConversasController = Get.find();
   final ContactsController contactsController = Get.find<ContactsController>();

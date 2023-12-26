@@ -10,8 +10,8 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 
 class ConversaMessages extends StatelessWidget {
   const ConversaMessages({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ConversaMessages extends StatelessWidget {
             itemCount: conversaController.papo.length + 1,
             itemBuilder: (e, index) {
               if (index == 0) {
-                return SizedBox(
+                return const SizedBox(
                   height: 30,
                 );
               }
@@ -55,8 +55,8 @@ class MensagemWidget extends StatelessWidget {
   const MensagemWidget({
     required this.mensagens,
     required this.index,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

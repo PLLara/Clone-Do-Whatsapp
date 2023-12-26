@@ -5,8 +5,8 @@ import '../../../state/location_state.dart';
 
 class NumeroDeCelularFormatadoEEmNegrito extends StatelessWidget {
   NumeroDeCelularFormatadoEEmNegrito({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final LocationController locationController = Get.find();
 
@@ -19,7 +19,7 @@ class NumeroDeCelularFormatadoEEmNegrito extends StatelessWidget {
           var formattedNumber = locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '');
           return Text(
             formattedNumber,
-            style: Theme.of(context).textTheme.bodyText1?.copyWith(fontWeight: FontWeight.bold),
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
           );
         },
       ),

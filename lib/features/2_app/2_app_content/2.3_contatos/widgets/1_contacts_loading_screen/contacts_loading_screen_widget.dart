@@ -9,8 +9,8 @@ import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class ContactsLoadingScreen extends StatelessWidget {
   const ContactsLoadingScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class ContactsLoadingScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.max,
                       children: [
-                        Text("Chame alguém pelo número", style: Theme.of(context).textTheme.headline2),
+                        Text("Chame alguém pelo número", style: Theme.of(context).textTheme.displayMedium),
                         ControlledFormLoginPhoneNumber(),
                         TextButton(
                           onPressed: () {
@@ -59,14 +59,14 @@ class ContactsLoadingScreen extends StatelessWidget {
 
 class AddConversaDialog extends StatelessWidget {
   const AddConversaDialog({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
     final ConversasPathController pathConversasController = Get.find();
     final LocationController locationController = Get.find();
-    var parsedPhoneNumber = "+55" + locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '');
+    var parsedPhoneNumber = "+55${locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '')}";
     var myPhoneNumber = FirebaseAuth.instance.currentUser!.phoneNumber ?? '';
 
     return AlertDialog(

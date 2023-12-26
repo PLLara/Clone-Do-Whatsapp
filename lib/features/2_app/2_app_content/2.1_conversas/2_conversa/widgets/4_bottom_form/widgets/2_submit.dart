@@ -9,7 +9,7 @@ import '../../../state/path_cubit.dart';
 import '1_text_image_form/1_text_image_form.dart';
 
 class Submit extends StatelessWidget {
-  const Submit({Key? key, this.optionalMediaLink}) : super(key: key);
+  const Submit({super.key, this.optionalMediaLink});
 
   final String? optionalMediaLink;
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 class GenericNullUser extends StatelessWidget {
   const GenericNullUser({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +19,7 @@ class GenericNullUser extends StatelessWidget {
           ),
           child: const Icon(
             Icons.person,
+            size: 14,
             color: Colors.black,
           ),
         ),

@@ -7,8 +7,8 @@ import 'package:whatsapp2/features/2_app/3_configuracoes/widgets/common/configur
 
 class Configuracoes extends StatelessWidget {
   const Configuracoes({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -80,9 +80,9 @@ class Configuracoes extends StatelessWidget {
               ),
             ],
           ),
-          Center(
+          const Center(
             child: Column(
-              children: const [
+              children: [
                 Text(
                   'de',
                   style: TextStyle(color: Colors.white70),

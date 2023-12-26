@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 
 class BotaoDeVoltar extends StatelessWidget {
   const BotaoDeVoltar({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

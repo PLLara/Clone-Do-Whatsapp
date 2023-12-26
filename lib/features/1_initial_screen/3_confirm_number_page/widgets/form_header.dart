@@ -5,8 +5,8 @@ import '../../2_register_page/state/location_state.dart';
 
 class ConfirmNumberFormHeader extends StatelessWidget {
   ConfirmNumberFormHeader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final LocationController locationController = Get.find();
 
@@ -18,7 +18,7 @@ class ConfirmNumberFormHeader extends StatelessWidget {
           padding: const EdgeInsets.only(top: 20, bottom: 30),
           child: Text(
             'Verificando teu numero',
-            style: Theme.of(context).textTheme.headline2,
+            style: Theme.of(context).textTheme.displayMedium,
           ),
         ),
         const Text('Aguarde que um SMS chegará no número'),

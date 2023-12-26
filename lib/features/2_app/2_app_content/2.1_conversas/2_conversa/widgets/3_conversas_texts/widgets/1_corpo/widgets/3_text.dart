@@ -5,10 +5,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 class MensagemText extends StatelessWidget {
   const MensagemText({
-    Key? key,
+    super.key,
     required this.constraints,
     required this.textMessage,
-  }) : super(key: key);
+  });
 
   final dynamic constraints;
   final String textMessage;

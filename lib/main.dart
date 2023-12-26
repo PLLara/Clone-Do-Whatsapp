@@ -28,7 +28,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
     // ! Versão desktop
@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
 
 class LoggedOrNorController extends StatefulWidget {
   LoggedOrNorController({
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     Print.green("-------------------- TENTANDO INICIAR O STATE -----------------------");
     FirebaseAuth.instance.userChanges().listen(
       (User? user) {

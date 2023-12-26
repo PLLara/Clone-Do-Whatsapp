@@ -1,62 +1,37 @@
 {
   "project_info": {
-    "project_number": "1005267707114",
-    "firebase_url": "https://whatsappi-2-default-rtdb.firebaseio.com",
-    "project_id": "whatsappi-2",
-    "storage_bucket": "whatsappi-2.appspot.com"
+    "project_number": "912678314863",
+    "project_id": "clone-do-zap-99767",
+    "storage_bucket": "clone-do-zap-99767.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1005267707114:android:56f36d89cad9b3bf6d2393",
+        "mobilesdk_app_id": "1:912678314863:android:5e87c7c3c12ba4f0cbbe9a",
         "android_client_info": {
           "package_name": "com.whatsapp2.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1005267707114-931dnttvdl339eu1vtlcjsk2ohu8sdp1.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.whatsapp2.app",
-            "certificate_hash": "a3b05f4a6fcd85bad5f17ed0d451d07ca035f72e"
-          }
-        },
-        {
-          "client_id": "1005267707114-i8nmggbsr9s1vbh0eao9orn5o4oh68ci.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.whatsapp2.app",
-            "certificate_hash": "3e4b44d71715530fe202b21ed166fecd0f2f990a"
-          }
-        },
-        {
-          "client_id": "1005267707114-o0qo5bbqo7oc3eu4tkduaopecncmgdnc.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.whatsapp2.app",
-            "certificate_hash": "4cc4bce22f175353c192acecf00a797503881001"
-          }
-        },
-        {
-          "client_id": "1005267707114-6aqj4vtnif5t1ebubkb3jlk8qv1rsqsm.apps.googleusercontent.com",
+          "client_id": "912678314863-r92tphln242o9fp0rum7td6ipiog1g8a.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAxQe0rhoXpHJTUcGpecL62nf8-O3r8Rmg"
+          "current_key": "AIzaSyAkJOScmroThO2UIvBhDR3c2MDZdr3NEpY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1005267707114-6aqj4vtnif5t1ebubkb3jlk8qv1rsqsm.apps.googleusercontent.com",
+              "client_id": "912678314863-r92tphln242o9fp0rum7td6ipiog1g8a.apps.googleusercontent.com",
               "client_type": 3
             },
             {
-              "client_id": "1005267707114-v2uphrqus1k8vscslj7f4cl22i2eguhu.apps.googleusercontent.com",
+              "client_id": "912678314863-41jprc6krp5apgvb4fceca7mt2fer5a5.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
                 "bundle_id": "com.whatsapp2.app"

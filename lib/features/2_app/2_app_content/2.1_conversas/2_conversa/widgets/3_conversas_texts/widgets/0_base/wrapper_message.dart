@@ -7,7 +7,6 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/3_conversas_texts/widgets/2_peteco/2_peteco.dart';
 import 'package:whatsapp2/model/conversa.dart';
 import 'package:whatsapp2/state/global/contacts_state.dart';
-import 'package:whatsapp2/state/global/conversas_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
 
 const MY_MESSAGE_COLOR = Color(0xff005C4B);
@@ -15,10 +14,10 @@ const NOT_MY_MESSAGE_COLOR = Color(0xff202C33);
 
 class WrapperMyMessageScaffold extends StatefulWidget {
   const WrapperMyMessageScaffold({
-    Key? key,
+    super.key,
     required this.mensagem,
     required this.distinct,
-  }) : super(key: key);
+  });
 
   final MessageModel mensagem;
   final bool distinct;
@@ -46,10 +45,10 @@ class _WrapperMyMessageScaffoldState extends State<WrapperMyMessageScaffold> {
 
 class WrapperNotMyMessageScaffold extends StatefulWidget {
   const WrapperNotMyMessageScaffold({
-    Key? key,
+    super.key,
     required this.mensagem,
     required this.distinct,
-  }) : super(key: key);
+  });
 
   final MessageModel mensagem;
   final bool distinct;
@@ -85,14 +84,14 @@ class MessageScaffold extends StatefulWidget {
 
   const MessageScaffold({
     // ! TODO: PROP DRILLING
-    Key? key,
+    super.key,
     required this.mensagem,
     required this.padding,
     required this.alignment,
     required this.color,
     this.showNumber = true,
     this.distinct = false,
-  }) : super(key: key);
+  });
 
   @override
   State<MessageScaffold> createState() => _MessageScaffoldState();

@@ -7,8 +7,8 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.3_contatos/contatos_pag
 
 class CreateNewConversaWidget extends StatelessWidget {
   const CreateNewConversaWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

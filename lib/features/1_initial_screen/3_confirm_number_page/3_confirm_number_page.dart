@@ -13,9 +13,9 @@ class ConfirmNumberPage extends StatefulWidget {
   String verificationId;
 
   ConfirmNumberPage({
-    Key? key,
+    super.key,
     required this.verificationId,
-  }) : super(key: key);
+  });
 
   @override
   State<ConfirmNumberPage> createState() => _ConfirmNumberPageState();
@@ -42,7 +42,7 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
                   child: loading
                       ? const Loading()
                       : TextField(
-                          style: Theme.of(context).textTheme.bodyText1,
+                          style: Theme.of(context).textTheme.bodyLarge,
                           onChanged: (verificationCode) async {
                             if (verificationCode.length == 6) {
                               setState(() {
@@ -91,7 +91,7 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
                       ),
                       title: Text(
                         'Remande o SMS',
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                     const Divider(),
@@ -103,7 +103,7 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
                       ),
                       title: Text(
                         "Receba por ligação",
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.bodyMedium,
                       ),
                     ),
                   ],

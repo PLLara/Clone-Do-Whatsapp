@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:metadata_fetch/metadata_fetch.dart';
 
 class MessageModel {

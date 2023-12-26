@@ -5,7 +5,7 @@ import '../../../../../../common/functions/temzap2.dart';
 
 class ContactsListView extends StatelessWidget {
   final List<Contact> contacts;
-  const ContactsListView({Key? key, required this.contacts}) : super(key: key);
+  const ContactsListView({super.key, required this.contacts});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,9 @@ class ContactsListView extends StatelessWidget {
 
 class ContactListTile extends StatelessWidget {
   const ContactListTile({
-    Key? key,
+    super.key,
     required this.contact,
-  }) : super(key: key);
+  });
 
   final Contact contact;
 

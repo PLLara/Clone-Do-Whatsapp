@@ -8,8 +8,8 @@ import '../2_register_page/2_register_page.dart';
 
 class InicialScreen extends StatelessWidget {
   const InicialScreen({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

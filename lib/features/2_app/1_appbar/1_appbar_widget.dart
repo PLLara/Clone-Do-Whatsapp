@@ -33,7 +33,7 @@ AppBar MyAppBar(myTabs) {
 
 class FileManager extends StatefulWidget {
   final List<FileSystemEntity> entities;
-  const FileManager({Key? key, required this.entities}) : super(key: key);
+  const FileManager({super.key, required this.entities});
 
   @override
   State<FileManager> createState() => _FileManagerState();
@@ -84,7 +84,7 @@ class _FileManagerState extends State<FileManager> {
 
 class IconFileAccordingToFileType extends StatelessWidget {
   final FileSystemEntity entitie;
-  const IconFileAccordingToFileType({Key? key, required this.entitie}) : super(key: key);
+  const IconFileAccordingToFileType({super.key, required this.entitie});
 
   @override
   Widget build(BuildContext context) {
@@ -116,8 +116,8 @@ bool isImage(FileSystemEntity entitie) {
 
 class TestLab extends StatelessWidget {
   const TestLab({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 class FormFooter extends StatelessWidget {
   const FormFooter({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class FormFooter extends StatelessWidget {
       padding: const EdgeInsets.only(top: 15.0),
       child: Text(
         "Você receberá um sms em instantes",
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
     );
   }

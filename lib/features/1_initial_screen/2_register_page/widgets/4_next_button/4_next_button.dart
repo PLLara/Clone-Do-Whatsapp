@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../state/location_state.dart';
-import '../5_confirm_number_dialog/5_confirm_number_dialog.dart';
 
 class NextButton extends StatelessWidget {
   const NextButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

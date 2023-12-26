@@ -12,8 +12,8 @@ class ControlledFormLoginPhoneNumber extends StatelessWidget {
   final LocationController cLocation = Get.find();
 
   ControlledFormLoginPhoneNumber({
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     changeCurrentLocation(
       location: const Location('Brasil', 'br', 55),
       locationController: cLocation,
@@ -46,8 +46,8 @@ class ControlledFormLoginPhoneNumber extends StatelessWidget {
 
 class ContrySelectButton extends StatelessWidget {
   ContrySelectButton({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final LocationController cLocation = Get.find();
 
@@ -102,8 +102,8 @@ class ContrySelectButton extends StatelessWidget {
 
 class ControlledFormLoginInputCelphone extends StatelessWidget {
   ControlledFormLoginInputCelphone({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final LocationController cLocation = Get.find();
 
@@ -116,7 +116,7 @@ class ControlledFormLoginInputCelphone extends StatelessWidget {
         Expanded(
           flex: 3,
           child: TextFormField(
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
             controller: cLocation.countryCodeInputController.value,
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
@@ -132,7 +132,7 @@ class ControlledFormLoginInputCelphone extends StatelessWidget {
         Expanded(
           flex: 8,
           child: TextFormField(
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context).textTheme.bodyLarge,
             controller: controllerPhoneNumber,
             keyboardType: TextInputType.number,
             onFieldSubmitted: (value) {

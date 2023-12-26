@@ -62,23 +62,6 @@ class ConversaController extends GetxController {
     iniciado.value = false;
     state.value = States.loading;
 
-    // ! Definindo as variaveis
-    final reference = FirebaseDatabase.instance.ref(route);
-    var ref = await reference.once();
-    var lista = <MessageModel>[];
-
-    // ! Pegando os dados
-    for (final element in ref.snapshot.children.toList()) {
-      MessageModel mensagemParseada = parseMessage(element);
-      await recieveUrlData(mensagemParseada);
-      lista.add(mensagemParseada);
-      messageWasAdded(mensagemParseada);
-    }
-
-    // * Adicionando os dados iniciais
-    papo.addAll(lista);
-    sortMessagesByDate();
-
     // ! Definindo listeners
     definirStreams();
     state.value = States.ready;
@@ -115,39 +98,18 @@ class ConversaController extends GetxController {
   }
 
   void definirStreamDeMensagensAdicionadas(DatabaseReference reference) {
-    streamMensagensAdicionadas = reference.orderByKey().limitToLast(1).onValue.listen(
+    streamMensagensAdicionadas = reference.onChildAdded.listen(
       (event) async {
-        try {
-          if (firstFalsePositive) {
-            firstFalsePositive = false; // ! isso aqui é culpa do firebase ;=;
-            return;
-          }
-          MessageModel mensagemParseada = parseMessage(event.snapshot.children.last);
-
-          await recieveUrlData(mensagemParseada);
-          papo.insert(0, mensagemParseada);
-          messageWasAdded(mensagemParseada);
-          // sort();
-          Print.green("----- MESSAGE ADDED (${mensagemParseada.message}) -----");
-        } catch (e) {
-          Print.red("----- MESSAGE NOT ADDED -----");
-          print(e);
-        }
+        MessageModel mensagemParseada = parseMessage(event.snapshot);
+        await recieveUrlData(mensagemParseada);
+        messageWasAdded(mensagemParseada);
+        papo.insert(0, mensagemParseada);
       },
     );
   }
 
-  sortMessagesByDate() {
-    papo.sort(
-      (a, b) {
-        var dateA = DateTime.parse(a.date.toString());
-        var dateB = DateTime.parse(b.date.toString());
-        return dateB.compareTo(dateA);
-      },
-    );
-  }
 
-  Future<void> recieveUrlData(MessageModel mensagemParseada) async {
+  recieveUrlData(MessageModel mensagemParseada) async {
     for (final url in findUrls(mensagemParseada.message)) {
       // !
       Metadata? metadata;

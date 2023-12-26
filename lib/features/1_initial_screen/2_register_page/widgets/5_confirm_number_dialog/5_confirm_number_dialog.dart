@@ -14,8 +14,8 @@ import '../../state/verify_phone_number.dart';
 
 class DialogoDeConfirmacaoDeNumero extends StatefulWidget {
   const DialogoDeConfirmacaoDeNumero({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<DialogoDeConfirmacaoDeNumero> createState() => _DialogoDeConfirmacaoDeNumeroState();
@@ -37,7 +37,7 @@ class _DialogoDeConfirmacaoDeNumeroState extends State<DialogoDeConfirmacaoDeNum
 
   List<Widget> ActionsList(BuildContext context) {
     final LocationController locationController = Get.find();
-    var parsedPhoneNumber = "+55" + locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '');
+    var parsedPhoneNumber = "+55${locationController.phoneNumberInputController.value.text.replaceAll('(', '').replaceAll('-', '').replaceAll(' ', '').replaceAll(')', '')}";
 
     return [
       Padding(
@@ -89,8 +89,8 @@ class _DialogoDeConfirmacaoDeNumeroState extends State<DialogoDeConfirmacaoDeNum
 
 class ConfirmNumberDialogContent extends StatelessWidget {
   const ConfirmNumberDialogContent({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +101,12 @@ class ConfirmNumberDialogContent extends StatelessWidget {
       children: [
         Text(
           "Você escolheu o número: ",
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
         NumeroDeCelularFormatadoEEmNegrito(),
         Text(
           "Tem certeza que esse é o número certo?",
-          style: Theme.of(context).textTheme.bodyText1,
+          style: Theme.of(context).textTheme.bodyLarge,
         )
       ],
     );

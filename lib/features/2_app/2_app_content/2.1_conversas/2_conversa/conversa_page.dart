@@ -6,16 +6,15 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/3_conversas_texts/conversa_texts.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/bottom_form.dart';
 import 'package:whatsapp2/model/conversa.dart';
-import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class Conversa extends StatefulWidget {
   final ConversaPathData path;
   const Conversa({
-    Key? key,
+    super.key,
     required this.path,
     required this.injectedConversaPhoto,
     required this.injectedTitle,
-  }) : super(key: key);
+  });
   final Widget injectedConversaPhoto;
   final Widget injectedTitle;
 
@@ -42,18 +41,18 @@ class _ConversaState extends State<Conversa> {
 
 class ConversaBody extends StatelessWidget {
   const ConversaBody({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return const Stack(
       fit: StackFit.expand,
       children: [
-        const Background(),
+        Background(),
         Column(
           mainAxisSize: MainAxisSize.max,
-          children: const [
+          children: [
             ConversaMessages(),
             BottomForm()
           ],

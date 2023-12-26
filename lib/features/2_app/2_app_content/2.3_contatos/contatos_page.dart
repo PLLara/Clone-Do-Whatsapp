@@ -9,8 +9,8 @@ class Contatos extends StatelessWidget {
   ContactsController contactsController = Get.find();
 
   Contatos({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

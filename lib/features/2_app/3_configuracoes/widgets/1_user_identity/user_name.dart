@@ -4,8 +4,8 @@ import 'package:whatsapp2/state/global/user_state.dart';
 
 class UserNameWidget extends StatelessWidget {
   const UserNameWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
   @override
   Widget build(BuildContext context) {
     var userController = Get.find<UserStateController>();
@@ -17,7 +17,7 @@ class UserNameWidget extends StatelessWidget {
         }
         return Text(
           user.displayName ?? '',
-          style: TextStyle(
+          style: const TextStyle(
             color: Colors.white,
           ),
         );

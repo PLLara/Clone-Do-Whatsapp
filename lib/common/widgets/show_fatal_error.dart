@@ -9,7 +9,7 @@ void showFatalError(FirebaseAuthException e) {
     barrierDismissible: false,
     textConfirm: "Exit",
     onConfirm: () {
-      Get.close(10);
+      Get.back();
     },
   );
 }

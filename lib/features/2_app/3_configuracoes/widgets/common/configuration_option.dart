@@ -12,13 +12,13 @@ class ConfigurationOption extends StatelessWidget {
   final VoidCallback? callback;
 
   const ConfigurationOption({
-    Key? key,
+    super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
     this.endIcon,
     this.callback,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class ConfigurationOption extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: Theme.of(context).textTheme.bodyText1,
+        style: Theme.of(context).textTheme.bodyLarge,
       ),
       subtitle: subtitle,
       trailing: Icon(endIcon),

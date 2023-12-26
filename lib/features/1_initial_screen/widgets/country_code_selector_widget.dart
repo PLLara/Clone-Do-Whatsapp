@@ -10,7 +10,7 @@ class CountryCodeSelector extends StatefulWidget {
   final Function(Location) onSelectCountry;
 
   const CountryCodeSelector(
-      {Key? key,
+      {super.key,
       this.locations = const [
         Location('Afghanistão', 'af', 93),
         Location('África do Sul', 'za', 27),
@@ -241,8 +241,7 @@ class CountryCodeSelector extends StatefulWidget {
         Location('Zimbabwe(Zimbabué)', 'zw', 263),
         Location('Zâmbia', 'zm', 260),
       ],
-      required this.onSelectCountry})
-      : super(key: key);
+      required this.onSelectCountry});
 
   @override
   State<CountryCodeSelector> createState() => _CountryCodeSelectorState();
@@ -322,7 +321,7 @@ class _CountryCodeSelectorState extends State<CountryCodeSelector> {
 class CountryListTile extends StatelessWidget {
   final Function(Location) onSelectCountry;
 
-  CountryListTile({Key? key, required Location location, required this.onSelectCountry}) : super(key: key) {
+  CountryListTile({super.key, required Location location, required this.onSelectCountry}) {
     _location = location;
     countryFlag = location.getFlag();
     countryName = location.countryName;
@@ -355,22 +354,22 @@ class CountryListTile extends StatelessWidget {
       ),
       title: Text(
         countryName,
-        style: TextStyle(
+        style: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
           color: Colors.white,
         ),
       ),
-      trailing: Text("+" + countryNumber.toString()),
+      trailing: Text("+$countryNumber"),
     );
   }
 }
 
 class CountryDetails extends StatelessWidget {
   const CountryDetails({
-    Key? key,
+    super.key,
     required this.location,
-  }) : super(key: key);
+  });
 
   final Location location;
 
@@ -390,7 +389,7 @@ class CountryDetails extends StatelessWidget {
             ),
           ),
           Text(
-            location.countryName + " (${location.countryCode})",
+            "${location.countryName} (${location.countryCode})",
           ),
         ],
       ),
@@ -401,7 +400,7 @@ class CountryDetails extends StatelessWidget {
 class SwitchTitleAndSearchBar extends StatelessWidget {
   final bool active;
   final Function(String) filterLocations;
-  const SwitchTitleAndSearchBar({Key? key, required this.active, required this.filterLocations}) : super(key: key);
+  const SwitchTitleAndSearchBar({super.key, required this.active, required this.filterLocations});
 
   @override
   Widget build(BuildContext context) {

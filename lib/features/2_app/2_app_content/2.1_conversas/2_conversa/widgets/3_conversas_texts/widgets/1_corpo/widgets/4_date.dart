@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class MensagemDate extends StatelessWidget {
   const MensagemDate({
-    Key? key,
+    super.key,
     required this.dia,
-  }) : super(key: key);
+  });
 
   final String dia;
 

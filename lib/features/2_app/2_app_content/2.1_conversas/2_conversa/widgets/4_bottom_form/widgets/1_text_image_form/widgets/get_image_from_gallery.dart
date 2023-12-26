@@ -3,18 +3,18 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
 import 'package:image_picker/image_picker.dart';
 import 'package:palestine_console/palestine_console.dart';
 import 'package:uuid/uuid.dart';
-import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
-import 'package:whatsapp2/state/local/conversa_state.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/state/path_cubit.dart';
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/1_text_image_form.dart';
+import 'package:whatsapp2/state/local/conversa_state.dart';
 
 class GetImageFromGallery extends StatelessWidget {
   const GetImageFromGallery({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,9 +42,9 @@ class GetImageFromGallery extends StatelessWidget {
                   Center(child: Image.memory(imagefile)),
                   BlocProvider.value(
                     value: context.read<PathCubit>(),
-                    child: Row(
+                    child: const Row(
                       mainAxisSize: MainAxisSize.max,
-                      children: const [
+                      children: [
                         TextImageForm(),
                       ],
                     ),
@@ -57,7 +57,7 @@ class GetImageFromGallery extends StatelessWidget {
 
                       var ref = FirebaseStorage.instance.ref('conversas/${conversaController.route}/${const Uuid().v4()}');
                       try {
-                        TaskSnapshot result = await sendImageToFirebase(ref, image);
+                        var result = await sendImageToFirebase(ref, image);
                         var path = await result.ref.getDownloadURL();
                         sendMessage(
                           path: conversaController.route,

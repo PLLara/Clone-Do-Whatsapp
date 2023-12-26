@@ -1,20 +1,21 @@
 // ignore_for_file: file_names, avoid_print
 
 import 'package:firebase_auth/firebase_auth.dart' show FirebaseAuth;
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:http/http.dart' as http;
 import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/widgets/4_bottom_form/widgets/1_text_image_form/widgets/get_image_from_gallery.dart';
+
 import '../../../../../../../../../state/local/conversa_state.dart';
 import '../../../../state/path_cubit.dart';
 
 class TextImageForm extends StatefulWidget {
   const TextImageForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<TextImageForm> createState() => _TextImageFormState();
@@ -65,8 +66,8 @@ class _TextImageFormState extends State<TextImageForm> {
 
 class TextImageFormText extends StatelessWidget {
   const TextImageFormText({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -109,15 +110,15 @@ class TextImageFormText extends StatelessWidget {
 
 class TextImageFormImage extends StatelessWidget {
   const TextImageFormImage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return const Row(
       mainAxisAlignment: MainAxisAlignment.end,
       mainAxisSize: MainAxisSize.max,
-      children: const [
+      children: [
         GetImageFromGallery(),
       ],
     );
@@ -125,13 +126,10 @@ class TextImageFormImage extends StatelessWidget {
 }
 
 Future<TaskSnapshot> sendImageToFirebase(Reference ref, XFile image) async {
-  TaskSnapshot result = await ref.putData(
+  var result = await ref.putData(
     await image.readAsBytes(),
     SettableMetadata(
       contentType: 'image/jpeg',
-      customMetadata: {
-        "Access-Control-Allow-Origin": "*"
-      },
     ),
   );
   return result;
@@ -142,23 +140,24 @@ void sendMessage({
   required String mensagem,
   String? mediaLink = '',
 }) async {
+  print("Enviando mensagem");
   var usuario = FirebaseAuth.instance.currentUser?.phoneNumber;
-  if (usuario == null) {
-    return print("Error");
-  }
-
-  var uri = 'https://whatsappi-2.uc.r.appspot.com/sendMessage';
-  await http.post(Uri.parse(uri), body: {
-    "path": path,
+  var parsedPath = "$path/${DateTime.now().millisecondsSinceEpoch}";
+  var eita = DateTime.now().toLocal().toString();
+  var tempo = eita.split(" ")[1];
+  var dias = eita.split(" ")[0].split("/").reversed.join("-");
+  var parsedData = "$dias $tempo";
+  FirebaseDatabase.instance.ref().child(parsedPath).set({
+    "date": parsedData,
+    "mediaLink": mediaLink ?? "",
     "mensagem": mensagem,
     "usuario": usuario,
-    "mediaLink": mediaLink ?? ''
   });
 }
 
 Future<XFile?> getImageFromGallery() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickImage(
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickImage(
     source: ImageSource.gallery,
     maxWidth: 500,
     maxHeight: 500,
@@ -168,8 +167,8 @@ Future<XFile?> getImageFromGallery() async {
 }
 
 Future<XFile?> getVideoFromGallery() async {
-  final ImagePicker _picker = ImagePicker();
-  final XFile? image = await _picker.pickVideo(
+  final ImagePicker picker = ImagePicker();
+  final XFile? image = await picker.pickVideo(
     source: ImageSource.camera,
   );
   return image;

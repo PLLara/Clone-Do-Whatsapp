@@ -7,7 +7,7 @@ import 'package:palestine_console/palestine_console.dart';
 class Internet {
   static final box = GetStorage();
 
-  static Future<Uint8List?> getCachedImageBytes(String url) async {
+  static getCachedImageBytes(String url) async {
     try {
       var rawCache = box.read(url).cast<int>();
       var cache = Uint8List.fromList(rawCache);

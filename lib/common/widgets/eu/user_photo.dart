@@ -6,13 +6,14 @@ import 'package:whatsapp2/state/global/user_state.dart';
 class UserPhotoWidget extends StatelessWidget {
   final double size;
   const UserPhotoWidget({
-    Key? key,
+    super.key,
     this.size = 40,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     var userController = Get.find<UserStateController>();
+    print(userController.user.value?.photoURL);
     return Obx(
       () {
         if (userController.user.value == null) {

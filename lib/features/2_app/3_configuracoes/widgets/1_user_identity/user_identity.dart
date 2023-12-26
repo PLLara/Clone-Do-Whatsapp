@@ -8,7 +8,7 @@ import 'package:whatsapp2/state/global/user_state.dart';
 import '../../../../../common/widgets/eu/user_photo.dart';
 
 class UserIdentity extends StatelessWidget {
-  const UserIdentity({Key? key}) : super(key: key);
+  const UserIdentity({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +43,7 @@ class UserIdentity extends StatelessWidget {
                       ),
                       Text(
                         user.metadata.creationTime.toString(),
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                         ),
                       ),
@@ -68,8 +68,8 @@ class UserIdentity extends StatelessWidget {
 
 class ChangeNameBottomSheet extends StatefulWidget {
   const ChangeNameBottomSheet({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<ChangeNameBottomSheet> createState() => _ChangeNameBottomSheetState();

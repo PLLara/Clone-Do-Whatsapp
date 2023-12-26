@@ -5,9 +5,9 @@ import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class UserDescription extends StatelessWidget {
   UserDescription({
-    Key? key,
+    super.key,
     required this.contact,
-  }) : super(key: key);
+  });
 
   final ConversasPathController pathConversasController = Get.find();
   final Contact contact;
@@ -52,9 +52,9 @@ class UserDescription extends StatelessWidget {
 
 class UserPhotoOrPlaceholder extends StatelessWidget {
   const UserPhotoOrPlaceholder({
-    Key? key,
+    super.key,
     required this.contact,
-  }) : super(key: key);
+  });
 
   final Contact contact;
 
@@ -70,8 +70,8 @@ class UserPhotoOrPlaceholder extends StatelessWidget {
 
 class PlaceholderPhotoFromUser extends StatelessWidget {
   const PlaceholderPhotoFromUser({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +94,9 @@ class PlaceholderPhotoFromUser extends StatelessWidget {
 
 class PhotoFromUser extends StatelessWidget {
   const PhotoFromUser({
-    Key? key,
+    super.key,
     required this.contact,
-  }) : super(key: key);
+  });
 
   final Contact contact;
 

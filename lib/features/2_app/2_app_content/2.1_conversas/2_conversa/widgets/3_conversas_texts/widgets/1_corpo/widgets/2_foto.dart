@@ -1,20 +1,19 @@
 // ignore_for_file: invalid_use_of_protected_member, library_prefixes, constant_identifier_names, non_constant_identifier_names
 import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:video_player/video_player.dart';
-import 'package:whatsapp2/common/widgets/loading.dart';
-import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
 import 'package:get/get_navigation/src/routes/transitions_type.dart' as getxTransitions;
 import 'package:http/http.dart' as http;
+import 'package:video_player/video_player.dart';
+import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/model/message_model.dart';
 
 class MensagemArquivoMaybe extends StatelessWidget {
   const MensagemArquivoMaybe({
-    Key? key,
+    super.key,
     required this.myMensagem,
     required this.showNumber,
-  }) : super(key: key);
+  });
 
   final MessageModel myMensagem;
   final bool showNumber;
@@ -44,9 +43,9 @@ class MensagemArquivoMaybe extends StatelessWidget {
 
 class MensagemImagem extends StatefulWidget {
   const MensagemImagem({
-    Key? key,
+    super.key,
     required this.myMensagem,
-  }) : super(key: key);
+  });
 
   final MessageModel myMensagem;
 
@@ -76,10 +75,7 @@ class _MensagemImagemState extends State<MensagemImagem> {
                           tag: widget.myMensagem.mediaLink,
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(8.0),
-                            child: CachedNetworkImage(
-                              imageUrl: widget.myMensagem.mediaLink,
-                              placeholder: (context, url) => const Loading(),
-                            ),
+                            child: Image.network(widget.myMensagem.mediaLink),
                           ),
                         ),
                       ),
@@ -92,30 +88,10 @@ class _MensagemImagemState extends State<MensagemImagem> {
           child: Hero(
             tag: widget.myMensagem.mediaLink,
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
-              child: CachedNetworkImage(
-                errorWidget: (context, url, error) {
-                  Future.delayed(
-                    const Duration(milliseconds: 0),
-                    () {
-                      try {
-                        setState(() {
-                          notImage = true;
-                        });
-                      } catch (e) {
-                        print('');
-                      }
-                    },
-                  );
-
-                  return MensagemVideo(
-                    mensagem: widget.myMensagem,
-                  );
-                },
-                imageUrl: widget.myMensagem.mediaLink,
-                placeholder: (context, url) => const Loading(),
-              ),
-            ),
+                borderRadius: BorderRadius.circular(8.0),
+                child: Image.network(
+                  widget.myMensagem.mediaLink,
+                )),
           ),
         ),
       ],
@@ -125,9 +101,9 @@ class _MensagemImagemState extends State<MensagemImagem> {
 
 class MensagemVideo extends StatefulWidget {
   const MensagemVideo({
-    Key? key,
+    super.key,
     required this.mensagem,
-  }) : super(key: key);
+  });
   final MessageModel mensagem;
 
   @override

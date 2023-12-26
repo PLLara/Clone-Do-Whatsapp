@@ -19,7 +19,7 @@ class ContactsController extends GetxController {
     super.onInit();
   }
 
-  Future getContactsFromDevice() async {
+  getContactsFromDevice() async {
     Print.magenta('---------- INITIALIZING CONTACTS CONTROLLER ---------');
 
     // * Definindo as variáveis

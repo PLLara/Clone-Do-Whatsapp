@@ -10,18 +10,18 @@ import 'package:whatsapp2/features/2_app/2_app_content/2.1_conversas/2_conversa/
 
 class BottomForm extends StatefulWidget {
   const BottomForm({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<BottomForm> createState() => _BottomFormState();
 }
 
 class _BottomFormState extends State<BottomForm> {
-  _onEmojiSelected(Emoji emoji, TextEditingController _controller) {
-    _controller
+  _onEmojiSelected(Emoji emoji, TextEditingController controller) {
+    controller
       ..text += emoji.emoji
-      ..selection = TextSelection.fromPosition(TextPosition(offset: _controller.text.length));
+      ..selection = TextSelection.fromPosition(TextPosition(offset: controller.text.length));
   }
 
   @override
@@ -47,8 +47,8 @@ class _BottomFormState extends State<BottomForm> {
                   color: const Color.fromARGB(255, 40, 54, 62),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-                child: Row(
-                  children: const [
+                child: const Row(
+                  children: [
                     TextImageFormText(),
                   ],
                 ),
@@ -63,11 +63,11 @@ class _BottomFormState extends State<BottomForm> {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 8),
             child: Row(
               mainAxisSize: MainAxisSize.max,
-              children: const [
+              children: [
                 TextImageForm(),
                 Submit(),
               ],

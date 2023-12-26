@@ -26,23 +26,23 @@ ThemeData defaultDarkTheme() {
     ),
     textTheme: const TextTheme()
         .copyWith(
-          headline1: const TextStyle(
+          displayLarge: const TextStyle(
             fontSize: 27,
             fontWeight: FontWeight.w800,
           ),
-          headline2: TextStyle(
+          displayMedium: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
             color: defaultColor,
           ),
-          headline3: const TextStyle(),
-          headline4: const TextStyle(),
-          headline5: const TextStyle(),
-          headline6: const TextStyle(),
-          bodyText1: const TextStyle(
+          displaySmall: const TextStyle(),
+          headlineMedium: const TextStyle(),
+          headlineSmall: const TextStyle(),
+          titleLarge: const TextStyle(),
+          bodyLarge: const TextStyle(
             fontSize: 14,
           ),
-          bodyText2: const TextStyle(),
+          bodyMedium: const TextStyle(),
         )
         .apply(
           bodyColor: Colors.white,
@@ -61,11 +61,11 @@ ThemeData defaultLightTheme() {
     appBarTheme: const AppBarTheme(elevation: 1),
     textTheme: const TextTheme()
         .copyWith(
-          headline1: const TextStyle(
+          displayLarge: const TextStyle(
             fontSize: 27,
             fontWeight: FontWeight.w800,
           ),
-          headline2: TextStyle(
+          displayMedium: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.w800,
             color: defaultColor,

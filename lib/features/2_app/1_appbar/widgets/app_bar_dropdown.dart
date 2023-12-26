@@ -9,8 +9,8 @@ import 'package:whatsapp2/state/global/conversas_state.dart';
 
 class AppBarDropDown extends StatelessWidget {
   const AppBarDropDown({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -41,14 +41,14 @@ class AppBarDropDown extends StatelessWidget {
       },
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
         PopupMenuItem(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           value: 'newGroup',
           child: const Text(
             'Novo Grupo',
           ),
         ),
         PopupMenuItem(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           value: 'favorites',
           child: Text(
             'Mensagens Favoritas',
@@ -56,7 +56,7 @@ class AppBarDropDown extends StatelessWidget {
           ),
         ),
         PopupMenuItem(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           value: 'danger',
           child: const Text(
             'Liberar conversa geral',
@@ -66,17 +66,17 @@ class AppBarDropDown extends StatelessWidget {
           ),
         ),
         PopupMenuItem(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           value: 'testlab',
           child: const Text('TestLab'),
         ),
         PopupMenuItem(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           value: 'config',
           child: const Text('Configurações'),
         ),
         PopupMenuItem(
-          textStyle: Theme.of(context).textTheme.bodyText1,
+          textStyle: Theme.of(context).textTheme.bodyLarge,
           value: 'Sair',
           child: const Text('Sair'),
           onTap: () {

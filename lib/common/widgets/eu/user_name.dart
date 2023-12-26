@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:whatsapp2/state/global/user_state.dart';
 
 class UserNameWidged extends StatelessWidget {
-  const UserNameWidged({Key? key}) : super(key: key);
+  const UserNameWidged({super.key});
 
   @override
   Widget build(BuildContext context) {
